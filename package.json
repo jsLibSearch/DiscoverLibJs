@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/jsLibSearch/DiscoverLibJs/issues"
   },
-  "homepage": "https://github.com/jsLibSearch/DiscoverLibJs#readme"
+  "homepage": "https://github.com/jsLibSearch/DiscoverLibJs#readme",
+  "dependencies": {
+    "express": "^4.16.2",
+    "mongoose": "^5.0.2"
+  }
 }
