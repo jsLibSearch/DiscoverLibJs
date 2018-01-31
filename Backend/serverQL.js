@@ -70,20 +70,20 @@ server.get('/', (req, res) => {
             const login = obj.node.owner.login;
             const name = obj.node.name;
 
-            axios.get(`https://api.github.com/repos/${login}/${name}/contents/package.json`, {
+            axios
+                .get(`https://raw.githubusercontent.com/${login}/${name}/master/package.json`)
 
-                    headers: { "Accept":  mediaType }
+                    .then((response) => {
+                        
+                        if (response.data.dependencies) s = s.concat(Object.keys(response.data.dependencies));
+                        if (response.data.devDependencies) s = s.concat(Object.keys(response.data.devDependencies));
 
-                }).then((response) => {
+                        console.log(s);
 
-                    if (response.data.devDependencies) s = s.concat(Object.keys(response.data.devDependencies));
-                    if (response.data.dependencies) s = s.concat(Object.keys(response.data.dependencies))
-
-                    console.log(s);
-                    
-                }).catch((err) => {
-                    console.log(err);
-                });
+                    })
+                    .catch((err) => {
+                        console.log('Not Found' , '--------->', login, name);
+                    })
 
         }
         res.json(arr);

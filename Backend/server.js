@@ -17,7 +17,6 @@ const PORT = 5000;
 server.use(bodyParser.json());
 
 server.get('/', (req, res) => {
-    const arr = [];
 
     const q = 'language:javascript';
     const sort = 'stars';
@@ -31,25 +30,25 @@ server.get('/', (req, res) => {
             const a = response.data.items;
 
             for (let obj of a) {
-                //github.repos.getContent({ owner, repo, path, ref }) // <----- I will need some time to figure out how to send a header, if it's possible
+               
                 const name = obj.name;
                 const login = obj.owner.login;
                 let s = [];
 
-                    axios.get(`https://api.github.com/repos/${login}/${name}/contents/package.json`, { // <---- this will eat your request limit, I guess it's beacuse axios 'unauth' request
-    
-                        headers: { "Accept":  mediaType } // <---- this will send us raw+json data, see mediaType above
-    
-                    }).then((response) => {
+                axios
+                    .get(`https://raw.githubusercontent.com/${login}/${name}/master/package.json`)
 
-                        if (response.data.devDependencies) s = s.concat(Object.keys(response.data.devDependencies));
-                        if (response.data.dependencies) s = s.concat(Object.keys(response.data.dependencies))
+                        .then((response) => {
 
-                        console.log(s); // <---- here we will need to do some operations I guess
+                            if (response.data.dependencies) s = s.concat(Object.keys(response.data.dependencies));
+                            if (response.data.devDependencies) s = s.concat(Object.keys(response.data.devDependencies));
 
-                    }).catch((err) => {
-                        console.log(err);
-                    });
+                            console.log(s);
+
+                        })
+                        .catch((err) => {
+                            console.log('Not Found' , '--------->', login, name);
+                        });
 
             }
             
@@ -57,6 +56,7 @@ server.get('/', (req, res) => {
         .catch((err) => {
             console.log(err);
         })
+
         res.json('success');    
 })
 
@@ -69,7 +69,7 @@ server.get('/limit', (req, res) => {
     .catch((err) => {
         res.json(err);
     })
-})
+});
 
 server.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`);
