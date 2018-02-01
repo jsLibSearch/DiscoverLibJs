@@ -9,7 +9,8 @@ export class SearchPage extends Component {
     super(props);
     this.state = {
         windowHeight: window.innerHeight - 40,
-        packages: {}
+        packages: {},
+        query: 'all'
     };
   }
 
@@ -34,13 +35,17 @@ export class SearchPage extends Component {
   render() {
     return (
       <div>
-        search resultz
-        {this.state.packages ? Object.keys(this.state.packages).map((pkg) => {
-          return (
-          <div>
-            <Package name={this.state.packages[pkg].name} about={this.state.packages[pkg].description} freq={this.state.packages[pkg].freq} />
-          </div>)
-        }) : <p>no packages found</p>}
+        <div>
+          <h3 className='SearchHeader'>{Object.keys(this.state.packages).length} Search Results for "{this.state.query}"</h3>
+        </div>
+        <div className='SearchResults'>
+          {this.state.packages ? Object.keys(this.state.packages).map((pkg, i) => {
+            return (
+            <div key={i + 'id'}>
+              <Package key={i} name={this.state.packages[pkg].name} about={this.state.packages[pkg].description} freq={this.state.packages[pkg].freq} />
+            </div>)
+          }) : <p>No packages found for {this.state.query}</p>}
+        </div>
       </div>
     );
   }

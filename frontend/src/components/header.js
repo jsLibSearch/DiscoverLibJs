@@ -21,7 +21,7 @@ class Header extends Component {
             searchedQuery: '',
             itemsInCart: 9,
             username: 'coleferg',
-            loggedIn: false
+            loggedIn: true
         })
         this.setState({
             windowWidth: window.innerWidth
