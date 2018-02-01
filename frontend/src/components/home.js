@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import '../App.css';
 import { customColors as c } from '../custom/colors.js';
 
-class LogIn extends Component {
+class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -30,10 +30,10 @@ class LogIn extends Component {
   render() {
     return (
       <div>
-        log in
+        home
       </div>
     );
   }
 }
 
-export default LogIn;
+export default Home;
