@@ -15,10 +15,11 @@ const PackageSchema = new Schema({
         required: true,
         unique: true
     },
-    processed: Boolean,
-    dependencies: [{
+    description: String,
+    freq: Number,
+    parents: [{
         type: Schema.Types.ObjectId,
-        ref: 'Dependencies'
+        ref: 'Projects'
     }]
 });
 /*

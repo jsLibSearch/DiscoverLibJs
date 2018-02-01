@@ -1,25 +1,30 @@
-const dummyData = require('./dummyData.json');
-const mongoose = require('mongoose');
+const fs = require("fs");
+let savedPackages = null;
+const readPackages = () => {
+  if (!savedPackages) {
+    const contents = fs.readFileSync("./processedPackageData.json", "utf8");
+    savedPackages = JSON.parse(contents);
+  }
+  return savedPackages;
+};
+const mongoose = require("mongoose");
+mongoose.Promise = Promise;
+mongoose.connect("mongodb://localhost/js-discovery", null);
 
-mongoose.connect('mongodb://localhost/js-discovery', { useMongoClient: true });
-
-const Package = require('./Package.js');
-const Dependency = require('./Dependency.js');
-const Project = require('./Project.js');
-
+const Package = require("./Package.js");
 const rows = [];
-console.log(dummyData.length)
-dummyData.forEach((project) => {
-    const row = [];
-    if (project.dependencies) Object.keys(project.dependencies).forEach(item => {
-        row.push(item);
-    })
-    if (project.devDependencies) Object.keys(project.devDependencies).forEach(item => {
-        row.push(item);
-    })
-    rows.push(row);
-})
-console.log(rows);
+const populatePackages = () => {
+  // TODO: implement this
+  readPackages();
+  const promises = Object.values(savedPackages).map(element => {
+    return new Package(element).save();
+  });
+  console.log("done");
+  return Promise.all(promises);
+};
+populatePackages();
+console.log("done2");
+
 /*
 rows.forEach(row => {
     console.log("hellow")

@@ -19,8 +19,7 @@ dummyData.forEach((project) => {
     })
     rows.push(row);
 })
-console.log(rows);
-/*
+
 rows.forEach(row => {
     console.log("hellow")
     const project = new Project({processed: false})
@@ -29,17 +28,16 @@ rows.forEach(row => {
     .then(() => {
         console.log("never got here?")
         row.forEach((element) => {
-            let package, flag = false;
-            Package.find({name: element})
+            Package.findOne({name: element})
             .then((pack) => {
                 console.log("pack", pack)
-                if (pack.length > 0) {
+                if (pack) {
                     console.log("skipped")
-                    project.children.push(pack[0]);
+                    project.children.push(pack._id);
                     project.save()
                     .then(() => {
-                        pack[0].parents.push(project);
-                        pack[0].save()
+                        pack.parents.push(project._id);
+                        pack.save()
                         // package = pack;
                         // const dep = new Dependency({parent: project._id, child: package._id})
                         // promises.push(dep.save());
@@ -47,19 +45,9 @@ rows.forEach(row => {
                     })
                     .catch(err => console.log(err));
                 } else {
-                    package = new Package({name: element})
-                    package.parents.push(project);
-                    package.save()
-                    .then(() => {
-                        // const dep = new Dependency({parent: project, child: package})
-                        // promises.push(dep.save());
-                        project.children.push(package);
-                        project.save();
-                    })
-                    .catch(err => console.log(err));                    
+                      
                 }
                 setTimeout(() => console.log("hi"), 300)
-                
             })
             .catch(err => console.log(err));            
         })
@@ -69,5 +57,3 @@ rows.forEach(row => {
     
 })
 console.log("done")
-return Promise.all(promises);
-*/

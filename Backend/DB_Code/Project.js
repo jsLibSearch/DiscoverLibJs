@@ -15,9 +15,9 @@ const ProjectSchema = new Schema({
     //     unique: true
     // },
     processed: Boolean,
-    dependencies: [{
+    children: [{
         type: Schema.Types.ObjectId,
-        ref: 'Dependencies'
+        ref: 'Packages'
     }]
 });
 /*
