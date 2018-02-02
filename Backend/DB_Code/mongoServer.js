@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+const cors = require('cors')
 const Package = require('./Package.js');
 const Project = require('./Project.js');
 mongoose.connect(`${process.env.MONGO_URI}`, null);
@@ -14,6 +14,12 @@ const STATUS_USER_ERROR = 422;
 
 const server = express();
 
+const corsOptions = {
+    "origin": "http://localhost:3000",
+    "credentials": true
+};
+
+server.use(cors(corsOptions));
 server.use(bodyParser.json());
 
 server.get('/search-package/:term', (req, res) => {
@@ -59,4 +65,4 @@ server.get('/all-projects', (req, res) => {
     });
 });
 
-server.listen(3000);
+server.listen(8080);
