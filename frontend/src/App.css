@@ -1,0 +1,244 @@
+.App {
+  text-align: center;
+}
+
+.Main {
+  display: flex;
+  justify-content: center
+}
+
+.Center {
+  background-color: #2022201a;
+  width: 40em;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  display: flex;
+  justify-content: space-between;
+  background-color: #313531;
+  height: 2.5em;
+  padding: 0em;
+  color: #E1E1E2;
+}
+
+.Cart-Box {
+  display: flex;
+  background-color: #242524b7;
+  width: 4em;
+  justify-content: center;
+  padding: 0em;
+}
+
+.Cart-Box:hover {
+  background-color: #1f201f;
+  cursor: pointer;
+}
+
+.Inner-Cart-Box {
+  display: inline-flex;
+  justify-content: space-between;
+  padding: .25em 0em .2em 0em;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
+}
+
+.Brackets {
+  font-size: 1.5em;
+  padding: 0em;
+  margin: 0;
+  color: rgb(182, 88, 21)
+}
+
+.Logo {
+  font-size: 1.25em;
+  padding: 0em .5em 0em .15em;
+  margin: .3em;
+  color: #C75058;
+  text-decoration: none;
+}
+
+.Logo:hover {
+  text-decoration: none;
+  color: #E1E1E2;
+}
+
+.HeaderLeft {
+  display: inline-flex;
+  justify-content: flex-start;
+  width: 15em;
+}
+
+.HeaderRight {
+  display: inline-flex;
+  justify-content: flex-end;
+  width: 15em;
+}
+
+.Sign {
+  padding: 0.5em;
+  font-size: 1em;
+  text-decoration: none;
+  color: #E1E1E2;
+}
+
+.Sign:hover {
+  color: #C75058;
+  text-decoration: none;
+}
+
+.SignSmall {
+  padding: 1em .5em 1em .5em;;
+  font-size: .7em;
+  text-decoration: none;
+  color: #E1E1E2;
+}
+
+.SignSmall:hover {
+  color: #C75058;
+  text-decoration: none;
+}
+
+.HeadLink {
+  padding: 0.95em;
+  font-size: .8em;
+  text-decoration: none;
+  color: #E1E1E2;
+}
+
+.HeadLink:hover {
+  color: #C75058;
+  text-decoration: none;
+}
+
+.Username {
+  padding: 0.5em;
+  color: #D86E09;
+  font-size: 1em;
+  text-decoration: none;
+}
+.Username:hover {
+  color: #C75058;
+  text-decoration: none;
+}
+
+.UsernameSmall {
+  padding: 1em .5em 1em .5em;
+  color: #D86E09;
+  font-size: .7em;
+  text-decoration: none;
+}
+.UsernameSmall:hover {
+  color: #C75058;
+  text-decoration: none;
+}
+
+.Cart-Box:hover .Brackets {
+  color: #C75058;
+}
+
+.Cart-Box:hover .Quantity {
+  color: rgb(201, 201, 202)
+}
+
+.Quantity {
+  font-size: 1.5em;
+  padding: 0em .1em 0em 0.1em;
+  margin: 0;
+  color: #D86E09
+}
+
+.App-title {
+  font-size: .75em;
+}
+
+.App-intro {
+  font-size: 2em;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+body {
+  background-color: #E1E1E2
+}
+
+/* 
+body_bg:       #E1E1E2
+darker_orange: #C15C16
+header:        #313531
+light_orange:  #D86E09
+off_green:     #91AC7C
+pink_red:      #C75058
+ */
+
+.Package {
+  background-color: #E1E1E2;
+  margin: 1em 2em;
+  padding: .4em;
+}
+
+.PackDiv {
+  text-align: left;
+}
+
+.PackTitle {
+  color: rgb(236, 121, 14);
+  font-size: 1.6em;
+  font-style: italic;
+  font-weight: 500;
+}
+.PackDesc {
+  color: rgb(194, 87, 11);
+  font-size: 0.8em;
+  margin: 0em;
+  font-weight: 100;
+}
+
+.PackButtons {
+  padding: 0em;
+  margin: 0em 0.25em;
+  width: 98%;
+  display: inline-flex;
+  justify-content: space-between
+}
+.PackButton {
+  padding: 0em;
+  height: 0em;
+  margin: -2em 0em 0em 0em;
+  width: 98%;
+  display: inline-flex;
+  justify-content: flex-end;
+}
+
+.ExpandBox {
+  padding: .3em 0em;
+  margin: 0.4em 0.25em 0.2em 0.25em;
+  width: 98%;
+  border: 1px solid #91AC7C;
+  border-radius: .5em;
+  color: #91AC7C;
+  text-align: left;
+  font-size: 0.6em;
+}
+
+.SearchHeader {
+  color: #D86E09;
+  text-align: left;
+  padding: .5em 1.1em;
+  border-bottom: 1px solid #91AC7C;
+  width: 94%;
+  margin-left: .6em;
+  font-size: 1.2em;
+  font-style: italic;
+}
+
+.SearchResults {
+  border-right: 1px solid #91AC7C;
+  width: 30em;
+}
