@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import { getPackages } from '../actions';
 import '../App.css';
 import { customColors as c } from '../custom/colors.js';
-import testPackages from '../custom/dummy_data.json';
-import Package from './package.js'
+import Package from './package.js';
 
 export class SearchPage extends Component {
   constructor(props) {
@@ -15,10 +17,12 @@ export class SearchPage extends Component {
   }
 
   componentDidMount() {
+    this.props.getPackages();
     window.addEventListener('resize', this.handleResize.bind(this))
     this.setState({
       windowHeight: window.innerHeight - 40,
-      packages: testPackages
+      packages: this.props.redux.packages,
+      query: this.props.redux.query
     })
   }
 
@@ -51,4 +55,10 @@ export class SearchPage extends Component {
   }
 }
 
-export default SearchPage;
+const mapStateToProps = (state) => {
+  return {
+      redux: state
+  };
+};
+
+export default withRouter(connect(mapStateToProps, { getPackages })(SearchPage));

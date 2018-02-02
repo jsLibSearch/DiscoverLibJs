@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import { newSearch } from '../actions';
 import './header.css';
 import { customColors as c } from '../custom/colors.js';
 import { Link } from 'react-router-dom';
@@ -50,12 +53,14 @@ class Header extends Component {
         if (e.key !== 'Enter') {
             return;
         }
+        this.props.newSearch(this.state.searchedQuery);
         this.props.history.push(`/`);
         this.props.history.push(`/search`);
         return;
     }
 
     handleSearch() {
+        this.props.newSearch(this.state.searchedQuery);
         this.props.history.push(`/`);
         this.props.history.push(`/search`);
         return;
@@ -108,4 +113,10 @@ class Header extends Component {
   }
 }
 
-export default Header;
+const mapStateToProps = (state) => {
+    return {
+        redux: state
+    };
+  };
+  
+  export default withRouter(connect(mapStateToProps, { newSearch })(Header));
