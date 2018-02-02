@@ -20,7 +20,9 @@ const PackageSchema = new Schema({
     parents: [{
         type: Schema.Types.ObjectId,
         ref: 'Projects'
-    }]
+    }],
+    keywords: [ String ],
+    homepage: String
 });
 /*
 */

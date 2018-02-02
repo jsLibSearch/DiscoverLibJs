@@ -1,8 +1,7 @@
 const dummyData = require('./dummyData.json');
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/js-discovery', { useMongoClient: true });
-
+mongoose.connect(`${process.env.MONGO_URI}`, null);
 const Package = require('./Package.js');
 const Dependency = require('./Dependency.js');
 const Project = require('./Project.js');

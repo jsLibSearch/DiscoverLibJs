@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const Package = require('./Package.js');
 const Project = require('./Project.js');
-mongoose.connect('mongodb://DOESNOTWORK');
+mongoose.connect(`${process.env.MONGO_URI}`, null);
 
 const bodyParser = require('body-parser');
 
