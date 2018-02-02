@@ -1,3 +1,6 @@
+import { combineReducers } from 'redux';
+import packageReducer from './packages';
+import accessTokenSaver from './accessToken';
 import { GET_PACKAGES, GET_PACKAGE, NEW_SEARCH, GET_SEARCH } from '../actions';
 const dev = true;
 
@@ -24,4 +27,9 @@ const packageReducer = (state = { query: '', packages: [] }, action) => {
 };
 
 
-export default packageReducer;
+const rootReducer = combineReducers({
+    packages: packageReducer,
+    accessToken: accessTokenSaver,
+})
+
+export default rootReducer;
