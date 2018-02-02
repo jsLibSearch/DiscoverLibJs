@@ -12,13 +12,17 @@ export class SearchPage extends Component {
     this.state = {
         windowHeight: window.innerHeight - 40,
         packages: {},
-        query: 'all'
+        query: 'all',
     };
   }
 
+  componentWillMount() {
+    console.log(this.props.getPackages());
+  }
+
   componentDidMount() {
-    this.props.getPackages();
-    window.addEventListener('resize', this.handleResize.bind(this))
+    console.log(this.state.packages, '<------', 'this.state.packages');
+    window.addEventListener('resize', this.handleResize.bind(this));
     this.setState({
       windowHeight: window.innerHeight - 40,
       packages: this.props.redux.packages,
@@ -37,16 +41,18 @@ export class SearchPage extends Component {
   }
   
   render() {
+    console.log(this.props.redux.packages);
+    console.log(this.state.packages, '<-----', 'this.state.packages');
     return (
       <div>
         <div>
-          <h3 className='SearchHeader'>{Object.keys(this.state.packages).length} Search Results for "{this.state.query}"</h3>
+          <h3 className='SearchHeader'>{Object.keys(this.props.redux.packages).length} Search Results for "{this.state.query}"</h3>
         </div>
         <div className='SearchResults'>
-          {this.state.packages ? Object.keys(this.state.packages).map((pkg, i) => {
+          {this.props.redux.packages ? Object.keys(this.props.redux.packages).map((pkg, i) => {
             return (
             <div key={i + 'id'}>
-              <Package key={i} name={this.state.packages[pkg].name} about={this.state.packages[pkg].description} freq={this.state.packages[pkg].freq} />
+              <Package key={i} name={this.props.redux.packages[pkg].name} about={this.props.redux.packages[pkg].description} freq={this.props.redux.packages[pkg].freq} />
             </div>)
           }) : <p>No packages found for {this.state.query}</p>}
         </div>
@@ -57,7 +63,7 @@ export class SearchPage extends Component {
 
 const mapStateToProps = (state) => {
   return {
-      redux: state
+      redux: state.packages
   };
 };
 
