@@ -1,15 +1,12 @@
-import { GET_PACKAGES, GET_PACKAGE } from '../actions';
+import { combineReducers } from 'redux';
+import packageReducer from './packages';
+import accessTokenSaver from './accessToken';
 
-const packageReducer = (packages = [], action) => {
-    switch(action.type) {
-        case GET_PACKAGES:
-            return action.payload.data;
-        case GET_PACKAGE:
-            return action.payload.data;
-        default:
-            return packages;
-    }
-};
+const rootReducer = combineReducers({
 
+    packages: packageReducer,
+    accessToken: accessTokenSaver,
 
-export default packageReducer;
+})
+
+export default rootReducer;

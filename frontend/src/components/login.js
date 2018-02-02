@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import '../App.css';
 import { customColors as c } from '../custom/colors.js';
+import { connect } from 'react-redux';
+import { saveAccessToken } from '../actions';
+const axios = require('axios');
 
 class LogIn extends Component {
   constructor(props) {
@@ -11,29 +14,50 @@ class LogIn extends Component {
   }
 
   componentDidMount() {
-    window.addEventListener('resize', this.handleResize.bind(this))
+    const code = this.props.location.search.replace(/\?code=/g, '');
+
+    window.addEventListener('resize', this.handleResize.bind(this));
     this.setState({
       windowHeight: window.innerHeight - 40
-    })
+    });
+
+    this.props.saveAccessToken(code);
+    
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this.handleResize.bind(this))
+    window.removeEventListener('resize', this.handleResize.bind(this));
   }
 
   handleResize() {
     this.setState({
         windowHeight: window.innerHeight - 40
-    })
+    });
+  }
+
+  saveToken() {
+    sessionStorage.setItem('jwtToken', this.props.user.jwt);
   }
   
   render() {
+    this.saveToken();
+    console.log(sessionStorage);
     return (
       <div>
-        log in
+        Logged In
       </div>
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+
+    user: state.accessToken
+
+  }
+}
+
+LogIn = connect(mapStateToProps, { saveAccessToken })(LogIn);
 
 export default LogIn;

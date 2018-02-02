@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import './header.css';
 import { customColors as c } from '../custom/colors.js';
 import { Link } from 'react-router-dom';
+const axios = require('axios');
+
 
 class Header extends Component {
     constructor(props) {
@@ -74,6 +76,21 @@ class Header extends Component {
         return;
     }
 
+
+    // this will redirect user to GitHub login page
+    handleLogInClick() { 
+        axios
+            .get('http://localhost:5000/login')
+
+                .then((response) => {
+                    window.location = response.data;
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+    }
+
+
     render() {
         return (
             <div className="App-header">
@@ -91,7 +108,7 @@ class Header extends Component {
                 </div>
                 <div className='HeaderRight'>
                     <Link to="/signup" className={!this.state.small ? 'Sign' : 'SignSmall'} style={this.state.loggedIn ? {display: 'none'} : null}>Sign Up</Link>
-                    <Link to="/login" className={!this.state.small ? 'Sign' : 'SignSmall'} style={this.state.loggedIn ? {display: 'none'} : null}>Log In</Link>
+                    <Link to="/login" className={!this.state.small ? 'Sign' : 'SignSmall'} style={this.state.loggedIn ? {display: 'none'} : null} onClick={() => { this.handleLogInClick() }} >Log In</Link>
                     <Link to="/logout" className={!this.state.small ? 'Sign' : 'SignSmall'} style={!this.state.loggedIn ? {display: 'none'} : null}>Log Out</Link>
                     <Link to="/user" className={!this.state.small ? 'Username' : 'UsernameSmall'} style={!this.state.loggedIn ? {display: 'none'} : null}>{this.state.username.length > 0 ? this.state.username : ''}</Link>
                     <div onClick={this.handleCart.bind(this)} className='Cart-Box'>
