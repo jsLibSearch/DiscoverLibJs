@@ -8,7 +8,7 @@
 }
 
 .Center {
-  background-color: #20222021;
+  background-color: #2022201a;
   width: 40em;
 }
 
@@ -176,3 +176,69 @@ light_orange:  #D86E09
 off_green:     #91AC7C
 pink_red:      #C75058
  */
+
+.Package {
+  background-color: #E1E1E2;
+  margin: 1em 2em;
+  padding: .4em;
+}
+
+.PackDiv {
+  text-align: left;
+}
+
+.PackTitle {
+  color: rgb(236, 121, 14);
+  font-size: 1.6em;
+  font-style: italic;
+  font-weight: 500;
+}
+.PackDesc {
+  color: rgb(194, 87, 11);
+  font-size: 0.8em;
+  margin: 0em;
+  font-weight: 100;
+}
+
+.PackButtons {
+  padding: 0em;
+  margin: 0em 0.25em;
+  width: 98%;
+  display: inline-flex;
+  justify-content: space-between
+}
+.PackButton {
+  padding: 0em;
+  height: 0em;
+  margin: -2em 0em 0em 0em;
+  width: 98%;
+  display: inline-flex;
+  justify-content: flex-end;
+}
+
+.ExpandBox {
+  padding: .3em 0em;
+  margin: 0.4em 0.25em 0.2em 0.25em;
+  width: 98%;
+  border: 1px solid #91AC7C;
+  border-radius: .5em;
+  color: #91AC7C;
+  text-align: left;
+  font-size: 0.6em;
+}
+
+.SearchHeader {
+  color: #D86E09;
+  text-align: left;
+  padding: .5em 1.1em;
+  border-bottom: 1px solid #91AC7C;
+  width: 94%;
+  margin-left: .6em;
+  font-size: 1.2em;
+  font-style: italic;
+}
+
+.SearchResults {
+  border-right: 1px solid #91AC7C;
+  width: 30em;
+}

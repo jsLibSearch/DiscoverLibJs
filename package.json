@@ -1,0 +1,27 @@
+{
+  "name": "discoverlibjs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jsLibSearch/DiscoverLibJs.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jsLibSearch/DiscoverLibJs/issues"
+  },
+  "homepage": "https://github.com/jsLibSearch/DiscoverLibJs#readme",
+  "dependencies": {
+    "axios": "^0.17.1",
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "github": "^13.1.0",
+    "mongoose": "^5.0.2",
+    "node-github-graphql": "^0.2.6"
+  }
+}
