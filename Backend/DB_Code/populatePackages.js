@@ -2,14 +2,14 @@ const fs = require("fs");
 let savedPackages = null;
 const readPackages = () => {
   if (!savedPackages) {
-    const contents = fs.readFileSync("./processedPackageData.json", "utf8");
+    const contents = fs.readFileSync("../../Frontend/src/custom/dummy_data.json", "utf8");
     savedPackages = JSON.parse(contents);
   }
   return savedPackages;
 };
 const mongoose = require("mongoose");
 mongoose.Promise = Promise;
-mongoose.connect("mongodb://localhost/js-discovery", null);
+mongoose.connect(`${process.env.MONGO_URI}`, null);
 
 const Package = require("./Package.js");
 const rows = [];
