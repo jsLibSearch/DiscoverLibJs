@@ -177,7 +177,9 @@ for (let i = 0; i < keys.length; i++) {
     let package = packages[keys[i]];
     axios.get(`http://registry.npmjs.org/${package.name}`)
     .then((response) => {
-        packages[keys[i]].description = response.data.description
+        packages[keys[i]].description = response.data.description;
+        packages[keys[i]].keywords = response.data.keywords;
+        packages[keys[i]].homepage = response.data.homepage;
     })
     .catch((err) => {
         console.log('err')
@@ -187,7 +189,7 @@ for (let i = 0; i < keys.length; i++) {
 setTimeout(() => {
     console.log('packages')
     
-    fs.writeFile("./ayy", JSON.stringify(packages), function(err) {
+    fs.writeFileSync("./custom/dummy_data.json", JSON.stringify(packages), function(err) {
         if(err) {
             return console.log(err);
         }
