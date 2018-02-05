@@ -22,8 +22,8 @@ class Package extends Component {
         name: this.props.name,
         about: this.props.about,
         freq: this.props.freq,
-        homepage: `https://www.npmjs.com/package/` + this.props.name,
-        keywords: this.state.package.keywords
+        homepage: this.props.homepage,
+        keywords: this.props.keywords
     }
     this.setState({
       package: pkg
@@ -44,20 +44,17 @@ class Package extends Component {
   }
 
   render() {
-    const name = this.state.package.name;
-    const about = this.state.package.about;
-    const freq = this.state.package.freq;
     return (
         <div className='Package'>
             <div className='PackDiv'>
-                <h2 className='PackTitle'>{name}</h2>
-                <p className='PackDesc'>{about}</p>
+                <h2 className='PackTitle'>{this.props.name}</h2>
+                <p className='PackDesc'>{this.props.about}</p>
             </div>
             <div className='ExpandBox' style={ this.state.expanded ? {} : {display: 'none'} }>
                 <ul style={{margin: '0em', padding: '0em 3em'}}>
-                    <li>Found in {freq} {freq > 1 ? 'packages' : 'package' }</li>
-                    <li>Homepage: <a href={this.state.package.homepage}>{this.state.package.homepage}</a></li>
-                    <li>Keywords: {this.state.package.keywords ? this.state.package.keywords.map((keyword, i) => keyword + ' '): null}</li>
+                    <li>Found in {this.props.freq} {this.props.freq > 1 ? 'packages' : 'package' }</li>
+                    <li>Homepage: <a href={this.props.homepage}>{this.props.homepage}</a></li>
+                    <li>Keywords: {this.props.keywords ? this.props.keywords.map((keyword, i) => keyword + ' '): null}</li>
                 </ul>
             </div>
             <div className={this.state.expanded ? 'PackButtons' : 'PackButton'}>

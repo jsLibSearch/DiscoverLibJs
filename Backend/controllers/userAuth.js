@@ -45,6 +45,8 @@ const getAccessToken = (req, res) => {
                 const [login, id, url, name] = await Promise.all([response2.data.login, response2.data.id, response2.data.url, response2.data.name]);
 
                 const token = await generateToken(login, id, url, name);
+                
+
 
                 res.json({
                     username: login,

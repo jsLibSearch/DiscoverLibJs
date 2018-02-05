@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+const cors = require('cors')
 const Package = require('./Package.js');
 const Project = require('./Project.js');
 mongoose.connect(`${process.env.MONGO_URI}`, null);
@@ -14,20 +14,37 @@ const STATUS_USER_ERROR = 422;
 
 const server = express();
 
+const corsOptions = {
+    "origin": "http://localhost:3000",
+    "credentials": true
+};
+
+server.use(cors(corsOptions));
 server.use(bodyParser.json());
 
 server.get('/search-package/:term', (req, res) => {
     const { term } = req.params;
+    let arr = [];
     Package.find({ name: {$regex : `.*${term}.*`} }, (err, foundPackages) => {
         if (err) {
             return res.status(STATUS_USER_ERROR).json(err);
         }
-        if (foundPackages.length < 1) {
-            return res.status(STATUS_USER_ERROR)
-                      .json({ error: 'no packages found'});
-        } else {
-           return res.json(foundPackages);
-        }
+            Package.find({ keywords: {$regex : `.*${term}.*`} }, (err, foundKeys) => {
+                if (err) {
+                    return res.status(STATUS_USER_ERROR).json(err);
+                }
+                
+                    
+                    arr = foundPackages.concat(foundKeys);
+                    for(let i=0; i<arr.length; ++i) {
+                        for(let j=i+1; j<arr.length; ++j) {
+                            if(arr[i].name === arr[j].name)
+                                arr.splice(j--, 1);
+                        }
+                    }
+                    res.json(arr);
+            })
+        
     });
 });
 
@@ -59,4 +76,4 @@ server.get('/all-projects', (req, res) => {
     });
 });
 
-server.listen(3000);
+server.listen(8080);

@@ -68,7 +68,9 @@ class Header extends Component {
     handleSearch() {
         this.props.newSearch(this.state.searchedQuery);
         this.props.history.push(`/`);
-        this.props.history.push(`/search`);
+        setTimeout(()=> {
+            this.props.history.push(`/search`);
+        }, 1)
         return;
     }
 
