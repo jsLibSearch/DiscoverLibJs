@@ -9,6 +9,8 @@
     "cors": "^2.8.4",
     "express": "^4.16.2",
     "github": "^13.1.0",
-    "jsonwebtoken": "^8.1.1"
+    "jsonwebtoken": "^8.1.1",
+    "mongo": "^0.1.0",
+    "mongoose": "^5.0.3"
   }
 }

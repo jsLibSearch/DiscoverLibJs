@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { newSearch } from '../actions';
+import { newSearch, clearAccessToken } from '../actions';
 import './header.css';
 import { customColors as c } from '../custom/colors.js';
 import { Link } from 'react-router-dom';
@@ -21,24 +21,28 @@ class Header extends Component {
     }
 
     componentDidMount() {
-        window.addEventListener('resize', this.handleResize.bind(this))
+        window.addEventListener('resize', this.handleResize.bind(this));
+        const small = this.state.windowWidth < 697 ? true : false;
         this.setState({
             searchedQuery: '',
             itemsInCart: 9,
-            username: 'coleferg',
-            loggedIn: false,
+            windowWidth: window.innerWidth,
+            small: small,
         })
-        this.setState({
-            windowWidth: window.innerWidth
-        })
-        const small = this.state.windowWidth < 697 ? true : false;
-        this.setState({
-            small: small
-        })
+        console.log(sessionStorage);
+    }
+
+    componentWillReceiveProps(nextProps, nextState) {
+        if (nextProps.user.username) { 
+            this.setState({
+                username: nextProps.user.username,
+                loggedIn: true,
+            });
+        }
     }
 
     componentWillUnmount() {
-        window.removeEventListener('resize', this.handleResize.bind(this))
+        window.removeEventListener('resize', this.handleResize.bind(this));
     }
 
     handleResize() {
@@ -81,7 +85,6 @@ class Header extends Component {
         return;
     }
 
-
     // this will redirect user to GitHub login page
     handleLogInClick() { 
         axios
@@ -95,8 +98,17 @@ class Header extends Component {
                 });
     }
 
+    handleLogOutClick() {
+        sessionStorage.clear();
+        this.setState({
+            username: '',
+            loggedIn: false,
+        })
+        this.props.clearAccessToken();
+    }
 
     render() {
+
         return (
             <div className="App-header">
                 <div style={this.state.small ? {display: 'inline-flex', width: '20em'} : {display: 'inline-flex', width: '50em'}}>
@@ -114,7 +126,7 @@ class Header extends Component {
                 <div className='HeaderRight'>
                     <Link to="/signup" className={!this.state.small ? 'Sign' : 'SignSmall'} style={this.state.loggedIn ? {display: 'none'} : null}>Sign Up</Link>
                     <Link to="/login" className={!this.state.small ? 'Sign' : 'SignSmall'} style={this.state.loggedIn ? {display: 'none'} : null} onClick={() => { this.handleLogInClick() }} >Log In</Link>
-                    <Link to="/logout" className={!this.state.small ? 'Sign' : 'SignSmall'} style={!this.state.loggedIn ? {display: 'none'} : null}>Log Out</Link>
+                    <Link to="/logout" className={!this.state.small ? 'Sign' : 'SignSmall'} style={!this.state.loggedIn ? {display: 'none'} : null} onClick={() => { this.handleLogOutClick() }} >Log Out</Link>
                     <Link to="/user" className={!this.state.small ? 'Username' : 'UsernameSmall'} style={!this.state.loggedIn ? {display: 'none'} : null}>{this.state.username.length > 0 ? this.state.username : ''}</Link>
                     <div onClick={this.handleCart.bind(this)} className='Cart-Box'>
                         <div className={'Inner-Cart-Box'}>
@@ -124,16 +136,16 @@ class Header extends Component {
                         </div>
                     </div>
                 </div>
-                    
             </div>
     );
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
     return {
-        redux: state
+        redux: state,
+        user: state.accessToken,
     };
-  };
+};
   
-  export default withRouter(connect(mapStateToProps, { newSearch })(Header));
+export default withRouter(connect(mapStateToProps, { newSearch, clearAccessToken })(Header));

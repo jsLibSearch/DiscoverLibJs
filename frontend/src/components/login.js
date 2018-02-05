@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import '../App.css';
 import { customColors as c } from '../custom/colors.js';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import { saveAccessToken } from '../actions';
 const axios = require('axios');
 
@@ -15,15 +16,18 @@ class LogIn extends Component {
 
   componentDidMount() {
     const code = this.props.location.search.replace(/\?code=/g, '');
-
     window.addEventListener('resize', this.handleResize.bind(this));
     this.setState({
       windowHeight: window.innerHeight - 40
     });
-
-    this.props.saveAccessToken(code);
     
+    this.props.saveAccessToken(code);
   }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.user.jwt) sessionStorage.setItem('jwtToken', nextProps.user.jwt);
+  }
+
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.handleResize.bind(this));
@@ -35,13 +39,7 @@ class LogIn extends Component {
     });
   }
 
-  saveToken() {
-    sessionStorage.setItem('jwtToken', this.props.user.jwt);
-  }
-  
   render() {
-    this.saveToken();
-    console.log(sessionStorage);
     return (
       <div>
         Logged In
@@ -52,12 +50,9 @@ class LogIn extends Component {
 
 const mapStateToProps = (state) => {
   return {
-
     user: state.accessToken
-
   }
 }
 
-LogIn = connect(mapStateToProps, { saveAccessToken })(LogIn);
+export default withRouter(connect(mapStateToProps, { saveAccessToken })(LogIn));
 
-export default LogIn;

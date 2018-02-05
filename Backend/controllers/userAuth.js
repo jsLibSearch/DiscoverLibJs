@@ -1,13 +1,13 @@
 // this route authorize user 
 const axios = require('axios');
 const jwt = require('jsonwebtoken');
+// user database
+const mongoose = require('mongoose');
 
 const client_id = process.env.CLIENT_ID;
 const client_secret = process.env.CLIENT_SECRET;
 
-// const URLGET = `https://github.com/login/oauth/authorize`; 
-// const URLPOST = `https://github.com/login/oauth/access_token`;
-// const redirect_uri = `https://localhost:3000/callback`;
+// const URLGET = `https://github.com/login/oauth/authorize`; // <----
 
 // helper function
 function generateToken(login, id, url, name) {
@@ -24,9 +24,7 @@ function generateToken(login, id, url, name) {
 }
 
 const sendAuthURL = (req, res) => {
-
     res.json(`https://github.com/login/oauth/authorize?client_id=${client_id}&scope=repo%20user`);
-
 }
 
 
@@ -34,7 +32,7 @@ const getAccessToken = (req, res) => {
 
     const { code } = req.body;
 
-    async function getUserCridentials(params) {
+    async function getUserCridentials() {
         try {
             let str = '';
             const response = await axios.post(`https://github.com/login/oauth/access_token?client_id=${client_id}&client_secret=${client_secret}&code=${code}`)
@@ -52,8 +50,7 @@ const getAccessToken = (req, res) => {
                     username: login,
                     accessToken: str,
                     jwt: token,
-                })
-
+                });
             }
 
         } catch(err) {
@@ -62,6 +59,10 @@ const getAccessToken = (req, res) => {
         
     }
     getUserCridentials();
+}
+
+const checkUserAuth = (str) => {
+
 }
 
 

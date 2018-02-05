@@ -4,9 +4,10 @@ export const dev = true;
 const apiURL = dev ? 'http://localhost:5000/' : 'http://localhost:5000/';
 export const GET_PACKAGES = 'GET_PACKAGES';
 export const GET_PACKAGE = 'GET_PACKAGE';
-export const SAVE_ACCESS_TOKEN = 'SAVE_ACCESS_TOKEN';
 export const GET_SEARCH = 'GET_SEARCH';
 export const NEW_SEARCH = 'NEW_SEARCH';
+export const SAVE_ACCESS_TOKEN = 'SAVE_ACCESS_TOKEN';
+export const CLEAR_ACCESS_TOKEN = 'CLEAR_ACCESS_TOKEN';
 
 
 export const getPackages = () => {
@@ -48,6 +49,16 @@ export const saveAccessToken = (code) => {
                 .catch((err) => {
                     console.log(err);
                 });
+    }
+
+}
+
+
+export const clearAccessToken = () => {
+
+    return {
+        type: CLEAR_ACCESS_TOKEN,
+        payload: {},
     }
 
 }
