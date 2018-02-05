@@ -24,7 +24,7 @@ server.use(bodyParser.json());
 
 server.get('/search-package/:term', (req, res) => {
     const { term } = req.params;
-    const arr = [];
+    let arr = [];
     Package.find({ name: {$regex : `.*${term}.*`} }, (err, foundPackages) => {
         if (err) {
             return res.status(STATUS_USER_ERROR).json(err);
@@ -35,8 +35,14 @@ server.get('/search-package/:term', (req, res) => {
                 }
                 
                     
-                    return res.json(foundPackages.concat(foundKeys));
-                
+                    arr = foundPackages.concat(foundKeys);
+                    for(let i=0; i<arr.length; ++i) {
+                        for(let j=i+1; j<arr.length; ++j) {
+                            if(arr[i].name === arr[j].name)
+                                arr.splice(j--, 1);
+                        }
+                    }
+                    res.json(arr);
             })
         
     });
