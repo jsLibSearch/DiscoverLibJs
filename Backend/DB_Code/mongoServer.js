@@ -35,7 +35,7 @@ server.get('/search-package/:term', (req, res) => {
                 }
                 
                     
-                    return foundPackages.concat(foundKeys);
+                    return res.json(foundPackages.concat(foundKeys));
                 
             })
         
