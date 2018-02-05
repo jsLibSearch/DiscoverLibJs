@@ -29,13 +29,13 @@ server.get('/search-package/:term', (req, res) => {
         if (err) {
             return res.status(STATUS_USER_ERROR).json(err);
         }
-            Package.find({ keyword: {$regex : `.*${term}.*`} }, (err, foundKeys) => {
+            Package.find({ keywords: {$regex : `.*${term}.*`} }, (err, foundKeys) => {
                 if (err) {
                     return res.status(STATUS_USER_ERROR).json(err);
                 }
                 
                     
-                    return foundPackages.concat(foundKeys);
+                    return res.json(foundPackages.concat(foundKeys));
                 
             })
         
