@@ -24,16 +24,21 @@ server.use(bodyParser.json());
 
 server.get('/search-package/:term', (req, res) => {
     const { term } = req.params;
+    const arr = [];
     Package.find({ name: {$regex : `.*${term}.*`} }, (err, foundPackages) => {
         if (err) {
             return res.status(STATUS_USER_ERROR).json(err);
         }
-        if (foundPackages.length < 1) {
-            return res.status(STATUS_USER_ERROR)
-                      .json({ error: 'no packages found'});
-        } else {
-           return res.json(foundPackages);
-        }
+            Package.find({ keyword: {$regex : `.*${term}.*`} }, (err, foundKeys) => {
+                if (err) {
+                    return res.status(STATUS_USER_ERROR).json(err);
+                }
+                
+                    
+                    return foundPackages.concat(foundKeys);
+                
+            })
+        
     });
 });
 
