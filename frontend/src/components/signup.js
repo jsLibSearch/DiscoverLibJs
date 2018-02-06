@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import '../App.css';
-import { customColors as c } from '../custom/colors.js';
+// import { customColors as c } from '../custom/colors.js';
 
 export class SignUp extends Component {
   constructor(props) {

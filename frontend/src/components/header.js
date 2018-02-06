@@ -20,12 +20,25 @@ class Header extends Component {
         };
     }
 
+    componentDidUpdate() {
+        if (this.props.redux.accessToken.username && this.props.redux.accessToken.username !== this.state.username) {
+            this.setState({
+                itemsInCart: this.props.redux.cart.length,
+                username: this.props.redux.accessToken.username,
+                loggedIn: true,
+            })
+        }
+        if (this.props.redux.cart.length !== this.state.itemsInCart) {
+            this.setState({ itemsInCart: this.props.redux.cart.length })
+        }
+    }
+
     componentDidMount() {
         window.addEventListener('resize', this.handleResize.bind(this));
         const small = this.state.windowWidth < 697 ? true : false;
         this.setState({
             searchedQuery: '',
-            itemsInCart: 9,
+            itemsInCart: 0,
             windowWidth: window.innerWidth,
             small: small,
         });
@@ -46,7 +59,7 @@ class Header extends Component {
                 loggedIn: true,
             });
         }
-        console.log(123);
+
         if (this.state.loggedIn) {
             const jwtToken = sessionStorage.getItem('jwtToken');
             this.props.makeServerCalls(jwtToken, this.props.user.github_id);         
@@ -72,17 +85,13 @@ class Header extends Component {
             return;
         }
         this.props.newSearch(this.state.searchedQuery);
-        this.props.history.push(`/`);
         this.props.history.push(`/search`);
         return;
     }
 
     handleSearch() {
         this.props.newSearch(this.state.searchedQuery);
-        this.props.history.push(`/`);
-        setTimeout(()=> {
-            this.props.history.push(`/search`);
-        }, 1)
+        this.props.history.push(`/search`);
         return;
     }
 

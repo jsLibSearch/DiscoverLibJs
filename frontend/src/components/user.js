@@ -4,6 +4,8 @@ import { customColors as c } from '../custom/colors.js';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { saveAccessToken } from '../actions';
+// import { customColors as c } from '../custom/colors.js';
+
 
 export class UserPage extends Component {
   constructor(props) {

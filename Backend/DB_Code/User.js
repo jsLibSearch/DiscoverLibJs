@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+const Cart = require("./Cart.js");
 mongoose.models = {};
 mongoose.modelSchemas = {};
 
@@ -29,7 +29,11 @@ const UserSchema = new Schema({
         type: String,
         required: true,
         unique: true
-    }
+    },
+    carts: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Carts'
+    }]
 });
 /*
 */
