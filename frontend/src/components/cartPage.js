@@ -6,7 +6,7 @@ import Cart from './cart.js';
 import '../App.css';
 // import { customColors as c } from '../custom/colors.js';
 
-export class CartPage extends Component {
+class CartPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -41,6 +41,7 @@ export class CartPage extends Component {
       windowHeight: window.innerHeight - 40,
       cart: currentCart
     })
+    console.log(sessionStorage);
   }
 
   componentWillUnmount() {

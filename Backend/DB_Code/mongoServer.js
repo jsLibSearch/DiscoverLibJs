@@ -8,9 +8,8 @@ const bodyParser = require('body-parser');
 
 const express = require('express');
 
-
-
 const STATUS_USER_ERROR = 422;
+const PORT = 8080;
 
 const server = express();
 
@@ -74,4 +73,6 @@ server.get('/all-projects', (req, res) => {
     });
 });
 
-server.listen(8080);
+server.listen(PORT, () => { 
+    console.log(`---> MongoDB server is running on port ${PORT} <---`) 
+});
