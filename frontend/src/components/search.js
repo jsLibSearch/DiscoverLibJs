@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { getPackages } from '../actions';
+import { getPackages, newItem } from '../actions';
 import '../App.css';
-import { customColors as c } from '../custom/colors.js';
+// import { customColors as c } from '../custom/colors.js';
 import Package from './package.js';
 
 export class SearchPage extends Component {
@@ -13,13 +13,27 @@ export class SearchPage extends Component {
         windowHeight: window.innerHeight - 40,
         packages: {},
         query: 'all',
+        dev: true
     };
+  }
+
+  componentDidUpdate() {
+    if (this.props.redux.query !== this.state.query && this.refs.searchPage) {
+      this.props.getPackages(this.props.redux.query);
+      this.setState({
+        packages: this.props.redux.packages,
+        query: this.props.redux.query
+      })
+    }
   }
 
   componentDidMount() {
     window.addEventListener('resize', this.handleResize.bind(this));
     if (this.props.redux.query.length > 0){
       this.props.getPackages(this.props.redux.query);
+    }
+    if (!this.refs.searchPage) {
+      return;
     }
     this.setState({
       windowHeight: window.innerHeight - 40,
@@ -33,15 +47,24 @@ export class SearchPage extends Component {
   }
 
   handleResize() {
+    if (!this.refs.searchPage) {
+      return;
+    }
     this.setState({
         windowHeight: window.innerHeight - 40
     })
   }
   
+  fillDevCart() {
+    this.props.redux.packages.forEach(pkg => {
+      this.props.newItem(pkg)
+    });
+  }
+
   render() {
-    console.log(this.props.redux.packages);
     return (
-      <div>
+      <div ref='searchPage'>
+        {this.state.dev ? (<button onClick={this.fillDevCart.bind(this)}>fill all</button>): null}
         <div>
           <h3 className='SearchHeader'>{this.props.redux.packages['error'] !== "no packages found" ? Object.keys(this.props.redux.packages).length : 0} Search Results for "{this.state.query}"</h3>
         </div>
@@ -58,6 +81,8 @@ export class SearchPage extends Component {
                 about={this.props.redux.packages[pkg].description}
                 freq={this.props.redux.packages[pkg].freq}
                 keywords={this.props.redux.packages[pkg].keywords}
+                parents={this.props.redux.packages[pkg].parents}
+                _id={this.props.redux.packages[pkg]._id}
                 homepage={this.props.redux.packages[pkg].homepage}/>
             </div>)
           }) : null}
@@ -73,4 +98,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default withRouter(connect(mapStateToProps, { getPackages })(SearchPage));
+export default withRouter(connect(mapStateToProps, { getPackages, newItem })(SearchPage));

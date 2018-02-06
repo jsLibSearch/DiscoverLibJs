@@ -5,13 +5,15 @@
   "dependencies": {
     "api-npm": "^1.0.0",
     "axios": "^0.17.1",
-    "bootstrap-social": "^5.1.1",
+    "bootstrap": "^4.0.0",
     "express": "^4.16.2",
     "react": "^16.2.0",
+    "react-bootstrap": "^0.32.1",
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.2.2",
     "react-scripts": "1.1.0",
+    "reactstrap": "^5.0.0-beta",
     "redux": "^3.7.2",
     "redux-promise": "^0.5.3",
     "redux-thunk": "^2.2.0"
