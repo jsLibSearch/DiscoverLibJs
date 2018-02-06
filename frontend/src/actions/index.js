@@ -9,6 +9,8 @@ export const GET_SEARCH = 'GET_SEARCH';
 export const NEW_SEARCH = 'NEW_SEARCH';
 export const SAVE_ACCESS_TOKEN = 'SAVE_ACCESS_TOKEN';
 export const CLEAR_ACCESS_TOKEN = 'CLEAR_ACCESS_TOKEN';
+export const CHECK_USER_AUTH = 'CHECK_USER_AUTH';
+export const SET_USER_LOG_STATUS = 'SET_USER_LOG_STATUS';
 
 export const getPackages = (query) => {
     if (dev) {
@@ -48,27 +50,6 @@ export const getPackage = (i) => {
     };
 };
 
-
-export const saveAccessToken = (code) => {
-
-    return (dispatch) => {
-        
-        axios
-            .post('http://localhost:5000/code', { code })
-                .then((response) => {
-                    dispatch({
-                        type: SAVE_ACCESS_TOKEN,
-                        payload: response.data,
-                    });
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
-    }
-
-}
-
-
 export const clearAccessToken = () => {
 
     return {
@@ -91,3 +72,42 @@ export const newSearch = (searchQuery) => {
     };
 };
 
+// here we have user's github auth token, jwt token and his github username
+export const saveAccessToken = (code) => {
+
+    return (dispatch) => {
+        
+        axios
+            .post('http://localhost:5000/code', { code })
+                .then((response) => {
+                    dispatch({
+                        type: SAVE_ACCESS_TOKEN,
+                        payload: response.data,
+                    });
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+    }
+
+}
+
+export const makeServerCalls = (jwtToken, github_id) => {
+
+    return (dispatch) => {
+
+        axios
+            .post('http://localhost:5000/check-auth', { jwtToken, github_id })
+                .then((response) => {
+                    //console.log(response.data);
+                    dispatch({
+                        type: CHECK_USER_AUTH,
+                        payload: response.data,
+                    });
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
+    }
+
+}

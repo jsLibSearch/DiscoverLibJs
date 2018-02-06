@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { newSearch, clearAccessToken } from '../actions';
+import { newSearch, clearAccessToken, makeServerCalls } from '../actions';
 import './header.css';
 import { customColors as c } from '../custom/colors.js';
 import { Link } from 'react-router-dom';
@@ -28,8 +28,15 @@ class Header extends Component {
             itemsInCart: 9,
             windowWidth: window.innerWidth,
             small: small,
-        })
+        });
         console.log(sessionStorage);
+        if (sessionStorage.username) {
+            const username = sessionStorage.getItem('username');
+            this.setState({
+                username: username,
+                loggedIn: true,
+            })
+        }
     }
 
     componentWillReceiveProps(nextProps, nextState) {
@@ -38,6 +45,11 @@ class Header extends Component {
                 username: nextProps.user.username,
                 loggedIn: true,
             });
+        }
+        console.log(123);
+        if (this.state.loggedIn) {
+            const jwtToken = sessionStorage.getItem('jwtToken');
+            this.props.makeServerCalls(jwtToken, this.props.user.github_id);         
         }
     }
 
@@ -91,7 +103,6 @@ class Header extends Component {
     handleLogInClick() { 
         axios
             .get('http://localhost:5000/login')
-
                 .then((response) => {
                     window.location = response.data;
                 })
@@ -110,9 +121,9 @@ class Header extends Component {
     }
 
     render() {
-
         return (
             <div className="App-header">
+
                 <div style={this.state.small ? {display: 'inline-flex', width: '20em'} : {display: 'inline-flex', width: '50em'}}>
                     <Link to='/' className='Logo' style={ this.state.small ? { fontSize: '.6em', marginTop: '.6em' }: null}>JS Lib Discovery</Link>
                     <div className="btn-group"  style={!this.state.small ? {marginTop: '.25em', display: 'flex', justifyContent: 'center', marginBottom: 3, height: '2em', borderColor: c.off_green} : {marginTop: '.35em', display: 'flex', justifyContent: 'center', marginBottom: 3, height: '1.6em', borderColor: c.off_green}}>
@@ -147,7 +158,8 @@ const mapStateToProps = (state, ownProps) => {
     return {
         redux: state,
         user: state.accessToken,
+        status: state.logInStatus,
     };
 };
   
-export default withRouter(connect(mapStateToProps, { newSearch, clearAccessToken })(Header));
+export default withRouter(connect(mapStateToProps, { newSearch, clearAccessToken, makeServerCalls })(Header));

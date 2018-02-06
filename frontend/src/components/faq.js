@@ -15,7 +15,6 @@ export class FAQ extends Component {
     this.setState({
       windowHeight: window.innerHeight - 40
     })
-    console.log(sessionStorage);
   }
 
   componentWillUnmount() {

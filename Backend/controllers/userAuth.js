@@ -3,6 +3,10 @@ const axios = require('axios');
 const jwt = require('jsonwebtoken');
 // user database
 const mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
+mongoose.connect(`${process.env.MONGO_URI}`, null);
+
+const User = require('../DB_Code/User');
 
 const client_id = process.env.CLIENT_ID;
 const client_secret = process.env.CLIENT_SECRET;
@@ -44,14 +48,29 @@ const getAccessToken = (req, res) => {
 
                 const [login, id, url, name] = await Promise.all([response2.data.login, response2.data.id, response2.data.url, response2.data.name]);
 
-                const token = await generateToken(login, id, url, name);
-                
+                // saving user to DB
+                const DBresponse = await User.find({ github_id: id })
+                if (!DBresponse) {
+                    const newUser = new User({ login_name: login, github_id: id, url: url, github_name: name });
+                    // const feedback = await newUser.save();
+                    // console.log(feedback);
+                    newUser.save()
+                        .then((user) => {
+                            console.log('---> success: account created <---');
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
+                }
 
+                // JWT token
+                const token = await generateToken(login, id, url, name);
 
                 res.json({
                     username: login,
                     accessToken: str,
                     jwt: token,
+                    github_id: id,
                 });
             }
 
@@ -63,12 +82,33 @@ const getAccessToken = (req, res) => {
     getUserCridentials();
 }
 
-const checkUserAuth = (str) => {
+const checkUserAuth = (req, res) => {
 
+    const { jwtToken, github_id } = req.body;
+
+    User.find({ github_id: github_id })
+        .then((response) => {
+            const result = response[0];
+            jwt.verify(jwtToken, process.env.JWT_SECRET, (e, user) => {
+                if (e) throw e;
+                if (user.id === Number(result.github_id) && user.login === result.login_name) {
+                    res.json({
+                        username: result.login_name
+                    });
+                }
+            })
+        })
+        .catch((err) => {
+            res.json({
+                error: 'something went wrong!'
+            });
+            console.log(err);
+        })
 }
 
 
 module.exports = {
     sendAuthURL,
     getAccessToken,
+    checkUserAuth,
 }

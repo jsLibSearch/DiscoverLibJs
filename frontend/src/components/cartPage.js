@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import '../App.css';
 import { customColors as c } from '../custom/colors.js';
 
-export class CartPage extends Component {
+class CartPage extends Component {
   constructor(props) {
     super(props);
     this.state = {

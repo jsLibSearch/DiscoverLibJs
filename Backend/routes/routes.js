@@ -1,7 +1,8 @@
 const getPackagesController = require('../controllers/getData');
-const getAccessController = require('../controllers/userAuth');
+const accessController = require('../controllers/userAuth');
 
 module.exports = (app) => {
+    
     // GitHub packages routes
     app
         .route('/github-packages/:page')
@@ -15,10 +16,14 @@ module.exports = (app) => {
     // User auth routes   
     app
         .route('/login')
-        .get(getAccessController.sendAuthURL);
+        .get(accessController.sendAuthURL);
 
     app
         .route('/code')
-        .post(getAccessController.getAccessToken);
+        .post(accessController.getAccessToken);
+    
+    app
+        .route('/check-auth')
+        .post(accessController.checkUserAuth);
     
 }

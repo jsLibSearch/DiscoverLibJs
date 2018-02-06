@@ -15,19 +15,12 @@ class LogIn extends Component {
   }
 
   componentDidMount() {
-    const code = this.props.location.search.replace(/\?code=/g, '');
+    
     window.addEventListener('resize', this.handleResize.bind(this));
     this.setState({
       windowHeight: window.innerHeight - 40
     });
-    
-    this.props.saveAccessToken(code);
   }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.user.jwt) sessionStorage.setItem('jwtToken', nextProps.user.jwt);
-  }
-
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.handleResize.bind(this));
@@ -50,7 +43,7 @@ class LogIn extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    user: state.accessToken
+    user: state.accessToken,
   }
 }
 
