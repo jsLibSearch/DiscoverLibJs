@@ -179,12 +179,16 @@ pink_red:      #C75058
 
 .Package {
   background-color: #E1E1E2;
-  margin: 1em 2em;
-  padding: .4em;
+  margin: 1em 3em;
+  padding: .8em;
 }
 
 .PackDiv {
   text-align: left;
+}
+
+.CartDiv {
+  margin: 0em;
 }
 
 .PackTitle {
@@ -207,6 +211,16 @@ pink_red:      #C75058
   display: inline-flex;
   justify-content: space-between
 }
+
+.PackCart {
+  padding: 0.5em;
+  margin: .25em 0.25em;
+  width: 98%;
+  display: inline-flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #91AC7C;
+}
+
 .PackButton {
   padding: 0em;
   height: 0em;

@@ -1,18 +1,18 @@
-import { GET_PACKAGES, GET_PACKAGE, NEW_SEARCH, GET_SEARCH } from '../actions';
-import axios from 'axios';
-const dev = false;
+import { GET_PACKAGES, GET_PACKAGE, NEW_SEARCH } from '../actions';
+// const dev = false;
 
 const packageReducer = (state = { query: '', packages: [] }, action) => {
     switch(action.type) {
         case GET_PACKAGES:
-            console.log(action.payload.data)
-            if (dev) {
-                return Object.assign({}, state, {
-                    packages: action.payload
+            const removeDuplicates = (a) => {
+                const seen = {};
+                return a.filter((item) => {
+                    return seen.hasOwnProperty(item.name) ? false : (seen[item.name] = true);
                 });
             }
+
             return Object.assign({}, state, {
-                packages: action.payload
+                packages: removeDuplicates(action.payload)
             });
         case GET_PACKAGE:
             return action.payload.data;

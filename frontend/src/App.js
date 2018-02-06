@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 import './App.css';
-import { customColors as c } from './custom/colors.js';
+// import { customColors as c } from './custom/colors.js';
 import { Home, LogIn, SearchPage, CartPage, Header, SignUp, UserPage, FAQ, GettingStarted } from './components';
 
 class App extends Component {
