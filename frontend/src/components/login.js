@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import '../App.css';
-import { customColors as c } from '../custom/colors.js';
+// import { customColors as c } from '../custom/colors.js';
 import { connect } from 'react-redux';
 import { saveAccessToken } from '../actions';
-const axios = require('axios');
+// const axios = require('axios');
 
 class LogIn extends Component {
   constructor(props) {

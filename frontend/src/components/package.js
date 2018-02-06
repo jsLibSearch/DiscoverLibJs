@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { newItem } from '../actions'
 import '../App.css';
 import { customColors as c } from '../custom/colors.js';
 
@@ -10,11 +12,41 @@ class Package extends Component {
             name: '',
             about: '',
             freq: 0,
-            homepage: 'http://www.google.com/',
-            keywords: ['javascript', 'fun', 'basic', 'web']
+            homepage: '',
+            keywords: [],
+            parents: [],
+            _id: ''
         },
-        expanded: false
+        expanded: false,
+        added: false
     };
+  }
+
+  componentDidUpdate() {
+    if (this.props.name !== this.state.package.name) {
+        const pkg = {
+            name: this.props.name,
+            about: this.props.about,
+            freq: this.props.freq,
+            homepage: this.props.homepage,
+            keywords: this.props.keywords,
+            parents: this.props.parents,
+            _id: this.props._id
+        }
+        let inCart = false
+        if (this.props.cart) {
+            for (let i = 0; i < this.props.cart.length; i++) {
+                if (this.props.name === this.props.cart[i].name) {
+                    inCart = true
+                }
+            }
+        }
+        this.setState({
+            package: pkg,
+            added: inCart,
+            expanded: false
+        })
+    }
   }
 
   componentDidMount() {
@@ -23,10 +55,21 @@ class Package extends Component {
         about: this.props.about,
         freq: this.props.freq,
         homepage: this.props.homepage,
-        keywords: this.props.keywords
+        keywords: this.props.keywords,
+        parents: this.props.parents,
+        _id: this.props._id
+    }
+    let inCart = false
+    if (this.props.cart) {
+        for (let i = 0; i < this.props.cart.length; i++) {
+            if (this.props.name === this.props.cart[i].name) {
+                inCart = true
+            }
+        }
     }
     this.setState({
-      package: pkg
+      package: pkg,
+      added: inCart
     })
   }
 
@@ -39,7 +82,10 @@ class Package extends Component {
 
   handleCart() {
       // todo, add item to cart
-      console.log(this.state.package.name, 'was added to the cart')
+      this.props.newItem(this.state.package);
+      this.setState({
+          added: true
+      })
       return;
   }
 
@@ -58,7 +104,7 @@ class Package extends Component {
                 </ul>
             </div>
             <div className={this.state.expanded ? 'PackButtons' : 'PackButton'}>
-                <button onClick={this.handleCart.bind(this)} className='btn btn-success' style={ this.state.expanded ? { margin: 0, padding: '0em 0.8em', fontStyle: 'italic', fontSize: '.7em', color: c.body_bg, borderColor: c.off_green, backgroundColor: c.off_green } : { display: 'none' } }>{!this.state.expanded ? '' : 'Add to Cart'}</button>
+                <button onClick={this.handleCart.bind(this)} disabled={this.state.added} className='btn btn-success' style={ this.state.expanded ? { margin: 0, padding: '0em 0.8em', fontStyle: 'italic', fontSize: '.7em', color: c.body_bg, borderColor: c.off_green, backgroundColor: c.off_green } : { display: 'none' } }>{this.state.added ? 'Added to Cart' : 'Add to Cart'}</button>
                 <button onClick={this.handleExpand.bind(this)} className='btn btn-outline-secondary' style={ { width: '1.6em', height: '1.6em', margin: 0, padding: '0em', fontSize: '.7em', color: c.pink_red, borderColor: c.off_green } }>{!this.state.expanded ? '▼' : '▲'}</button>
             </div>
         </div>
@@ -66,4 +112,11 @@ class Package extends Component {
   }
 }
 
-export default Package;
+
+const mapStateToProps = (state) => {
+    return {
+        cart: state.cart
+    };
+  };
+  
+export default connect(mapStateToProps, { newItem })(Package);

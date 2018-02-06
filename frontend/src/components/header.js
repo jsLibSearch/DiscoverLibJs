@@ -20,13 +20,25 @@ class Header extends Component {
         };
     }
 
+    componentDidUpdate() {
+        if (this.props.redux.accessToken.username && this.props.redux.accessToken.username !== this.state.username) {
+            this.setState({
+                itemsInCart: this.props.redux.cart.length,
+                username: this.props.redux.accessToken.username,
+                loggedIn: true,
+            })
+        }
+        if (this.props.redux.cart.length !== this.state.itemsInCart) {
+            this.setState({ itemsInCart: this.props.redux.cart.length })
+        }
+    }
+
     componentDidMount() {
         window.addEventListener('resize', this.handleResize.bind(this))
         this.setState({
             searchedQuery: '',
-            itemsInCart: 9,
-            username: 'coleferg',
-            loggedIn: false,
+            itemsInCart: 0,
+            loggedIn: this.props.redux.accessToken.username ? true : false,
         })
         this.setState({
             windowWidth: window.innerWidth
@@ -56,19 +68,13 @@ class Header extends Component {
             return;
         }
         this.props.newSearch(this.state.searchedQuery);
-        this.props.history.push(`/`);
-        setTimeout(()=> {
-            this.props.history.push(`/search`);
-        }, 1)
+        this.props.history.push(`/search`);
         return;
     }
 
     handleSearch() {
         this.props.newSearch(this.state.searchedQuery);
-        this.props.history.push(`/`);
-        setTimeout(()=> {
-            this.props.history.push(`/search`);
-        }, 1)
+        this.props.history.push(`/search`);
         return;
     }
 

@@ -2,12 +2,20 @@ import axios from 'axios';
 import testPackages from '../custom/dummy_data.json';
 const dev = false;
 const apiURL = dev ? 'http://localhost:5000/' : 'http://localhost:5000/';
-const dbURL = dev ? 'http://localhost:8080/' : 'http://localhost:8080/'
+const DB_URL = dev ? 'http://localhost:8080/' : 'http://localhost:8080/'
+
 export const GET_PACKAGES = 'GET_PACKAGES';
 export const GET_PACKAGE = 'GET_PACKAGE';
+
 export const SAVE_ACCESS_TOKEN = 'SAVE_ACCESS_TOKEN';
-export const GET_SEARCH = 'GET_SEARCH';
-export const NEW_SEARCH = 'NEW_SEARCH';
+
+export const GET_SEARCH = 'GET_SEARCH'; // useless?
+export const NEW_SEARCH = 'NEW_SEARCH'; // useless?
+
+export const GET_CART = 'GET_CART';
+export const NEW_ITEM = 'NEW_ITEM';
+export const DELETE_ITEM = 'DELETE_ITEM';
+
 
 export const getPackages = (query) => {
     if (dev) {
@@ -18,7 +26,7 @@ export const getPackages = (query) => {
         };
     }
     return (dispatch) => {
-        axios.get(`${dbURL}search-package/${query}`, {
+        axios.get(`${DB_URL}search-package/${query}`, {
             validateStatus: function (status) {
                 return status < 500; // Reject only if the status code is greater than or equal to 500
             }
@@ -80,3 +88,24 @@ export const newSearch = (searchQuery) => {
     };
 };
 
+export const getCart = (i) => {
+    const promise = axios.get(`${DB_URL}/cart/${i}`);
+    return {
+        type: 'GET_CART',
+        payload: promise
+    };
+};
+
+export const newItem = (i) => {
+    return {
+        type: 'NEW_ITEM',
+        item: i
+    };
+};
+
+export const deleteItem = (item) => {
+    return {
+        type: 'DELETE_ITEM',
+        item: item
+    };
+};
