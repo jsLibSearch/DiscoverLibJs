@@ -35,7 +35,7 @@ class Header extends Component {
             this.setState({
                 username: username,
                 loggedIn: true,
-            })
+            });
         }
     }
 
