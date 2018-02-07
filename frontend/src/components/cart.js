@@ -127,8 +127,9 @@ class Cart extends Component {
   render() {
     return (
       <div ref='theCart' className='Package PackDiv'>
-        
-        <h1 className='PackTitle'>You have {this.state.cart.length} {this.state.cart.length === 1 ? 'package' : 'packages'} in your project</h1>
+        <h1 className='PackTitle'>
+          You have {this.state.cart.length} {this.state.cart.length === 1 ? 'package' : 'packages'} in your project
+        </h1>
         <div className='PackCart' style={{ padding: 0.2 }}>
         <Button
           outline={!(this.state.cart.length > 0 && this.state.selected.length === this.state.cart.length)}
@@ -155,21 +156,22 @@ class Cart extends Component {
         >Delete Selected</Button>
         </div>
         <div className='CartDiv'>
+        <CSSTransitionGroup
+                transitionName="background"
+                transitionAppear
+                transitionAppearTimeout={0}
+                transitionEnterTimeout={500}
+                transitionLeaveTimeout={500}
+                component='div'>
             {this.state.cart ?
             this.state.cart.map((item, i) => {
             return (
-              <CSSTransitionGroup
-                transitionName="background"
-                transitionAppearTimeout={0}
-                transitionEnterTimeout={500}
-                transitionLeaveTimeout={0}
-                key={item.name}>
-                <div className='PackCart' style={{ margin: '0am'}} key={item._id}>
-                  <h1 className='PackDesc' style={{
+                <div className='PackCart' style={{ margin: '0am'}} key={item.name}>
+                  <h1 key={item._id} className='PackDesc' style={{
                           margin: '.6em 0em',
                           verticalAlign: 'middle',
                           display: 'inline-flex'
-                      }} key={item.name}>{item.name}</h1>
+                      }}>{item.name}</h1>
                   <div key={`abc${item.name}`}>
                     <Button
                       outline={!this.state.selected.includes(item.name)}
@@ -191,7 +193,14 @@ class Cart extends Component {
                         style={{
                             margin: '0em'
                         }}>
-                        <DropdownToggle key={`zyx${item.name}`} style={{ border: 'none', margin: '0em' }} size="sm" outline caret>Options</DropdownToggle>
+                        <DropdownToggle
+                          key={`zyx${item.name}`}
+                          style={{ border: 'none', margin: '0em' }}
+                          size="sm"
+                          outline
+                          caret>
+                          Options
+                        </DropdownToggle>
                         <DropdownMenu>
                           <DropdownItem key={`q${item.name}`} onClick={this.removePackage.bind(this, item, i)}>Remove</DropdownItem>
                           <DropdownItem key={`w${item.name}`}>Move Up</DropdownItem>
@@ -202,10 +211,10 @@ class Cart extends Component {
                     </Dropdown>
                   </div>
                 </div>
-                </CSSTransitionGroup>
             )
             })
             : null}
+          </CSSTransitionGroup>
         </div>
       </div>
     );

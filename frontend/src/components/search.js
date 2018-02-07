@@ -84,6 +84,9 @@ export class SearchPage extends Component {
   
   fillDevCart() {
     this.props.redux.packages.forEach(pkg => {
+      if (pkg.scoped === false || pkg.scoped === true) {
+        return;
+      }
       this.props.newItem(pkg)
     });
   }
@@ -91,7 +94,7 @@ export class SearchPage extends Component {
   render() {
     return (
       <div ref='searchPage'>
-        {!this.state.dev ? (<button onClick={this.fillDevCart.bind(this)}>fill all</button>): null}
+        {this.state.dev ? (<button onClick={this.fillDevCart.bind(this)}>fill all</button>): null}
         <div>
           {this.state.loading ?
             (<h3 className='SearchHeader'>Loading search results for "{this.state.query}"</h3>)

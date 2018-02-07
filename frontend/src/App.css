@@ -268,10 +268,16 @@ pink_red:      #C75058
   transition: transform 500ms ease;
 }
 .background-leave {
-  display: none;
+  display: flex;
+  opacity: 1;
+  height: 20;
+  padding: 0.2em;
 }
 .background-leave.background-leave-active {
-  display: none;
+  height: 0;
+  opacity: 0;
+  padding: 0;
+  transition: all 500ms ease;
 }
 
 .page-enter {
