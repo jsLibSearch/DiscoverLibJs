@@ -5,6 +5,7 @@ const apiURL = dev ? 'http://localhost:5000/' : 'http://localhost:5000/';
 const DB_URL = dev ? 'http://localhost:8080/' : 'http://localhost:8080/'
 
 export const GET_PACKAGES = 'GET_PACKAGES';
+export const LOADING = 'LOADING';
 export const GET_PACKAGE = 'GET_PACKAGE';
 
 export const SAVE_ACCESS_TOKEN = 'SAVE_ACCESS_TOKEN';
@@ -19,6 +20,15 @@ export const GET_CART = 'GET_CART';
 export const NEW_ITEM = 'NEW_ITEM';
 export const DELETE_ITEM = 'DELETE_ITEM';
 
+export const SEARCH_REC = 'SEARCH_REC';
+export const LOADING_RECS = 'LOADING_RECS';
+export const GET_RECS = 'GET_RECS';
+
+const setStatusLoading = () => {
+    return {
+            type: 'LOADING'
+    }
+}
 
 
 export const getPackages = (query) => {
@@ -30,6 +40,7 @@ export const getPackages = (query) => {
         };
     }
     return (dispatch) => {
+        dispatch(setStatusLoading())
         axios.get(`${DB_URL}search-package/${query}`, {
             validateStatus: function (status) {
                 return status < 500; // Reject only if the status code is greater than or equal to 500
@@ -144,3 +155,59 @@ export const deleteItem = (item) => {
     };
 };
 
+
+const setRecStatusLoading = () => {
+    return {
+            type: 'LOADING_RECS'
+    }
+};
+
+export const getRecs = (cart) => {
+    const ids = cart.map(pkg => pkg._id);
+    return (dispatch) => {
+        dispatch(setRecStatusLoading())
+        axios.post(`${DB_URL}rec`, { cart: ids },{
+            validateStatus: function (status) {
+                return status < 500; // Reject only if the status code is greater than or equal to 500
+            }
+        })
+            .then((response) => {
+                dispatch({
+                    type: 'GET_RECS',
+                    payload: response.data
+                });
+            })
+            .catch(() => {
+                dispatch({
+                    type: 'GET_RECS',
+                    payload: []
+                });
+            });
+    }
+    
+};
+
+export const searchRec = (cart, query) => {
+    const ids = cart.map(pkg => pkg._id);
+    return (dispatch) => {
+        dispatch(setRecStatusLoading())
+        axios.post(`${DB_URL}rec/${query}`, { cart: ids },{
+            validateStatus: function (status) {
+                return status < 500; // Reject only if the status code is greater than or equal to 500
+            }
+        })
+            .then((response) => {
+                dispatch({
+                    type: 'SEARCH_REC',
+                    payload: response.data
+                });
+            })
+            .catch(() => {
+                dispatch({
+                    type: 'SEARCH_REC',
+                    payload: []
+                });
+            });
+    }
+    
+};
