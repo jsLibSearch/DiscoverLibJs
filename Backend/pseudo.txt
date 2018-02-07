@@ -1,0 +1,46 @@
+for each package:
+    for each other package:
+        for each project:
+            average the differences in preferences for each project
+
+        React   axios   mongoose    express
+Project1  1       0         1           0
+Project2  1       1         0           0  
+Project3  0       1         1           0
+Project4  1       1         1           1
+newProj   1                 1
+
+            React   axios   mongoose    express
+React       -
+axios       2/4     -       
+mongoose    2/4     2/4     -
+express     1/4     1/4     1/4         -
+
+compare axios to both react and mongoose
+axios to react - 2/4
+axios to mongoose - 2/4
+average for axios = 2/4 
+express to react - 1/4
+express to mongoose - 1/4
+average for express = 1/4
+recommend = max(avg) = axios
+
+edges schema
+edges.find(package in left, cart-packages in right) (xor vice versa)
+    average for each package not in cart r.e. packages in cart
+        return highest averages as recommendations
+
+
+Steps for completion:
+precompute: 
+for each package:
+    for each other package:
+        for each project:
+            average the differences in preferences for each project
+
+        React   axios   mongoose    express
+Project1  1       0         1           0
+Project2  1       1         0           0  
+Project3  0       1         1           0
+Project4  1       1         1           1
+
