@@ -8,9 +8,8 @@ const bodyParser = require('body-parser');
 
 const express = require('express');
 
-
-
 const STATUS_USER_ERROR = 422;
+const PORT = 8080;
 
 const server = express();
 
@@ -24,7 +23,7 @@ server.use(bodyParser.json());
 
 server.get('/search-package/:term', (req, res) => {
     const { term } = req.params;
-    const arr = [];
+    let arr = [];
     Package.find({ name: {$regex : `.*${term}.*`} }, (err, foundPackages) => {
         if (err) {
             return res.status(STATUS_USER_ERROR).json(err);
@@ -33,10 +32,14 @@ server.get('/search-package/:term', (req, res) => {
                 if (err) {
                     return res.status(STATUS_USER_ERROR).json(err);
                 }
-                
-                    
-                    return res.json(foundPackages.concat(foundKeys));
-                
+                    arr = foundPackages.concat(foundKeys);
+                    const removeDuplicates = (a) => {
+                        const seen = {};
+                        return a.filter((item) => {
+                            return seen.hasOwnProperty(item.name) ? false : (seen[item.name] = true);
+                        });
+                    }
+                    res.json(removeDuplicates(arr));
             })
         
     });
@@ -70,4 +73,6 @@ server.get('/all-projects', (req, res) => {
     });
 });
 
-server.listen(8080);
+server.listen(PORT, () => { 
+    console.log(`---> MongoDB server is running on port ${PORT} <---`) 
+});

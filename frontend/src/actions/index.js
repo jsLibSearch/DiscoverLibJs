@@ -9,6 +9,9 @@ export const LOADING = 'LOADING';
 export const GET_PACKAGE = 'GET_PACKAGE';
 
 export const SAVE_ACCESS_TOKEN = 'SAVE_ACCESS_TOKEN';
+export const CLEAR_ACCESS_TOKEN = 'CLEAR_ACCESS_TOKEN';
+export const CHECK_USER_AUTH = 'CHECK_USER_AUTH';
+export const SET_USER_LOG_STATUS = 'SET_USER_LOG_STATUS';
 
 export const GET_SEARCH = 'GET_SEARCH'; // useless?
 export const NEW_SEARCH = 'NEW_SEARCH'; // useless?
@@ -26,6 +29,7 @@ const setStatusLoading = () => {
             type: 'LOADING'
     }
 }
+
 
 export const getPackages = (query) => {
     if (dev) {
@@ -66,7 +70,29 @@ export const getPackage = (i) => {
     };
 };
 
+export const clearAccessToken = () => {
 
+    return {
+        type: CLEAR_ACCESS_TOKEN,
+        payload: {},
+    }
+
+}
+
+export const getSearch = (searchQuery) => {
+    return {
+        type: 'GET_SEARCH'
+    };
+};
+
+export const newSearch = (searchQuery) => {
+    return {
+        type: 'NEW_SEARCH',
+        text: searchQuery
+    };
+};
+
+// here we have user's github auth token, jwt token and his github username
 export const saveAccessToken = (code) => {
 
     return (dispatch) => {
@@ -86,18 +112,26 @@ export const saveAccessToken = (code) => {
 
 }
 
-export const getSearch = (searchQuery) => {
-    return {
-        type: 'GET_SEARCH'
-    };
-};
+export const makeServerCalls = (jwtToken, github_id) => {
 
-export const newSearch = (searchQuery) => {
-    return {
-        type: 'NEW_SEARCH',
-        text: searchQuery
-    };
-};
+    return (dispatch) => {
+
+        axios
+            .post('http://localhost:5000/check-auth', { jwtToken, github_id })
+                .then((response) => {
+                    //console.log(response.data);
+                    dispatch({
+                        type: CHECK_USER_AUTH,
+                        payload: response.data,
+                    });
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
+    }
+
+
+}
 
 export const getCart = (i) => {
     const promise = axios.get(`${DB_URL}/cart/${i}`);
@@ -120,6 +154,7 @@ export const deleteItem = (item) => {
         item: item
     };
 };
+
 
 const setRecStatusLoading = () => {
     return {

@@ -2,6 +2,8 @@
 
 # dependencies
 /node_modules
+/bootstrap
+/fontawesome-free-5.0.6
 
 # testing
 /coverage
