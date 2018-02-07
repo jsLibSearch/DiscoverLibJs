@@ -213,12 +213,15 @@ pink_red:      #C75058
 }
 
 .PackCart {
-  padding: 0.5em;
-  margin: .25em 0.25em;
+  padding: 0.2em;
+  margin: 0em;
   width: 98%;
   display: inline-flex;
   justify-content: space-between;
-  border-bottom: 1px solid #91AC7C;
+  border-bottom: .05em solid #91AC7C;
+  border-radius: 0em;
+  height: 2.25em;
+  max-height: 2.25em;
 }
 
 .PackButton {
@@ -255,4 +258,33 @@ pink_red:      #C75058
 .SearchResults {
   border-right: 1px solid #91AC7C;
   width: 30em;
+}
+
+.background-enter {
+  transform: translate(0, 100%);
+}
+.background-enter.background-enter-active {
+  transform: translate(0, 0%);
+  transition: transform 500ms ease;
+}
+.background-leave {
+  display: none;
+}
+.background-leave.background-leave-active {
+  display: none;
+}
+
+.page-enter {
+  transform: translate(100%);
+}
+.page-enter.background-enter-active {
+  transform: translate(0%);
+  transition: transform 1000ms ease-in-out;
+}
+.page-leave {
+  transform: translate(0%);
+}
+.page-leave.background-leave-active {
+  transform: translate(-100%);
+  transition: transform 1000ms ease-in-out;
 }

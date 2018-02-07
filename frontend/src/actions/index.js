@@ -5,6 +5,7 @@ const apiURL = dev ? 'http://localhost:5000/' : 'http://localhost:5000/';
 const DB_URL = dev ? 'http://localhost:8080/' : 'http://localhost:8080/'
 
 export const GET_PACKAGES = 'GET_PACKAGES';
+export const LOADING = 'LOADING';
 export const GET_PACKAGE = 'GET_PACKAGE';
 
 export const SAVE_ACCESS_TOKEN = 'SAVE_ACCESS_TOKEN';
@@ -16,6 +17,11 @@ export const GET_CART = 'GET_CART';
 export const NEW_ITEM = 'NEW_ITEM';
 export const DELETE_ITEM = 'DELETE_ITEM';
 
+const setStatusLoading = () => {
+    return {
+            type: 'LOADING'
+    }
+}
 
 export const getPackages = (query) => {
     if (dev) {
@@ -26,6 +32,7 @@ export const getPackages = (query) => {
         };
     }
     return (dispatch) => {
+        dispatch(setStatusLoading())
         axios.get(`${DB_URL}search-package/${query}`, {
             validateStatus: function (status) {
                 return status < 500; // Reject only if the status code is greater than or equal to 500
