@@ -1,7 +1,21 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { CSSTransitionGroup } from 'react-transition-group'
-import { Dropdown, DropdownToggle, DropdownItem, DropdownMenu, Button } from 'reactstrap';
+import { 
+  Dropdown,
+  DropdownToggle,
+  DropdownItem,
+  DropdownMenu,
+  Button,
+  Form,
+  FormGroup,
+  Label,
+  Input,
+  Popover,
+  PopoverHeader,
+  PopoverBody
+} from 'reactstrap';
+
 import { deleteItem, newItem } from '../actions';
 import '../App.css';
 import { customColors as c } from '../custom/colors.js';
@@ -16,7 +30,11 @@ class Cart extends Component {
         npmString: '',
         yarnString: '',
         isOpen: [],
-        selected: []
+        selected: [],
+        cartOptionsOpen: false,
+        cartName: 'Untitled Project',
+        newName: '',
+        renaming: false
     };
   }
 
@@ -79,6 +97,17 @@ class Cart extends Component {
       })
   }
 
+  toggleOpenCartOptions() {
+    this.setState({
+        cartOptionsOpen: !this.state.cartOptionsOpen
+    })
+  }
+
+  saveCart() {
+    console.log('saving cart')
+    // this.props.saveCartToUser()
+  }
+
   selectPackage(item) {
     if (this.state.selected.includes(item)) {
       const index = this.state.selected.findIndex(pkg => pkg === item)
@@ -124,36 +153,107 @@ class Cart extends Component {
     })
   }
 
+  toggleRename() {
+    this.setState({
+      renaming: !this.state.renaming
+    })
+  }
+
+  handleRenameText(e) {
+    e.preventDefault()
+    this.setState({
+      newName: e.target.value
+    })
+  }
+
+  renameCart(e) {
+    e.preventDefault();
+    if (this.state.newName.length < 1) {
+      return;
+    }
+    this.setState({
+      cartName: this.state.newName,
+      newName: '',
+      renaming: false
+    })
+  }
+
   render() {
     return (
       <div ref='theCart' className='Package PackDiv'>
-        <h1 className='PackTitle'>
-          You have {this.state.cart.length} {this.state.cart.length === 1 ? 'package' : 'packages'} in your project
-        </h1>
+        <div className='PackCart' style={{ position: 'relative', padding: 0.2, marginBottom: 6 }}>
+          <h1 className='PackTitle'>
+            {this.state.cartName}
+          </h1>
+          <h1 className='PackDesc' style={{ position: 'absolute', bottom: 0, right:0, marginBottom: '0.5rem' }}>
+            You have {this.state.cart.length} {this.state.cart.length === 1 ? 'package' : 'packages'} in your project
+          </h1>
+        </div>
         <div className='PackCart' style={{ padding: 0.2 }}>
-        <Button
-          outline={!(this.state.cart.length > 0 && this.state.selected.length === this.state.cart.length)}
-          color='success'
-          size='sm'
-          onClick={this.toggleSelectAll.bind(this)}
-          style={{
-            height: '2.2em',
-            fontSize: '.8em',
-            border: 'none',
-            margin: 0
-          }}>
-          {(this.state.cart.length > 0 && this.state.selected.length === this.state.cart.length) ? 'Unselect All' : 'Select all'}
-          </Button>
-        <Button outline color='danger'
-          size='sm'
-          disabled={this.state.selected.length === 0}
+        <div>
+          <Button
+            outline={!(this.state.cart.length > 0 && this.state.selected.length === this.state.cart.length)}
+            color='success'
+            size='sm'
+            onClick={this.toggleSelectAll.bind(this)}
+            style={{
+              height: '2.2em',
+              fontSize: '.8em',
+              border: 'none',
+              margin: 0
+            }}>
+            {(this.state.cart.length > 0 && this.state.selected.length === this.state.cart.length) ? 'Unselect All' : 'Select all'}
+            </Button>
+          <Button outline color='danger'
+            size='sm'
+            disabled={this.state.selected.length === 0}
+            style={{
+              height: '2.2em',
+              fontSize: '.8em',
+              border: 'none'
+            }}
+            onClick={this.deleteSelected.bind(this)}
+          >Delete Selected</Button>
+        </div>
+        <Dropdown
+          group
+          title='Cart Options'
+          id={`options`}
+          isOpen={this.state.cartOptionsOpen}
+          toggle={this.toggleOpenCartOptions.bind(this)}
+          size="sm"
           style={{
             height: '2.2em',
             fontSize: '.8em',
             border: 'none'
-          }}
-          onClick={this.deleteSelected.bind(this)}
-        >Delete Selected</Button>
+          }}>
+          <DropdownToggle
+            style={{ border: 'none', margin: '0em' }}
+            size="sm"
+            outline
+            caret>
+            Project Options
+          </DropdownToggle>
+          <DropdownMenu>
+            <DropdownItem onClick={this.saveCart.bind(this)}>Save Project</DropdownItem>
+            <DropdownItem id='rename'onClick={this.toggleRename.bind(this)}>Rename</DropdownItem>
+            <Popover style={ { backgroundColor: c.body_bg } }  placement='left' isOpen={this.state.renaming} target='options' toggle={this.toggleRename.bind(this)}>
+              <PopoverHeader style={ { backgroundColor: c.header, color: c.body_bg } }>Rename Project</PopoverHeader>
+              <PopoverBody>
+                <Form onSubmit={this.renameCart.bind(this)}>
+                  <FormGroup>
+                    <Label for="rename project" hidden>Rename Project</Label>
+                    <Input bsSize='sm' onChange={this.handleRenameText.bind(this)} placeholder={this.state.cartName} />
+                  </FormGroup>
+                  {' '}
+                  <Button size='sm' color='success' type='submit'>Submit</Button>
+                </Form>
+              </PopoverBody>
+            </Popover>
+            <DropdownItem divider />
+            <DropdownItem>Delete Project</DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
         </div>
         <div className='CartDiv'>
         <CSSTransitionGroup
