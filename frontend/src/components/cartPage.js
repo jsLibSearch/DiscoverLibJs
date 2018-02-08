@@ -38,7 +38,7 @@ class CartPage extends Component {
     } else if (!this.props.recState.loading && this.state.loading) {
       this.setState({
         loading: false,
-        packages: this.props.recState.recs,
+        recs: this.props.recState.recs,
       })
     }
   }
@@ -81,7 +81,6 @@ class CartPage extends Component {
   }
 
   render() {
-    console.log(this.props.recState.recs);
     return (
       <div ref='cartPage'>
         <Cart />
@@ -90,19 +89,28 @@ class CartPage extends Component {
           onClick={this.sendRecRequest.bind(this)}>
           Get recommendations from cart
         </Button>
+        <p>
+          {this.state.loading ? 'Loading recommendations' : ''}
+        </p>
         {this.state.recs.length > 0 ?
         this.state.recs.map((rec, i) => {
+          if (this.state.recs.length === i + 1) {
+            return (
+              <div key={'scoper'}>
+              </div>
+            )
+          }
           return (
             <div key={rec._id + 'id'}>
               <Package
                 key={i}
-                name={this.state.recs[rec].name}
-                about={this.state.recs[rec].description}
-                freq={this.state.recs[rec].freq}
-                keywords={this.state.recs[rec].keywords}
-                parents={this.state.recs[rec].parents}
-                _id={this.state.recs[rec]._id}
-                homepage={this.state.recs[rec].homepage}/>
+                name={rec.name}
+                about={rec.description}
+                freq={rec.freq}
+                keywords={rec.keywords}
+                parents={rec.parents}
+                _id={rec._id}
+                homepage={rec.homepage}/>
             </div>
           )
         })

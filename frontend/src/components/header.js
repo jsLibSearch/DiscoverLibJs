@@ -62,7 +62,7 @@ class Header extends Component {
 
         if (this.state.loggedIn) {
             const jwtToken = sessionStorage.getItem('jwtToken');
-            this.props.makeServerCalls(jwtToken, this.props.user.github_id);         
+            // this.props.makeServerCalls(jwtToken, this.props.user.github_id);         
         }
     }
 
