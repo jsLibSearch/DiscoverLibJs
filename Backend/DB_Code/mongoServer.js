@@ -3,6 +3,8 @@ const cors = require('cors')
 const Package = require('./Package.js');
 const Project = require('./Project.js');
 const Edge = require('./Edge.js');
+const User = require('./User.js');
+const Cart = require('./Cart.js');
 mongoose.connect(`${process.env.MONGO_URI}`, null);
 
 const bodyParser = require('body-parser');
@@ -152,6 +154,41 @@ server.post('/rec', (req, res) => {
         })
 })
 
+server.post('/save-cart', (req, res) => {
+    const { cart, user } = req.body;
+    const { github_id, github_name } = user;
+    Package.find({_id: { $in: cart }})
+    .then(pkgs => {
+        const ids = pkgs.map(pkg => pkg._id);
+        User.findOne({ github_id, github_name})
+        .then(foundUser => {
+            if (!foundUser) {
+                return res.status(STATUS_USER_ERROR).send({ error: " not a foundUser "})
+            }
+            const theCart = new Cart ( { cart: ids, user: foundUser._id});
+            theCart.save()
+            .then((savedCart) => {
+                foundUser.carts.push(savedCart._id);
+                foundUser.save()
+                .then(() => {
+                   return res.json(savedCart);
+                })
+                .catch((err) => {
+                    return res.status(STATUS_USER_ERROR).send(err);
+                })
+            })
+            .catch((err) => {
+                return res.status(STATUS_USER_ERROR).send(err);
+            })
+        })
+        .catch((err) => {
+            return res.status(STATUS_USER_ERROR).send(err);
+        })
+    })
+    .catch((err) => {
+        return res.status(STATUS_USER_ERROR).send(err);
+    })
+})
 server.listen(PORT, () => { 
     console.log(`---> MongoDB server is running on port ${PORT} <---`) 
 });
