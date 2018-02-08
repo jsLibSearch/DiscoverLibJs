@@ -9,7 +9,7 @@ import recReducer from './rec_reducer.js'
 const rootReducer = combineReducers({
     packages: packageReducer,
     accessToken: accessTokenSaver,
-    recState: recReducer
+    recState: recReducer,
     userStatusReducer: userReducer,
     logInStatus: userLogStatus,
     cart: cartReducer
