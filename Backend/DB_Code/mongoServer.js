@@ -154,8 +154,40 @@ server.post('/rec', (req, res) => {
         })
 })
 
+server.post('/user-cart', (req, res) => {
+    const { user } = req.body;
+    const { github_id, github_name } = user;
+    User.findOne({ github_id, github_name})
+    .then(foundUser => {
+        if (!foundUser) {
+            return res.status(STATUS_USER_ERROR).send({ error: " not a foundUser "})
+        }
+        Cart.find({user: foundUser._id})
+        .then((carts) => {
+            res.send(carts);
+        })
+        .catch((err) => {
+            return res.status(STATUS_USER_ERROR).send(err);
+        })
+    })
+    .catch((err) => {
+        return res.status(STATUS_USER_ERROR).send(err);
+    })
+});
+
+server.get('/cart/:cartid', (req, res) => {
+    const {cartid} = req.params;
+    Cart.findOne({_id: cartid})
+    .then(cart => {
+        if (!cart) {
+            return res.status(STATUS_USER_ERROR).send({err: "no cart"})
+        }
+        return res.json(cart);
+    })
+})
+
 server.post('/save-cart', (req, res) => {
-    const { cart, user } = req.body;
+    const { cart, user, name } = req.body;
     const { github_id, github_name } = user;
     Package.find({_id: { $in: cart }})
     .then(pkgs => {
@@ -165,7 +197,7 @@ server.post('/save-cart', (req, res) => {
             if (!foundUser) {
                 return res.status(STATUS_USER_ERROR).send({ error: " not a foundUser "})
             }
-            const theCart = new Cart ( { cart: ids, user: foundUser._id});
+            const theCart = new Cart ( { cart: ids, user: foundUser._id, name});
             theCart.save()
             .then((savedCart) => {
                 foundUser.carts.push(savedCart._id);
