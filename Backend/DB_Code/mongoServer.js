@@ -154,10 +154,9 @@ server.post('/rec', (req, res) => {
         })
 })
 
-server.post('/user-cart', (req, res) => {
-    const { user } = req.body;
-    const { github_id, github_name } = user;
-    User.findOne({ github_id, github_name})
+server.get('/user-carts/:github_id', (req, res) => {
+    const { github_id } = req.params;
+    User.findOne({ github_id })
     .then(foundUser => {
         if (!foundUser) {
             return res.status(STATUS_USER_ERROR).send({ error: " not a foundUser "})
@@ -184,7 +183,55 @@ server.get('/cart/:cartid', (req, res) => {
         }
         return res.json(cart);
     })
+    .catch((err) => {
+        return res.status(STATUS_USER_ERROR).send(err);
+    })
 })
+
+
+server.put('/edit-cart', (req, res) => {
+    const { cartid, cart, name } = req.body;
+    Package.find({_id: { $in: cart }})
+    .then(pkgs => {
+        const ids = pkgs.map(pkg => pkg._id);
+        Cart.findOneAndUpdate({_id: cartid}, { $set: { cart: ids , name }}, {new: true})
+        .then(cart => {
+            if (!cart) {
+                return res.status(STATUS_USER_ERROR).send({err: "no cart"})
+            }
+            return res.json(cart);
+        })
+        .catch((err) => {
+            return res.status(STATUS_USER_ERROR).send(err);
+        })
+    })
+    .catch((err) => {
+        return res.status(STATUS_USER_ERROR).send(err);
+    });
+
+});
+
+server.delete('/delete-cart', (req, res) => {
+    const { cartid } = req.body;
+    User.find({carts: cartid })
+    .then(users => {
+        users.forEach(user => {
+            user.carts.splice(user.carts.indexOf(cartid), 1);
+            user.save();
+        })
+        Cart.deleteOne({_id: cartid})
+        .then(() => {
+            return res.json({success: true});
+        })
+        .catch((err) => {
+            return res.status(STATUS_USER_ERROR).send(err);
+        })
+    })
+    .catch((err) => {
+        return res.status(STATUS_USER_ERROR).send(err);
+    });
+
+});
 
 server.post('/save-cart', (req, res) => {
     const { cart, user, name } = req.body;
