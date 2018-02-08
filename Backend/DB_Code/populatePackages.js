@@ -1,11 +1,19 @@
 const fs = require("fs");
-let savedPackages = null;
-const readPackages = () => {
-  if (!savedPackages) {
-    const contents = fs.readFileSync("../../Frontend/src/custom/packages.json", "utf8");
-    savedPackages = JSON.parse(contents);
+const finalPackages ={};
+let last = Number(process.argv[2])
+console.log("last number for packages ...", last);
+async function readPackages () {
+  while (last >= 0) {
+    const contents = await fs.readFileSync(`../../Frontend/src/custom/packages${last}.json`, "utf8");
+    const savedPackages = JSON.parse(contents);
+    savedPackages.forEach(pkg => {
+        if (finalPackages.hasOwnProperty(pkg.name)) {
+            finalPackages[pkg.name].freq += pkg.freq;
+        } else finalPackages[pkg.name] = pkg;
+    })
+    last--;
   }
-  return savedPackages;
+  return;
 };
 const mongoose = require("mongoose");
 mongoose.Promise = Promise;
@@ -15,10 +23,17 @@ const Package = require("./Package.js");
 const rows = [];
 const populatePackages = () => {
   // TODO: implement this
-  readPackages();
-  const promises = Object.values(savedPackages).map(element => {
-    return new Package(element).save();
-  });
+  readPackages().then(() => {
+    // const promises = Object.values(finalPackages).map(element => {
+    //     return new Package(element).save();
+    fs.writeFileSync("./finalPackagesish.json", JSON.stringify(finalPackages), function(err) {
+        if(err) {
+            return console.log(err);
+        }
+    
+        console.log("The file was saved!");
+    });
+  })
   console.log("done");
   return Promise.all(promises);
 };
