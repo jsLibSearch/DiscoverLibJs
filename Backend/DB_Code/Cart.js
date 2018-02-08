@@ -11,6 +11,7 @@ const Schema = mongoose.Schema;
 
 
 const CartSchema = new Schema({
+    name: String,
     cart: [{
         type: Schema.Types.ObjectId,
         ref: 'Packages'
