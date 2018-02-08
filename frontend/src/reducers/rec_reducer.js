@@ -32,12 +32,12 @@ const recReducer = (state = { recs: [], loading: false, query: '' }, action) => 
                 return noDups;
             }
             return Object.assign({}, state, {
-                packages: processPackages(action.payload),
+                recs: processPackages(action.payload),
                 loading: false
             });
         case SEARCH_REC:
             return Object.assign({}, state, {
-                packages: processPackages(action.payload),
+                recs: processPackages(action.payload),
                 loading: false
             });
         case LOADING_RECS:

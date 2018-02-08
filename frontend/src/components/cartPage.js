@@ -43,6 +43,8 @@ class CartPage extends Component {
     }
   }
 
+  
+
   componentDidMount() {
     window.addEventListener('resize', this.handleResize.bind(this));
 
@@ -79,6 +81,7 @@ class CartPage extends Component {
   }
 
   render() {
+    console.log(this.props.recState.recs);
     return (
       <div ref='cartPage'>
         <Cart />
