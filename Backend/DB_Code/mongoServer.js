@@ -162,7 +162,7 @@ server.post('/user-cart', (req, res) => {
         if (!foundUser) {
             return res.status(STATUS_USER_ERROR).send({ error: " not a foundUser "})
         }
-        Cart.find({user: user._id})
+        Cart.find({user: foundUser._id})
         .then((carts) => {
             res.send(carts);
         })
