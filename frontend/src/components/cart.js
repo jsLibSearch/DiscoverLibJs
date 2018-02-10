@@ -34,7 +34,8 @@ class Cart extends Component {
         cartOptionsOpen: false,
         cartName: 'Untitled Project',
         newName: '',
-        renaming: false
+        renaming: false,
+        
     };
   }
 
