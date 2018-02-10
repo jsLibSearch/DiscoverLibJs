@@ -55,8 +55,8 @@ async function createEdges() {
                                 count++
                             }
                         }
+                        if (count < 5) continue;
                         const average = count/529;
-                        if (average === 0) continue;
                         const newEdge = new Edge({left: packages[i]._id, right: packages[j]._id, weight: average})
                         promises.push(newEdge.save());
                     }
@@ -68,8 +68,12 @@ async function createEdges() {
                 console.log(err);
             }
         }
-        if (packages) fillUp();
-        return Promise.all(promises);
+        if (packages) fillUp().then(() => {
+            Promise.all(promises).then(() => {
+            console.log('edges made');
+            });
+        });
+        return 
     } catch (err) {
         console.log(err);
     }

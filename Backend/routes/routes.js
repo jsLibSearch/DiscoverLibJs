@@ -5,7 +5,7 @@ module.exports = (app) => {
     
     // GitHub packages routes
     app
-        .route('/github-packages/:page')
+        .route('/github-packages/:page/:month')
         .get(getPackagesController.getPackages);
     
     app

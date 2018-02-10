@@ -11,7 +11,8 @@ export class UserPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        windowHeight: window.innerHeight - 40
+        windowHeight: window.innerHeight - 40,
+        userCarts: []
     };
   }
 
