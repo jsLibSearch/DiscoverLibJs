@@ -6,6 +6,7 @@
   "dependencies": {
     "axios": "^0.17.1",
     "body-parser": "^1.18.2",
+    "cli-progress": "^1.7.0",
     "cors": "^2.8.4",
     "express": "^4.16.2",
     "github": "^13.1.0",

@@ -13,7 +13,7 @@ const Project = require('./Project.js');
 
 async function readData() {
     async function readProjects() {
-            const contents = await fs.readFileSync(`../../Frontend/src/custom/projects${current}.json`, "utf8");
+            const contents = await fs.readFileSync(`./projectdata/projects${current}.json`, "utf8");
             return JSON.parse(contents);
     };
     const data = await readProjects()
