@@ -45,10 +45,10 @@ async function createEdges() {
                         hash[projects[m]._id][projects[m].children[z]] = true;
                     }
                 }
-                bar.start(packages.length, 0)
-                for (let i = 0; i < packages.length; i++) {
+                bar.start(4000, 0)
+                for (let i = 0; i < 4000; i++) {
                     bar.update(i)
-                    for (let j = i + 1; j < packages.length; j++) {
+                    for (let j = i + 1; j < 4000; j++) {
                         let count = 0;
                         for (let q = 0; q < packages[i].parents.length; q++) {
                             if (hash[packages[i].parents[q]].hasOwnProperty(packages[j]._id)) {

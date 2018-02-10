@@ -27,11 +27,11 @@ server.use(bodyParser.json());
 server.get('/search-package/:term', (req, res) => {
     const { term } = req.params;
     let arr = [];
-    Package.find({ name: {$regex : `.*${term}.*`} }, (err, foundPackages) => {
+    Package.find({ $query: { name: {$regex : `.*${term}.*`}}, $sort: { freq : -1 }  }, (err, foundPackages) => {
         if (err) {
             return res.status(STATUS_USER_ERROR).json(err);
         }
-            Package.find({ keywords: {$regex : `.*${term}.*`} }, (err, foundKeys) => {
+            Package.find({ $query: { keywords: {$regex : `.*${term}.*`} }, $sort: { freq : -1 }  }, (err, foundKeys) => {
                 if (err) {
                     return res.status(STATUS_USER_ERROR).json(err);
                 }
@@ -39,10 +39,10 @@ server.get('/search-package/:term', (req, res) => {
                     const removeDuplicates = (a) => {
                         const seen = {};
                         return a.filter((item) => {
-                            return seen.hasOwnProperty(item.name) ? false : (seen[item.name] = true);
+                            return seen.hasOwnProperty(item.name) ? false : (seen[item.name] = true)
                         });
                     }
-                    res.json(removeDuplicates(arr));
+                    res.json(removeDuplicates(arr).sort((a,b) => b.freq - a.freq));
             })
         
     });
@@ -105,6 +105,7 @@ server.post('/rec', (req, res) => {
                     children[child] = 0;
                 })
             })
+            console.log(Object.keys(children).length)
             cart.forEach((cartid, i) => {
                 if (children.hasOwnProperty(cartid)) {
                     delete children[cartid];
@@ -133,13 +134,17 @@ server.post('/rec', (req, res) => {
                 resolve();
             });
             promise.then(() => {
-                // const keysSorted =  Object.keys(children).sort(function(a,b){return children[a]-children[b]})
-                Package.find({_id: { $in: Object.keys(children)}})
+                const keysSorted =  Object.keys(children).sort(function(a,b){return children[b]-children[a]})
+                const keysSliced = keysSorted.slice(keysSorted.length - 10)
+                console.log(children[keysSliced[2]])
+                Package.find({_id: { $in: keysSliced}})
                 .then(pkgs => {
                     let sortedPkgs =  pkgs.sort(function(a,b){return children[a._id]-children[b._id]})
-                    sortedPkgs = sortedPkgs.filter(a => children[a._id] > 0);
-                    console.log(sortedPkgs.slice(sortedPkgs.length - 8));
-                    return res.json(sortedPkgs.reverse());
+                    // sortedPkgs = sortedPkgs.filter(a => {
+                    //     return children[a._id] > 0;
+                    // // });
+                    // console.log(sortedPkgs.slice(sortedPkgs.length - 8));
+                    return res.json(sortedPkgs);
                 })
                 .catch((err) => {
                     console.log(err)
