@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const cors = require('cors')
+const _progress =  require('cli-progress')
+
 const Package = require('./Package.js');
 const Project = require('./Project.js');
 const Edge = require('./Edge.js');
@@ -96,63 +98,77 @@ child with highest average, is highest recommendation
 
 */
 server.post('/rec', (req, res) => {
+    
+    const bar = new _progress.Bar({}, _progress.Presets.shades_classic);
     const { cart } = req.body;
+    
     Project.find({ children: { $in: cart } })
-        .then((proj) => {
-            let children = {};
-            proj.forEach((p) => {
+        .then(async (proj) => {
+            const children = {};
+            const some1 = await proj.map((p) => {
                 p.children.forEach(child => {
                     children[child] = 0;
                 })
             })
             console.log(Object.keys(children).length)
-            cart.forEach((cartid, i) => {
+            const some2 = await cart.map((cartid, i) => {
                 if (children.hasOwnProperty(cartid)) {
                     delete children[cartid];
                     console.log("deleted ... ", cartid);
                 }
             })
             const keyCounter = () => {
-                Object.keys(children).forEach((child) => {
-                    Edge.find({$or: [ { left: child, right: {$in: cart}}, { right: child , left: {$in: cart}}]})
+
+                Edge.find({$or: [ { left: {$in: Object.keys(children)}, right: {$in: cart}}, { right: {$in: Object.keys(children)} , left: {$in: cart}}]}).sort({weight:-1})
                     .then((edges) => {
-                        edges.forEach(edge => {
-                            children[child] += edge.weight;
+                        console.log(edges.length, "edges");              
+                        edges.forEach((edge) => {
+                            cart.indexOf(edge.left) < cart.indexOf(edge.right) ?
+                            children[edge.left] += edge.weight :children[edge.right] += edge.weight
                         })
                         // if (edges.length > 0) {
                         //     children[child] /= Object.keys(children).length;
                         // }
                     })
+                    .then(()=> {
+                            console.log("children", Object.keys(children).length)
+                            const keysSorted =  Object.keys(children).sort(function(a,b){return children[b]-children[a]})
+                            const keysSliced = keysSorted.slice(keysSorted.length - 100)
+                            Package.find({_id: { $in: keysSliced}})
+                            .then(pkgs => {
+                                let sortedPkgs =  pkgs
+                                // sortedPkgs = sortedPkgs.filter(a => {
+                                //     return children[a._id] > 0;
+                                // // });
+                                // console.log(sortedPkgs.slice(sortedPkgs.length - 8));
+                                return res.json(sortedPkgs);
+                            })
+                            .catch((err) => {
+                                console.log(err)
+                            })
+                    })
                     .catch((err) => {
                         console.log(err)
                     })
-                })
             }
-            const promise = new Promise((resolve, reject) => {
-                keyCounter();
-                console.log("hellow");
-                resolve();
-            });
-            promise.then(() => {
-                const keysSorted =  Object.keys(children).sort(function(a,b){return children[b]-children[a]})
-                const keysSliced = keysSorted.slice(keysSorted.length - 10)
-                console.log(children[keysSliced[2]])
-                Package.find({_id: { $in: keysSliced}})
-                .then(pkgs => {
-                    let sortedPkgs =  pkgs.sort(function(a,b){return children[a._id]-children[b._id]})
-                    // sortedPkgs = sortedPkgs.filter(a => {
-                    //     return children[a._id] > 0;
-                    // // });
-                    // console.log(sortedPkgs.slice(sortedPkgs.length - 8));
-                    return res.json(sortedPkgs);
-                })
-                .catch((err) => {
-                    console.log(err)
-                })
-            })
-            .catch((err) => {
-                console.log(err)
-            })
+            // const promise = new Promise((resolve, reject) => {
+            //     keyCounter();
+            //     console.log("hellow");
+            //     resolve();
+            // });
+            // promise
+            // })
+            // .catch((err) => {
+            //     console.log(err)
+            // })
+            
+        const refreshIntervalId = setInterval(() => {
+            if (Object.keys(children).length > 2) {
+                keyCounter(); 
+                clearInterval(refreshIntervalId)
+            }
+            console.log(Object.keys(children).length)
+        }, 300);
         })
         .catch((err) => {
             console.log(err)
