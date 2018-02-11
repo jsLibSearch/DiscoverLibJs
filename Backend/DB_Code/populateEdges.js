@@ -45,18 +45,20 @@ async function createEdges() {
                         hash[projects[m]._id][projects[m].children[z]] = true;
                     }
                 }
-                bar.start(4000, 0)
-                for (let i = 0; i < 4000; i++) {
+                bar.start(packages.length, 0)
+                const average = 2/529;
+                for (let i = 0; i < packages.length / 2; i++) {
                     bar.update(i)
-                    for (let j = i + 1; j < 4000; j++) {
+                    for (let j = packages.length / 2; j < packages.length; j++) {
                         let count = 0;
                         for (let q = 0; q < packages[i].parents.length; q++) {
                             if (hash[packages[i].parents[q]].hasOwnProperty(packages[j]._id)) {
                                 count++
                             }
+                            if (count > 2) break;
                         }
-                        if (count < 5) continue;
-                        const average = count/529;
+                        if (count !== 2) continue;
+                        if (average === 0) continue;
                         const newEdge = new Edge({left: packages[i]._id, right: packages[j]._id, weight: average})
                         promises.push(newEdge.save());
                     }
@@ -68,12 +70,8 @@ async function createEdges() {
                 console.log(err);
             }
         }
-        if (packages) fillUp().then(() => {
-            Promise.all(promises).then(() => {
-            console.log('edges made');
-            });
-        });
-        return 
+        if (packages) fillUp();
+        return Promise.all(promises);
     } catch (err) {
         console.log(err);
     }
