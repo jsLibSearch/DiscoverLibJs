@@ -1,9 +1,9 @@
-import { GET_PACKAGES, GET_PACKAGE, NEW_SEARCH, LOADING } from '../actions';
+import { GET_RECS, SEARCH_REC, LOADING_RECS } from '../actions';
 // const dev = false;
 
-const packageReducer = (state = { query: '', packages: [], loading: false }, action) => {
+const recReducer = (state = { recs: [], loading: false, query: '' }, action) => {
     switch(action.type) {
-        case GET_PACKAGES:
+        case GET_RECS:
             const processPackages = (a) => {
                 const seen = {};
                 let noDups = a.filter((item) => {
@@ -32,16 +32,15 @@ const packageReducer = (state = { query: '', packages: [], loading: false }, act
                 return noDups;
             }
             return Object.assign({}, state, {
-                packages: processPackages(action.payload),
+                recs: processPackages(action.payload),
                 loading: false
             });
-        case GET_PACKAGE:
-            return action.payload.data;
-        case NEW_SEARCH:
+        case SEARCH_REC:
             return Object.assign({}, state, {
-                query: action.text
-            })
-        case LOADING:
+                recs: processPackages(action.payload),
+                loading: false
+            });
+        case LOADING_RECS:
             return Object.assign({}, state, {
                 loading: true
             })
@@ -51,4 +50,4 @@ const packageReducer = (state = { query: '', packages: [], loading: false }, act
 };
 
 
-export default packageReducer;
+export default recReducer;

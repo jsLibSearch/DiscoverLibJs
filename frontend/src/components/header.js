@@ -85,7 +85,9 @@ class Header extends Component {
         if (e.key !== 'Enter') {
             return;
         }
-        this.props.newSearch(this.state.searchedQuery);
+        if (this.state.searchedQuery) {
+            this.props.newSearch(this.state.searchedQuery);
+        }
         this.props.history.push(`/search`);
         return;
     }
