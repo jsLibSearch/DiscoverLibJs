@@ -26,6 +26,14 @@ const corsOptions = {
 server.use(cors(corsOptions));
 server.use(bodyParser.json());
 
+server.post('/save-user', (req, res) => {
+    const { info } = req.body;
+    const newUser = new User(info);
+    newUser.save().then((user) => {
+        return res.json(user);
+    }).catch(err => res.status(STATUS_USER_ERROR).json(err));
+})
+
 server.get('/search-package/:term', (req, res) => {
     const { term } = req.params;
     let arr = [];
@@ -133,9 +141,10 @@ server.post('/rec', (req, res) => {
                     .then(()=> {
                             console.log("children", Object.keys(children).length)
                             const keysSorted =  Object.keys(children).sort(function(a,b){return children[b]-children[a]})
-                            const keysSliced = keysSorted.slice(0, 100).filter((x) => {
-                                return cart.indexOf(x) < 0;
-                            })
+                            const keysSliced = keysSorted.slice(0, 300)
+                            // .filter((x) => {
+                            //     return cart.indexOf(x) < 0;
+                            // })
                             console.log(children[keysSliced[0]], children[keysSliced[keysSliced.length - 1]])
                             Package.find({_id: { $in: keysSliced}})
                             .then(pkgs => {

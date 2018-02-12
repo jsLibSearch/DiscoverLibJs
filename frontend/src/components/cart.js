@@ -130,6 +130,7 @@ class Cart extends Component {
   onDescriptionTextChange(e) {
     this.setState({ description: e.target.value });
     e.preventDefault();
+  }
 
   toggleOpenCartOptions() {
     this.setState({
@@ -373,7 +374,7 @@ class Cart extends Component {
             </Form>
           </ModalBody>
           <ModalFooter>
-            <Button color="primary" onClick={() => this.onCreateRepoClick()}>Sumbit</Button>
+            <Button color="primary" onClick={() => this.onCreateRepoClick()}>Submit</Button>
             <Button color="secondary" onClick={() => this.toggleModal()}>Cancel</Button>
           </ModalFooter>
         </Modal> 
