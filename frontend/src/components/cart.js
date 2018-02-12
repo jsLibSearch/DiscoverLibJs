@@ -28,6 +28,7 @@ class Cart extends Component {
         cartName: 'Untitled Project',
         newName: '',
         renaming: false,
+        _id: null
     };
   }
 
