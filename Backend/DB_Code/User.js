@@ -7,8 +7,6 @@ mongoose.Promise = Promise;
 
 const Schema = mongoose.Schema;
 
-
-
 const UserSchema = new Schema({
     login_name: {
         type: String,

@@ -41,7 +41,6 @@ class CartPage extends Component {
       windowHeight: window.innerHeight - 40,
       cart: currentCart
     })
-    console.log(sessionStorage);
   }
 
   componentWillUnmount() {

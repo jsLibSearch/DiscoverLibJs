@@ -118,8 +118,6 @@ export const makeServerCalls = (jwtToken, github_id) => {
                     console.log(err);
                 })
     }
-
-
 }
 
 export const getCart = (i) => {

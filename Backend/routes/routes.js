@@ -1,5 +1,7 @@
 const getPackagesController = require('../controllers/getData');
 const accessController = require('../controllers/userAuth');
+const repoController = require('../controllers/createRepo');
+
 
 module.exports = (app) => {
     
@@ -25,5 +27,11 @@ module.exports = (app) => {
     app
         .route('/check-auth')
         .post(accessController.checkUserAuth);
+
+
+    // Creates Repo
+    app
+        .route('/create-repo')
+        .post(repoController.createRepo);
     
 }
