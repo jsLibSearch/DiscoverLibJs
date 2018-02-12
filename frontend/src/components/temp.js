@@ -29,11 +29,11 @@ class Cart extends Component {
         newName: '',
         renaming: false,
     };
+
   }
 
   componentDidUpdate() {
     if (this.props.cart && this.props.cart.length !== this.state.cart.length && this.refs.theCart) {
-      
       let currentCart = [];
       if (this.props.cart.length > 0) {
         currentCart = this.props.cart.slice()
@@ -131,11 +131,7 @@ class Cart extends Component {
     this.setState({ description: e.target.value });
     e.preventDefault();
   }
-<<<<<<< HEAD
 
-=======
-  
->>>>>>> 0763b51141a34a490c93214d045b879bb4ec2ea4
   toggleOpenCartOptions() {
     this.setState({
         cartOptionsOpen: !this.state.cartOptionsOpen
@@ -174,7 +170,7 @@ class Cart extends Component {
     }
     this.state.cart.forEach(pkg => {
       newSelected.push(pkg.name)
-    });
+    })
     this.setState({
       selected: newSelected
     });
@@ -277,7 +273,6 @@ class Cart extends Component {
           <DropdownMenu>
             <DropdownItem onClick={this.saveCart.bind(this)}>Save Project</DropdownItem>
             <DropdownItem id='rename'onClick={this.toggleRename.bind(this)}>Rename</DropdownItem>
-            <DropdownItem color="secondary" onClick={() => this.toggleModal() }> Create A Repo </DropdownItem>
             <Popover style={ { backgroundColor: c.body_bg } }  placement='left' isOpen={this.state.renaming} target='options' toggle={this.toggleRename.bind(this)}>
               <PopoverHeader style={ { backgroundColor: c.header, color: c.body_bg } }>Rename Project</PopoverHeader>
               <PopoverBody>
@@ -357,6 +352,7 @@ class Cart extends Component {
             : null}
           </CSSTransitionGroup>
         </div>
+        <Button color="secondary" onClick={() => this.toggleModal() }> Create A Repo </Button>
         <Modal isOpen={this.state.modal} toggle={() => this.toggleModal()}>
           <ModalHeader toggle={() => this.toggleModal()}>Short Info</ModalHeader>
           <ModalBody>
