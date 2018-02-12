@@ -12,8 +12,10 @@ github.authenticate({
 const getPackages = (req, res) => {
 
     const  _page = req.params.page;
-
-    const q = 'language:javascript';
+    const month = req.params.month;
+    //>=YYYY-MM-DD
+    const created = `2017-${month}-01..2017-${month}-28`
+    const q = `language:javascript created:${created}`;
     const sort = 'stars';
     const order = 'desc';
     const page = _page;
@@ -22,7 +24,7 @@ const getPackages = (req, res) => {
 
     async function getPs() {
         try {
-            const result = await github.search.repos({q, sort, order, page, per_page });
+            const result = await github.search.repos({ q, sort, order, page, per_page });
             const a = await result.data.items;
             if (a) {
                 for (let obj of a) {

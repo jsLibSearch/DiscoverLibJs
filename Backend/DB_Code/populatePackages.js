@@ -2,7 +2,7 @@ const fs = require("fs");
 let savedPackages = null;
 const readPackages = () => {
   if (!savedPackages) {
-    const contents = fs.readFileSync("../../Frontend/src/custom/packages.json", "utf8");
+    const contents = fs.readFileSync("./packagesDetailed.json", "utf8");
     savedPackages = JSON.parse(contents);
   }
   return savedPackages;

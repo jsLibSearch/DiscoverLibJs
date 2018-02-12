@@ -1,6 +1,9 @@
 const fs = require("fs");
 
 
+let current = Number(process.argv[2])
+console.log("current number for projects ...", current);
+
 const mongoose = require('mongoose');
 
 mongoose.connect(`${process.env.MONGO_URI}`, null);
@@ -10,8 +13,8 @@ const Project = require('./Project.js');
 
 async function readData() {
     async function readProjects() {
-        const contents = await fs.readFileSync("../../Frontend/src/custom/projects.json", "utf8");
-        return JSON.parse(contents);
+            const contents = await fs.readFileSync(`./projectdata/projects${current}.json`, "utf8");
+            return JSON.parse(contents);
     };
     const data = await readProjects()
     const final = await data.map(row => {
