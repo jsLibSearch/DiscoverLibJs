@@ -4,8 +4,8 @@
 	"private": true,
 	"dependencies": {
 		"axios": "*",
-		"cors": "*",
 		"express": "*",
-		"mongo": "*"
+		"mongo": "*",
+		"nacl": "*"
 	}
 }
