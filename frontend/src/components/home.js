@@ -15,7 +15,6 @@ class Home extends Component {
     this.setState({
       windowHeight: window.innerHeight - 40
     })
-    console.log(sessionStorage);
   }
 
   componentWillUnmount() {

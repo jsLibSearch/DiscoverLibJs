@@ -21,7 +21,7 @@ class Header extends Component {
     }
 
     componentDidUpdate() {
-        if (this.props.redux.accessToken.username && this.props.redux.accessToken.username !== this.state.username) {
+        if (this.props.user.username && this.props.user.username !== this.state.username) {
             this.setState({
                 itemsInCart: this.props.redux.cart.length,
                 username: this.props.redux.accessToken.username,
@@ -42,13 +42,13 @@ class Header extends Component {
             windowWidth: window.innerWidth,
             small: small,
         });
-        console.log(sessionStorage);
+
         if (sessionStorage.username) {
             const username = sessionStorage.getItem('username');
             this.setState({
                 username: username,
                 loggedIn: true,
-            })
+            });
         }
     }
 
@@ -58,10 +58,11 @@ class Header extends Component {
                 username: nextProps.user.username,
                 loggedIn: true,
             });
+            
         }
 
         if (this.state.loggedIn) {
-            const jwtToken = sessionStorage.getItem('jwtToken');
+            // const jwtToken = sessionStorage.getItem('jwtToken');
             // this.props.makeServerCalls(jwtToken, this.props.user.github_id);         
         }
     }
@@ -132,6 +133,7 @@ class Header extends Component {
     }
 
     render() {
+    
         return (
             <div className="App-header">
 

@@ -50,10 +50,10 @@ const getAccessToken = (req, res) => {
 
                 // saving user to DB
                 const DBresponse = await User.find({ github_id: id })
+
                 if (!DBresponse) {
                     const newUser = new User({ login_name: login, github_id: id, url: url, github_name: name });
-                    // const feedback = await newUser.save();
-                    // console.log(feedback);
+
                     newUser.save()
                         .then((user) => {
                             console.log('---> success: account created <---');
@@ -85,7 +85,7 @@ const getAccessToken = (req, res) => {
 const checkUserAuth = (req, res) => {
 
     const { jwtToken, github_id } = req.body;
-
+    console.log(github_id);
     User.find({ github_id: github_id })
         .then((response) => {
             const result = response[0];

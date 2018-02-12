@@ -1,24 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Dropdown, DropdownToggle, DropdownDropdown, DropdownItem, DropdownMenu, 
+  Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, FormText, Popover,
+  PopoverHeader, PopoverBody } from 'reactstrap';
 import { CSSTransitionGroup } from 'react-transition-group'
-import { 
-  Dropdown,
-  DropdownToggle,
-  DropdownItem,
-  DropdownMenu,
-  Button,
-  Form,
-  FormGroup,
-  Label,
-  Input,
-  Popover,
-  PopoverHeader,
-  PopoverBody
-} from 'reactstrap';
-
 import { deleteItem, newItem } from '../actions';
 import '../App.css';
 import { customColors as c } from '../custom/colors.js';
+const axios = require('axios');
 
 
 class Cart extends Component {
@@ -30,13 +19,17 @@ class Cart extends Component {
         npmString: '',
         yarnString: '',
         isOpen: [],
+        modal: false,
+        filename: '',
+        description: '',
+        private: false,
         selected: [],
         cartOptionsOpen: false,
         cartName: 'Untitled Project',
         newName: '',
         renaming: false,
-        
     };
+
   }
 
   componentDidUpdate() {
@@ -56,6 +49,7 @@ class Cart extends Component {
 
   componentDidMount() {
     window.addEventListener('resize', this.handleResize.bind(this));
+    
     let currentCart = [];
     if (this.props.cart && this.props.cart.length > 0) {
       currentCart = this.props.cart.slice();
@@ -97,6 +91,45 @@ class Cart extends Component {
           isOpen: newArr
       })
   }
+
+
+  onCreateRepoClick() {
+    const [ repo_name, description, _private, accessToken ] = 
+      [ this.state.filename, this.state.description, this.state.private, this.props.user.accessToken ];
+
+    axios
+      .post(`http://localhost:5000/create-repo`, { repo_name, description, _private, accessToken })
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+
+
+    this.setState({
+      modal: !this.state.modal
+    });
+  }
+
+  toggleModal() {
+    this.setState({
+      modal: !this.state.modal
+    });
+  }
+
+  onCheckBoxClick() {
+    this.setState({ private: !this.state.private });
+  }
+
+  onRepoTextChange(e) {
+    this.setState({ filename: e.target.value });
+    e.preventDefault();
+  }
+
+  onDescriptionTextChange(e) {
+    this.setState({ description: e.target.value });
+    e.preventDefault();
 
   toggleOpenCartOptions() {
     this.setState({
@@ -177,6 +210,7 @@ class Cart extends Component {
       newName: '',
       renaming: false
     })
+
   }
 
   render() {
@@ -317,6 +351,32 @@ class Cart extends Component {
             : null}
           </CSSTransitionGroup>
         </div>
+        <Button color="secondary" onClick={() => this.toggleModal() }> Create A Repo </Button>
+        <Modal isOpen={this.state.modal} toggle={() => this.toggleModal()}>
+          <ModalHeader toggle={() => this.toggleModal()}>Short Info</ModalHeader>
+          <ModalBody>
+            <Form>
+              <FormGroup>
+                <Label for="repo name">Repo name</Label>
+                <Input type="textarea" name="repo" id="reponame" placeholder="reponame" onChange={(e) => this.onRepoTextChange(e)}/>
+              </FormGroup>
+              <FormGroup>
+                <Label for="description">Description</Label>
+                <Input type="textarea" name="description" id="description" placeholder="description" onChange={(e) => this.onDescriptionTextChange(e)}/>
+              </FormGroup>
+              <FormGroup check >
+              <Label check >
+                <Input type="checkbox" id="checkbox" onClick={() => this.onCheckBoxClick()} />{' '}
+                Private?
+              </Label>
+            </FormGroup>
+            </Form>
+          </ModalBody>
+          <ModalFooter>
+            <Button color="primary" onClick={() => this.onCreateRepoClick()}>Sumbit</Button>
+            <Button color="secondary" onClick={() => this.toggleModal()}>Cancel</Button>
+          </ModalFooter>
+        </Modal> 
       </div>
     );
   }
@@ -324,7 +384,8 @@ class Cart extends Component {
 
 const mapStateToProps = (state) => {
   return {
-      cart: state.cart
+      cart: state.cart,
+      user: state.accessToken,
   };
 };
 

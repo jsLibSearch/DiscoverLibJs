@@ -4,7 +4,6 @@ import { customColors as c } from '../custom/colors.js';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { saveAccessToken } from '../actions';
-// import { customColors as c } from '../custom/colors.js';
 
 
 export class UserPage extends Component {
@@ -17,21 +16,25 @@ export class UserPage extends Component {
   }
 
   componentDidMount() {
-    const code = this.props.location.search.replace(/\?code=/g, '');
+    let code;
+    if (this.props.location.search.match(/\?code=/g)) {
+      code = this.props.location.search.replace(/\?code=/g, '');
+      if (!this.props.user.jwt) {
+        this.props.saveAccessToken(code);
+      }
+    }
 
     window.addEventListener('resize', this.handleResize.bind(this))
     this.setState({
       windowHeight: window.innerHeight - 40
     })
-    if (!this.props.user.jwt) {
-      this.props.saveAccessToken(code);
-    }
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.user.jwt) { 
       sessionStorage.setItem('jwtToken', nextProps.user.jwt);
       sessionStorage.setItem('username', nextProps.user.username);
+      sessionStorage.setItem('loggedIn', true);
     }
   }
 

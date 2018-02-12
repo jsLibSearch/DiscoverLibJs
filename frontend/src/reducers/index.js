@@ -2,7 +2,7 @@ import { combineReducers } from 'redux';
 import packageReducer from './packages';
 import accessTokenSaver from './accessToken';
 import userReducer from './userReducer';
-import userLogStatus from './userLogStatus';
+//import userLogStatus from './userLogStatus';
 import cartReducer from './cart_reducer';
 import recReducer from './rec_reducer.js'
 
