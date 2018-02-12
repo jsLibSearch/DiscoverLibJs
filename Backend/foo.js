@@ -21,16 +21,11 @@ const p = './packages/package.json';
 const dirname = './packages';
 
 
-function b64Endcode(str) {
-    return nacl.util.encodeBase64(str);
-}
-
 function readFile() {
 
     const content = fs.readFileSync(`${p}`, 'utf8');
-    const e = b64Endcode(content);
+    const e = nacl.util.encodeBase64(content);
     return e;
-    
 }
 
 
