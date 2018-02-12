@@ -24,8 +24,8 @@ class Header extends Component {
         if (this.props.user.username && this.props.user.username !== this.state.username) {
             this.setState({
                 itemsInCart: this.props.redux.cart.length,
-                // username: this.props.redux.accessToken.username,
-                // loggedIn: true,
+                username: this.props.redux.accessToken.username,
+                loggedIn: true,
             })
         }
         if (this.props.redux.cart.length !== this.state.itemsInCart) {
@@ -114,7 +114,7 @@ class Header extends Component {
     // this will redirect user to GitHub login page
     handleLogInClick() { 
         axios
-            .get('http://localhost:5000/login')
+            .get('http://localhost:8080/login')
                 .then((response) => {
                     window.location = response.data;
                 })

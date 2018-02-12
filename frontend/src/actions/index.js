@@ -1,8 +1,8 @@
 import axios from 'axios';
 import testPackages from '../custom/dummy_data.json';
 const dev = false;
-const apiURL = dev ? 'http://localhost:5000/' : 'http://localhost:5000/';
-const DB_URL = dev ? 'http://localhost:8080/' : 'http://localhost:8080/'
+const apiURL = dev ? 'http://localhost:8080/' : 'http://localhost:8080/';
+const DB_URL = dev ? 'http://localhost:8080/' : 'http://localhost:8080/';
 
 export const GET_PACKAGES = 'GET_PACKAGES';
 export const LOADING = 'LOADING';
@@ -98,7 +98,7 @@ export const saveAccessToken = (code) => {
     return (dispatch) => {
         
         axios
-            .post('http://localhost:5000/code', { code })
+            .post(`${apiURL}code`, { code })
                 .then((response) => {
                     dispatch({
                         type: SAVE_ACCESS_TOKEN,
@@ -117,7 +117,7 @@ export const makeServerCalls = (jwtToken, github_id) => {
     return (dispatch) => {
 
         axios
-            .post('http://localhost:5000/check-auth', { jwtToken, github_id })
+            .post(`${apiURL}check-auth`, { jwtToken, github_id })
                 .then((response) => {
                     //console.log(response.data);
                     dispatch({
@@ -132,7 +132,7 @@ export const makeServerCalls = (jwtToken, github_id) => {
 }
 
 export const getCart = (i) => {
-    const promise = axios.get(`${DB_URL}/cart/${i}`);
+    const promise = axios.get(`${DB_URL}cart/${i}`);
     return {
         type: 'GET_CART',
         payload: promise
