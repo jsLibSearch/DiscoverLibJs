@@ -28,8 +28,8 @@ class Cart extends Component {
         cartName: 'Untitled Project',
         newName: '',
         renaming: false,
+        _id: null
     };
-
   }
 
   componentDidUpdate() {
@@ -130,7 +130,8 @@ class Cart extends Component {
   onDescriptionTextChange(e) {
     this.setState({ description: e.target.value });
     e.preventDefault();
-
+  }
+  
   toggleOpenCartOptions() {
     this.setState({
         cartOptionsOpen: !this.state.cartOptionsOpen
@@ -272,6 +273,7 @@ class Cart extends Component {
           <DropdownMenu>
             <DropdownItem onClick={this.saveCart.bind(this)}>Save Project</DropdownItem>
             <DropdownItem id='rename'onClick={this.toggleRename.bind(this)}>Rename</DropdownItem>
+            <DropdownItem color="secondary" onClick={() => this.toggleModal() }> Create A Repo </DropdownItem>
             <Popover style={ { backgroundColor: c.body_bg } }  placement='left' isOpen={this.state.renaming} target='options' toggle={this.toggleRename.bind(this)}>
               <PopoverHeader style={ { backgroundColor: c.header, color: c.body_bg } }>Rename Project</PopoverHeader>
               <PopoverBody>
@@ -351,7 +353,6 @@ class Cart extends Component {
             : null}
           </CSSTransitionGroup>
         </div>
-        <Button color="secondary" onClick={() => this.toggleModal() }> Create A Repo </Button>
         <Modal isOpen={this.state.modal} toggle={() => this.toggleModal()}>
           <ModalHeader toggle={() => this.toggleModal()}>Short Info</ModalHeader>
           <ModalBody>
@@ -373,7 +374,7 @@ class Cart extends Component {
             </Form>
           </ModalBody>
           <ModalFooter>
-            <Button color="primary" onClick={() => this.onCreateRepoClick()}>Sumbit</Button>
+            <Button color="primary" onClick={() => this.onCreateRepoClick()}>Submit</Button>
             <Button color="secondary" onClick={() => this.toggleModal()}>Cancel</Button>
           </ModalFooter>
         </Modal> 
