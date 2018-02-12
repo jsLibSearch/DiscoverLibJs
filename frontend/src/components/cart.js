@@ -131,11 +131,7 @@ class Cart extends Component {
     this.setState({ description: e.target.value });
     e.preventDefault();
   }
-<<<<<<< HEAD
-
-=======
   
->>>>>>> 0763b51141a34a490c93214d045b879bb4ec2ea4
   toggleOpenCartOptions() {
     this.setState({
         cartOptionsOpen: !this.state.cartOptionsOpen

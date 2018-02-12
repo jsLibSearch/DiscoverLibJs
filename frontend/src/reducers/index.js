@@ -11,10 +11,7 @@ const rootReducer = combineReducers({
     accessToken: accessTokenSaver,
     recState: recReducer,
     userStatusReducer: userReducer,
-<<<<<<< HEAD
-=======
     // logInStatus: userLogStatus,
->>>>>>> 0763b51141a34a490c93214d045b879bb4ec2ea4
     cart: cartReducer
 })
 

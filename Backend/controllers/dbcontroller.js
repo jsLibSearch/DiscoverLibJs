@@ -9,6 +9,15 @@ const Cart = require('../DB_Code/Cart.js');
 mongoose.connect(`${process.env.MONGO_URI}`, null);
 
 
+
+const postUser = (req, res) => {
+    const { info } = req.body;
+    const newUser = new User(info);
+    newUser.save().then((user) => {
+        return res.json(user);
+    }).catch(err => res.status(STATUS_USER_ERROR).json(err));
+}
+
 const searchPackage = (req, res) => {
 
     const { term } = req.params;
@@ -176,7 +185,7 @@ const getUserCarts = (req, res) => {
 const getCartByID = (req, res) => {
 
     const {cartid} = req.params;
-    Cart.findOne({_id: cartid})
+    Cart.findOne({_id: cartid}).exec().populate('Package')
     .then(cart => {
         if (!cart) {
             return res.status(STATUS_USER_ERROR).send({err: "no cart"})
@@ -288,5 +297,6 @@ module.exports = {
     editCart,
     deleteCart,
     saveCart,
+    postUser,
 
 }
