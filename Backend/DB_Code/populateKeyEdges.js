@@ -36,9 +36,9 @@ async function createEdges() {
         async function fillUp() {
             try {
                 const bar = new _progress.Bar({}, _progress.Presets.shades_classic);
-                bar.start(packages.length, 0)
+                bar.start(packages.length - 1, 0)
                 for (let i = 0; i < packages.length ; i++) {
-                    bar.update(i)
+                    bar.update(i + 1)
                     for (let j = i+1; j < packages.length; j++) {
                         let count = 0;
                         for (let q = 0; q < packages[i].keywords.length; q++) {
@@ -48,7 +48,7 @@ async function createEdges() {
                         }
                         if (count <= 1) continue;
                         const newEdge = new KeyEdge({left: packages[i]._id, right: packages[j]._id, weight: count})
-                        promises.push(newEdge.save());
+                        promises.push(newEdge);
                     }
                 }
                 bar.stop();
@@ -59,7 +59,11 @@ async function createEdges() {
             }
         }
         if (packages) fillUp();
-        return Promise.all(promises);
+        KeyEdge.insertMany(promises)
+            .then(() => {
+                console.log('Its done');
+            });
+
     } catch (err) {
         console.log(err);
     }
