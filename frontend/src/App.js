@@ -3,6 +3,7 @@ import { Route } from 'react-router-dom';
 import './App.css';
 // import { customColors as c } from './custom/colors.js';
 import { Home, LogIn, SearchPage, CartPage, Header, SignUp, UserPage, FAQ, GettingStarted } from './components';
+import RequireAuth from './components/middleware/index.js'
 
 class App extends Component {
   constructor(props) {
@@ -39,7 +40,7 @@ class App extends Component {
             <Route path='/cart' component={CartPage}/>
             <Route path='/login' component={LogIn}/>
             <Route path='/signup' component={SignUp}/>
-            <Route path='/user' component={UserPage}/>
+            <Route path='/user' component={RequireAuth(UserPage)}/>
             <Route path='/faq' component={FAQ}/>
             <Route path='/gettingstarted' component={GettingStarted}/>
             <Route exact path='/' component={Home}/>

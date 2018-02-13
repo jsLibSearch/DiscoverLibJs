@@ -21,14 +21,6 @@ export class UserPage extends Component {
   }
 
   componentDidMount() {
-    let code;
-    if (this.props.location.search.match(/\?code=/g)) {
-      code = this.props.location.search.replace(/\?code=/g, '');
-      if (!this.props.user.jwt) {
-        this.props.saveAccessToken(code);
-      }
-    }
-
     window.addEventListener('resize', this.handleResize.bind(this))
     this.setState({
       windowHeight: window.innerHeight - 40
@@ -80,7 +72,6 @@ export class UserPage extends Component {
   }
   
   render() {
-    console.log(this.state)
     return (
       <div>
         {this.state.userCarts ? this.state.userCarts.map((cart, i) => {

@@ -8,6 +8,7 @@ const User = require('../DB_Code/User.js');
 const Cart = require('../DB_Code/Cart.js');
 mongoose.connect(`${process.env.MONGO_URI}`, null);
 
+const STATUS_USER_ERROR = 422;
 
 const searchPackage = (req, res) => {
 
