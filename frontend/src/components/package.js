@@ -34,9 +34,9 @@ class Package extends Component {
             _id: this.props._id
         }
         let inCart = false
-        if (this.props.cart) {
-            for (let i = 0; i < this.props.cart.length; i++) {
-                if (this.props.name === this.props.cart[i].name) {
+        if (this.props.cart.packages) {
+            for (let i = 0; i < this.props.cart.packages.length; i++) {
+                if (this.props.name === this.props.cart.packages[i].name) {
                     inCart = true
                 }
             }
@@ -60,9 +60,9 @@ class Package extends Component {
         _id: this.props._id
     }
     let inCart = false
-    if (this.props.cart) {
-        for (let i = 0; i < this.props.cart.length; i++) {
-            if (this.props.name === this.props.cart[i].name) {
+    if (this.props.cart.packages) {
+        for (let i = 0; i < this.props.cart.packages.length; i++) {
+            if (this.props.name === this.props.cart.packages[i].name) {
                 inCart = true
             }
         }

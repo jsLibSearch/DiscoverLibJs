@@ -20,9 +20,9 @@ class ScopedPackages extends Component {
         const pkgs = this.props.packages
         const name = this.props.name
         let inCart = []
-        if (this.props.cart) {
+        if (this.props.cart.packages) {
             for (let i = 0; i < this.props.packages.length; i++) {
-                if (this.props.cart.includes(this.props.packages[i])) {
+                if (this.props.cart.packages.includes(this.props.packages[i])) {
                     inCart.push(true)
                 } else inCart.push(false)
             }
@@ -42,9 +42,9 @@ class ScopedPackages extends Component {
     const pkgs = this.props.packages
     let inCart = []
     const name = this.props.name
-    if (this.props.cart) {
+    if (this.props.cart.packages) {
         for (let i = 0; i < this.props.packages.length; i++) {
-            if (this.props.cart.includes(this.props.packages[i])) {
+            if (this.props.cart.packages.includes(this.props.packages[i])) {
                 inCart.push(true)
             } else inCart.push(false)
         }
