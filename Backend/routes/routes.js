@@ -36,6 +36,17 @@ module.exports = (app) => {
 
 
     // DB controllers/routes
+
+    
+    app 
+    .route('/search-recs')
+    .post(dbController.searchWithRecs);
+
+    
+    app 
+    .route('/save-user')
+    .post(dbController.postUser);
+
     app 
         .route('/search-package/:term')
         .get(dbController.searchPackage);
