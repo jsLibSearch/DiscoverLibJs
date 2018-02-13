@@ -44,6 +44,50 @@ const searchPackage = (req, res) => {
 
 }
 
+const searchWithRecs = (req, res) => {
+    const { cart, term } = req.body;
+    const children = {};
+    Edge.find({$or: [ { right: {$in: cart}}, {  left: {$in: cart}}]}).sort({weight:-1})
+        .then((edges) => {
+            console.log(edges.length, "edges");              
+            edges.forEach((edge) => {
+                cart.indexOf(edge.left) === -1 ?
+                children.hasOwnProperty(edge.left) ? children[edge.left] += edge.weight :children[edge.left] = edge.weight :children.hasOwnProperty(edge.right) ? children[edge.right] += edge.weight :children[edge.right] = edge.weight
+            })
+            // if (edges.length > 0) {
+            //     children[child] /= Object.keys(children).length;
+            // }
+        })
+        .then(()=> {
+                console.log("children", Object.keys(children).length)
+                const keysSorted =  Object.keys(children).sort(function(a,b){return children[b]-children[a]})
+                const keysSliced = keysSorted.slice(0, 300).filter((x) => {
+                    return cart.indexOf(x) < 0;
+                })
+                console.log(children[keysSliced[0]], children[keysSliced[keysSliced.length - 1]])
+                Package.find({_id: { $in: keysSliced}})
+                .then(pkgs => {
+                    const sortedPkgs =  pkgs.sort(function(a,b){return children[b._id]-children[a._id]})
+                    console.log(children[sortedPkgs[0]._id], children[sortedPkgs[sortedPkgs.length - 1]._id])
+                    Package.find({ $or: [{name: { $in: cart }}, {keywords: {$regex : `.*${term}.*`}}, { name: {$regex : `.*${term}.*`}} ]}).sort({freq: -1}).exec()
+                    .then(packs => {
+                        const final = [];
+                        for (let i = 0, j = 0; i < packs.length, j < sortedPkgs.length; i++, j++) {
+                            final.push(packs[i])
+                            final.push(sortedPkgs[j])
+                        }
+                        res.json(final);
+                    })
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+}
+
 
 const getAllPackages = (req, res) => {
 
@@ -115,7 +159,7 @@ const requestRecommendations = (req, res) => {
                     .then(()=> {
                             console.log("children", Object.keys(children).length)
                             const keysSorted =  Object.keys(children).sort(function(a,b){return children[b]-children[a]})
-                            const keysSliced = keysSorted.slice(0, 100).filter((x) => {
+                            const keysSliced = keysSorted.slice(0, 300).filter((x) => {
                                 return cart.indexOf(x) < 0;
                             })
                             console.log(children[keysSliced[0]], children[keysSliced[keysSliced.length - 1]])
@@ -298,5 +342,6 @@ module.exports = {
     deleteCart,
     saveCart,
     postUser,
+    searchWithRecs,
 
 }

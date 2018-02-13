@@ -39,6 +39,11 @@ module.exports = (app) => {
 
     
     app 
+    .route('/search-recs')
+    .post(dbController.searchWithRecs);
+
+    
+    app 
     .route('/save-user')
     .post(dbController.postUser);
 
