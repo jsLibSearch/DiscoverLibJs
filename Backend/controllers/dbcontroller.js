@@ -170,13 +170,19 @@ const requestKeyRecommendations = (req, res) => {
     const bar = new _progress.Bar({}, _progress.Presets.shades_classic);
     const { cart } = req.body;
     const children = {};
-    KeyEdge.find({$or: [ { right: {$in: cart}}, {  left: {$in: cart}}]}).sort({weight:-1})
+
+    let arr = cart.map(ele => new mongoose.Types.ObjectId(ele));
+    const cartObj = {}
+    cart.forEach((element) => {
+        cartObj[element] = 0
+    })
+
+    KeyEdge.find({$or: [ { right: {$in: arr}}, {  left: {$in: arr}}]}).sort({weight:-1})
         .then((edges) => {
             console.log(edges.length, "edges");  
             if (edges.length < 1) return res.json([]);           
             edges.forEach((edge) => {
-                console.log(edge)
-                if (cart.indexOf(edge.left) !== -1) {
+                if (!cartObj.hasOwnProperty(edge.left)) {
                     children.hasOwnProperty(edge.left) ? children[edge.left] += edge.weight :children[edge.left] = edge.weight
                 } else {
                     children.hasOwnProperty(edge.right) ? children[edge.right] += edge.weight :children[edge.right] = edge.weight                    
