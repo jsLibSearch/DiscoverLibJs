@@ -134,6 +134,7 @@ const requestRecommendations = (req, res) => {
     cart.forEach((element) => {
         cartObj[element] = 0
     })
+
     const children = {};
     Edge.find({$or: [ { right: { $in: arr }}, {  left: { $in: arr } } ]}).sort({weight:-1})
         .then((edges) => {
