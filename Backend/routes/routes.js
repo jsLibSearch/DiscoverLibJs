@@ -44,6 +44,11 @@ module.exports = (app) => {
 
     
     app 
+    .route('/key-recs')
+    .post(dbController.requestKeyRecommendations);
+
+    
+    app 
     .route('/save-user')
     .post(dbController.postUser);
 
