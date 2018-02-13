@@ -113,7 +113,6 @@ export class SearchPage extends Component {
                 if (key === 'scoped') {
                   return null
                 }
-                console.log('mapping out ', key)
                 return (
                   <div key={key}>
                     <ScopedPackages

@@ -4,7 +4,7 @@ import { Dropdown, DropdownToggle, DropdownDropdown, DropdownItem, DropdownMenu,
   Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, FormText, Popover,
   PopoverHeader, PopoverBody } from 'reactstrap';
 import { CSSTransitionGroup } from 'react-transition-group';
-import { deleteItem, newItem } from '../actions';
+import { deleteItem, newItem, addCartToUser } from '../actions';
 import '../App.css';
 import { customColors as c } from '../custom/colors.js';
 const axios = require('axios');
@@ -140,8 +140,10 @@ class Cart extends Component {
   }
 
   saveCart() {
-    console.log('saving cart')
-    // this.props.saveCartToUser()
+    if (this.state.cart.length === 0 || this.props.user.status === 'unauthorized') {
+      return;
+    }
+    this.props.addCartToUser(this.state.cart, this.props.user.user, this.state.cartName)
   }
 
   selectPackage(item) {
@@ -387,8 +389,8 @@ class Cart extends Component {
 const mapStateToProps = (state) => {
   return {
       cart: state.cart,
-      user: state.accessToken,
+      user: state.userStatusReducer,
   };
 };
 
-export default connect(mapStateToProps, { deleteItem, newItem })(Cart);
+export default connect(mapStateToProps, { deleteItem, newItem, addCartToUser })(Cart);
