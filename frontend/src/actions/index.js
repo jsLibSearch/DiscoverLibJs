@@ -172,7 +172,7 @@ export const getRecs = (cart) => {
     const ids = cart.map(pkg => pkg._id);
     return (dispatch) => {
         dispatch(setRecStatusLoading())
-        axios.post(`${DB_URL}rec`, { cart: ids },{
+        axios.post(`${DB_URL}key-recs`, { cart: ids },{
             validateStatus: function (status) {
                 return status < 500; // Reject only if the status code is greater than or equal to 500
             }
