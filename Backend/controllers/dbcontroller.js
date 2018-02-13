@@ -4,6 +4,7 @@ const _progress =  require('cli-progress');
 const Package = require('../DB_Code/Package');
 const Project = require('../DB_Code/Project.js');
 const Edge = require('../DB_Code/Edge.js');
+const KeyEdge = require('../DB_Code/KeyEdge.js');
 const User = require('../DB_Code/User.js');
 const Cart = require('../DB_Code/Cart.js');
 mongoose.connect(`${process.env.MONGO_URI}`, null);
@@ -123,7 +124,6 @@ const getAllProjects = (req, res) => {
 
 }
 
-
 const requestRecommendations = (req, res) => {
 
     const bar = new _progress.Bar({}, _progress.Presets.shades_classic);
@@ -204,6 +204,49 @@ const requestRecommendations = (req, res) => {
 }
 
 
+const requestKeyRecommendations = (req, res) => {  
+    const bar = new _progress.Bar({}, _progress.Presets.shades_classic);
+    const { cart } = req.body;
+    const children = {};
+    KeyEdge.find({$or: [ { right: {$in: cart}}, {  left: {$in: cart}}]}).sort({weight:-1})
+        .then((edges) => {
+            console.log(edges.length, "edges");  
+            if (edges.length < 1) return res.json([]);           
+            edges.forEach((edge) => {
+                console.log(edge)
+                if (cart.indexOf(edge.left) !== -1) {
+                    console.log(edge.left)
+                    children.hasOwnProperty(edge.left) ? children[edge.left] += edge.weight :children[edge.left] = edge.weight
+                } else {
+                    console.log(edge.right)
+                    children.hasOwnProperty(edge.right) ? children[edge.right] += edge.weight :children[edge.right] = edge.weight                    
+                }
+            })
+        })
+        .then(()=> {
+            if (Object.keys(children).length < 1) return null;
+                console.log("children", Object.keys(children).length)
+                const keysSorted =  Object.keys(children).sort(function(a,b){return children[b]-children[a]})
+                const keysSliced = keysSorted.slice(0, 300).filter((x) => {
+                    return cart.indexOf(x) < 0;
+                })
+                console.log(children[keysSliced[0]], children[keysSliced[keysSliced.length - 1]])
+                Package.find({_id: { $in: keysSliced}})
+                .then(pkgs => {
+                    const sortedPkgs =  pkgs.sort(function(a,b){return children[b._id]-children[a._id]})
+                    // console.log(children[sortedPkgs[0]._id], children[sortedPkgs[sortedPkgs.length - 1]._id])
+                    return res.json(sortedPkgs);
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+}
+    
+    
 const getUserCarts = (req, res) => {
 
     const { github_id } = req.params;
@@ -344,5 +387,6 @@ module.exports = {
     saveCart,
     postUser,
     searchWithRecs,
+    requestKeyRecommendations,
 
 }
