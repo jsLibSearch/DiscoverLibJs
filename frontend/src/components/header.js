@@ -24,13 +24,13 @@ class Header extends Component {
         if (this.props.user.user.username && this.props.user.user.username !== this.state.username) {
             console.log('kalamidy')
             this.setState({
-                itemsInCart: this.props.redux.cart.length,
+                itemsInCart: this.props.redux.cart.packages.length,
                 username: this.props.user.user.username,
                 loggedIn: true,
             })
         }
-        if (this.props.redux.cart.length !== this.state.itemsInCart) {
-            this.setState({ itemsInCart: this.props.redux.cart.length })
+        if (this.props.redux.cart.packages.length !== this.state.itemsInCart) {
+            this.setState({ itemsInCart: this.props.redux.cart.packages.length })
         }
     }
 

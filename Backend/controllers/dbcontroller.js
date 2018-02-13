@@ -134,11 +134,10 @@ const requestRecommendations = (req, res) => {
     cart.forEach((element) => {
         cartObj[element] = 0
     })
-    console.log(arr)
+
     const children = {};
     Edge.find({$or: [ { right: { $in: arr }}, {  left: { $in: arr } } ]}).sort({weight:-1})
         .then((edges) => {
-            console.log(edges.length, "edges");            
             edges.forEach((edge) => {
                 if (cartObj.hasOwnProperty(edge.left)) {
                     children.hasOwnProperty(edge.right) ? children[edge.right] += edge.weight : children[edge.right] = edge.weight
@@ -148,16 +147,13 @@ const requestRecommendations = (req, res) => {
             })
         })
         .then(()=> {
-                console.log("children", Object.keys(children).length)
                 const keysSorted =  Object.keys(children).sort(function(a,b){return children[b]-children[a]})
                 const keysSliced = keysSorted.slice(0, 300).filter((x) => {
                     return cart.indexOf(x) < 0;
                 })
-                console.log(children[keysSliced[0]], children[keysSliced[keysSliced.length - 1]])
                 Package.find({_id: { $in: keysSliced}})
                 .then(pkgs => {
                     const sortedPkgs =  pkgs.sort(function(a,b){return children[b._id]-children[a._id]})
-                    console.log(sortedPkgs[0].name)
                     return res.json(sortedPkgs);
                 })
                 .catch((err) => {
