@@ -134,6 +134,7 @@ const requestRecommendations = (req, res) => {
     cart.forEach((element) => {
         cartObj[element] = 0
     })
+
     const children = {};
     Edge.find({$or: [ { right: { $in: arr }}, {  left: { $in: arr } } ]}).sort({weight:-1})
         .then((edges) => {
@@ -176,10 +177,8 @@ const requestKeyRecommendations = (req, res) => {
             edges.forEach((edge) => {
                 console.log(edge)
                 if (cart.indexOf(edge.left) !== -1) {
-                    console.log(edge.left)
                     children.hasOwnProperty(edge.left) ? children[edge.left] += edge.weight :children[edge.left] = edge.weight
                 } else {
-                    console.log(edge.right)
                     children.hasOwnProperty(edge.right) ? children[edge.right] += edge.weight :children[edge.right] = edge.weight                    
                 }
             })
