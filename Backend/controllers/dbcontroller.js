@@ -129,6 +129,7 @@ const requestRecommendations = (req, res) => {
     const bar = new _progress.Bar({}, _progress.Presets.shades_classic);
     const { cart } = req.body;
     
+
     let arr = cart.map(ele => new mongoose.Types.ObjectId(ele));
     const cartObj = {}
     cart.forEach((element) => {

@@ -28,6 +28,7 @@ export class UserPage extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    console.log(nextProps);
     if (nextProps.user.jwt) { 
       sessionStorage.setItem('jwtToken', nextProps.user.jwt);
       sessionStorage.setItem('username', nextProps.user.username);
