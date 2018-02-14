@@ -6,7 +6,7 @@ import Package from './package.js';
 import { getRecs } from '../actions';
 import '../App.css';
 import { Button } from 'reactstrap';
-// import { customColors as c } from '../custom/colors.js';
+import { customColors as c } from '../custom/colors.js';
 
 class CartPage extends Component {
   constructor(props) {
@@ -18,6 +18,7 @@ class CartPage extends Component {
       loading: false,
       dev: true
     };
+    this.sendRecRequest = this.sendRecRequest.bind(this);
   }
 
   componentDidUpdate() {
@@ -29,6 +30,10 @@ class CartPage extends Component {
           windowHeight: window.innerHeight - 40,
           cart: currentCart,
         })
+        this.sendRecRequest();
+      }
+      if (this.state.cart && this.state.cart.length > 0 && this.state.recs.length === 0 && !this.props.recState.loading && !this.state.loading) {
+        this.sendRecRequest();
       }
     }
     if (this.props.recState.loading && !this.state.loading) {
@@ -41,6 +46,9 @@ class CartPage extends Component {
         recs: this.props.recState.recs,
       })
     }
+    if (this.state.cart && this.state.cart.length > 0 && this.state.recs.length === 0 && !this.props.recState.loading && !this.state.loading) {
+      this.sendRecRequest();
+    }
   }
 
   
@@ -51,6 +59,8 @@ class CartPage extends Component {
     let currentCart = [];
     if (this.props.cart.packages.length > 0) {
       currentCart = this.props.cart.packages
+      console.log('hay')
+      this.sendRecRequest();
     }
 
     this.setState({
@@ -75,7 +85,7 @@ class CartPage extends Component {
   sendRecRequest() {
     if (this.state.cart && this.state.cart.length > 0) {
       console.log('sending rec request');      
-      this.props.getRecs(this.state.cart);
+      this.props.getRecs(this.props.cart.packages);
     }
   }
 
@@ -83,11 +93,9 @@ class CartPage extends Component {
     return (
       <div ref='cartPage'>
         <Cart />
-        <Button 
-          style={this.state.dev ? null : { display: 'none' }}
-          onClick={this.sendRecRequest.bind(this)}>
-          Get recommendations from cart
-        </Button>
+        <p style={{ color: c.darker_orange, fontStyle: 'italic', textAlign: 'left', marginLeft: '3em' }}>
+          Recommendations
+        </p>
         <p>
           {this.state.loading ? 'Loading recommendations' : ''}
         </p>
