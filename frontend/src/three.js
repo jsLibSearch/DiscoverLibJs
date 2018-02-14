@@ -93,7 +93,7 @@ class AnimThree extends Component {
     }
 
     animate() {
-        if (this.camera.position.z >= 1.76) {
+        if (this.camera.position.z >= 1.7) {
             this.cube.rotation.x += 0.15;
             this.camera.position.z -= 0.099;
         }

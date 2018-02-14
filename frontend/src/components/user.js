@@ -45,9 +45,16 @@ export class UserPage extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+<<<<<<< HEAD
     if (nextProps.userState.jwt !== this.props.userState.jwt) { 
       sessionStorage.setItem('jwtToken', nextProps.userState.jwt);
       sessionStorage.setItem('username', nextProps.userState.username);
+=======
+    console.log(nextProps);
+    if (nextProps.user.jwt) { 
+      sessionStorage.setItem('jwtToken', nextProps.user.jwt);
+      sessionStorage.setItem('username', nextProps.user.username);
+>>>>>>> b321a0cdeedd6a13fc7aafc06f69fbb097a06b77
       sessionStorage.setItem('loggedIn', true);
     }
     if (nextProps.userState.loadingCarts !== this.props.userState.loadingCarts) {

@@ -101,7 +101,7 @@ const getAccessToken = (req, res) => {
 const checkUserAuth = (req, res) => {
 
     const { jwtToken, github_id } = req.body;
-    console.log(github_id);
+
     User.find({ github_id: github_id })
         .then((response) => {
             const result = response[0];
