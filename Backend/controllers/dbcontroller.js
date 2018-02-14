@@ -223,6 +223,8 @@ const getUserCarts = (req, res) => {
             return res.status(STATUS_USER_ERROR).send({ error: " not a foundUser "})
         }
         Cart.find({user: foundUser._id})
+        .populate('cart', 'name keywords freq', Package )
+        .exec()
         .then((carts) => {
             res.send(carts);
         })
