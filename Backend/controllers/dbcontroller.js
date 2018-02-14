@@ -75,6 +75,7 @@ const requestRecommendations = (req, res) => {
     const bar = new _progress.Bar({}, _progress.Presets.shades_classic);
     const { cart } = req.body;
     
+
     // Project.find({ children: { $in: cart } })
     //     .then(async (proj) => {
     //         const children = {};

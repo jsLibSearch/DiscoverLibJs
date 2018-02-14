@@ -56,7 +56,7 @@ class Header extends Component {
         if (nextProps.user.username) { 
             this.setState({
                 username: nextProps.user.username,
-                loggedIn: true,
+                loggedIn: true, 
             });
             
         }
