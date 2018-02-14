@@ -21,15 +21,16 @@ class Header extends Component {
     }
 
     componentDidUpdate() {
-        if (this.props.user.username && this.props.user.username !== this.state.username) {
+        if (this.props.user.user.username && this.props.user.user.username !== this.state.username) {
+            console.log('kalamidy')
             this.setState({
-                itemsInCart: this.props.redux.cart.length,
-                username: this.props.redux.accessToken.username,
+                itemsInCart: this.props.redux.cart.packages.length,
+                username: this.props.user.user.username,
                 loggedIn: true,
             })
         }
-        if (this.props.redux.cart.length !== this.state.itemsInCart) {
-            this.setState({ itemsInCart: this.props.redux.cart.length })
+        if (this.props.redux.cart.packages.length !== this.state.itemsInCart) {
+            this.setState({ itemsInCart: this.props.redux.cart.packages.length })
         }
     }
 
@@ -42,21 +43,13 @@ class Header extends Component {
             windowWidth: window.innerWidth,
             small: small,
         });
-
-        if (sessionStorage.username) {
-            const username = sessionStorage.getItem('username');
-            this.setState({
-                username: username,
-                loggedIn: true,
-            });
-        }
     }
 
     componentWillReceiveProps(nextProps, nextState) {
-        if (nextProps.user.username) { 
+        if (nextProps.user.user.hasOwnProperty('username')) {
             this.setState({
-                username: nextProps.user.username,
-                loggedIn: true, 
+                username: nextProps.user.user.username,
+                loggedIn: true,
             });
             
         }
@@ -133,7 +126,6 @@ class Header extends Component {
     }
 
     render() {
-    
         return (
             <div className="App-header">
 
@@ -170,8 +162,8 @@ class Header extends Component {
 const mapStateToProps = (state, ownProps) => {
     return {
         redux: state,
-        user: state.accessToken,
-        status: state.logInStatus,
+        accessToken: state.accessToken,
+        user: state.userStatusReducer,
     };
 };
   

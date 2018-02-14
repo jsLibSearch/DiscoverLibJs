@@ -22,8 +22,7 @@ const _progress =  require('cli-progress')
 const mongoose = require("mongoose");
 const cors = require('cors')
 const Package = require('./Package.js');
-const Project = require('./Project.js');
-const Edge = require('./Edge.js');
+const KeyEdge = require('./KeyEdge.js');
 mongoose.connect(`${process.env.MONGO_URI}`, null);
 
 const bodyParser = require('body-parser');
@@ -33,30 +32,22 @@ const express = require('express');
 async function createEdges() {
     try {
         const promises = [];
-        const hash = {};
         const packages = await Package.find({})
-        const projects = await Project.find({})
         async function fillUp() {
             try {
                 const bar = new _progress.Bar({}, _progress.Presets.shades_classic);
-                for (let m = 0; m < projects.length; m++) {
-                    hash[projects[m]._id] = {}
-                    for (let z = 0; z < projects[m].children.length; z++) {
-                        hash[projects[m]._id][projects[m].children[z]] = true;
-                    }
-                }
-                bar.start(packages.length, 0)
-                for (let i = 0; i < packages.length; i++) {
+                bar.start(packages.length - 1, 0)
+                for (let i = 0; i < packages.length ; i++) {
                     bar.update(i + 1)
-                    for (let j = i + 1; j < packages.length; j++) {
+                    for (let j = i+1; j < packages.length; j++) {
                         let count = 0;
-                        for (let q = 0; q < packages[i].parents.length; q++) {
-                            if (hash[packages[i].parents[q]].hasOwnProperty(packages[j]._id)) {
+                        for (let q = 0; q < packages[i].keywords.length; q++) {
+                            if (packages[j].keywords.indexOf(packages[i].keywords[q]) >= 0) {
                                 count++
                             }
                         }
                         if (count <= 1) continue;
-                        const newEdge = new Edge({left: packages[i]._id, right: packages[j]._id, weight: count})
+                        const newEdge = new KeyEdge({left: packages[i]._id, right: packages[j]._id, weight: count})
                         promises.push(newEdge);
                     }
                 }
@@ -68,9 +59,11 @@ async function createEdges() {
             }
         }
         if (packages) fillUp();
-        Edge.insertMany(promises).then(() => {
-            console.log('done!!!')
-        });
+        KeyEdge.insertMany(promises)
+            .then(() => {
+                console.log('Its done');
+            });
+
     } catch (err) {
         console.log(err);
     }

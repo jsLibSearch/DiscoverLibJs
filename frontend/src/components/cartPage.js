@@ -21,13 +21,13 @@ class CartPage extends Component {
   }
 
   componentDidUpdate() {
-    if (this.props.cart.length !== this.state.cart.length && this.refs.cartPage) {
+    if (this.props.cart.packages.length !== this.state.cart.length && this.refs.cartPage) {
       let currentCart = [];
-      if (this.props.cart.length > 0) {
-        currentCart = this.props.cart
+      if (this.props.cart.packages.length > 0) {
+        currentCart = this.props.cart.packages
         this.setState({
           windowHeight: window.innerHeight - 40,
-          cart: currentCart
+          cart: currentCart,
         })
       }
     }
@@ -49,8 +49,8 @@ class CartPage extends Component {
     window.addEventListener('resize', this.handleResize.bind(this));
 
     let currentCart = [];
-    if (this.props.cart.length > 0) {
-      currentCart = this.props.cart
+    if (this.props.cart.packages.length > 0) {
+      currentCart = this.props.cart.packages
     }
 
     this.setState({

@@ -12,6 +12,10 @@ export const SAVE_ACCESS_TOKEN = 'SAVE_ACCESS_TOKEN';
 export const CLEAR_ACCESS_TOKEN = 'CLEAR_ACCESS_TOKEN';
 export const CHECK_USER_AUTH = 'CHECK_USER_AUTH';
 export const SET_USER_LOG_STATUS = 'SET_USER_LOG_STATUS';
+export const SET_USER_STATUS_LOADING = 'SET_USER_STATUS_LOADING';
+export const USER_LOGGED_IN = 'USER_LOGGED_IN';
+
+export const ADD_CART = 'ADD_CART';
 
 export const GET_SEARCH = 'GET_SEARCH'; // useless?
 export const NEW_SEARCH = 'NEW_SEARCH'; // useless?
@@ -30,15 +34,14 @@ const setStatusLoading = () => {
     }
 }
 
+const setLoadingTo = (dataToLoad) => {
+    return {
+            type: `${dataToLoad}_LOADING`
+    }
+}
+
 
 export const getPackages = (query) => {
-    if (dev) {
-        const promise = testPackages;
-        return {
-            type: 'GET_PACKAGES',
-            payload: promise
-        };
-    }
     return (dispatch) => {
         dispatch(setStatusLoading())
         axios.get(`${DB_URL}search-package/${query}`, {
@@ -94,14 +97,19 @@ export const newSearch = (searchQuery) => {
 
 // here we have user's github auth token, jwt token and his github username
 export const saveAccessToken = (code) => {
-
+    
     return (dispatch) => {
-        
+        dispatch(setLoadingTo('SET_USER_STATUS'))
         axios
             .post(`${apiURL}code`, { code })
                 .then((response) => {
+                    console.log(response.data)
                     dispatch({
                         type: SAVE_ACCESS_TOKEN,
+                        payload: response.data.accessToken,
+                    });
+                    dispatch({
+                        type: USER_LOGGED_IN,
                         payload: response.data,
                     });
                 })
@@ -115,7 +123,7 @@ export const saveAccessToken = (code) => {
 export const makeServerCalls = (jwtToken, github_id) => {
 
     return (dispatch) => {
-
+        dispatch(setLoadingTo('SET_USER_STATUS'))
         axios
             .post(`${apiURL}check-auth`, { jwtToken, github_id })
                 .then((response) => {
@@ -164,7 +172,7 @@ export const getRecs = (cart) => {
     const ids = cart.map(pkg => pkg._id);
     return (dispatch) => {
         dispatch(setRecStatusLoading())
-        axios.post(`${DB_URL}rec`, { cart: ids },{
+        axios.post(`${DB_URL}key-recs`, { cart: ids },{
             validateStatus: function (status) {
                 return status < 500; // Reject only if the status code is greater than or equal to 500
             }
@@ -207,5 +215,29 @@ export const searchRec = (cart, query) => {
                 });
             });
     }
-    
 };
+
+export const addCartToUser = (cart, user, name) => {
+    const ids = cart.map(pkg => pkg._id);
+    // { cart, user, name }
+    // { github_id, github_name } = user;
+    return (dispatch) => {
+        axios.post(`${DB_URL}save-cart`, { cart: ids, user: user, name: name },{
+            validateStatus: function (status) {
+                return status < 500; // Reject only if the status code is greater than or equal to 500
+            }
+        })
+            .then((response) => {
+                dispatch({
+                    type: 'ADD_CART',
+                    payload: response.data
+                });
+            })
+            .catch(() => {
+                dispatch({
+                    type: 'ADD_CART',
+                    payload: []
+                });
+            });
+    }
+}

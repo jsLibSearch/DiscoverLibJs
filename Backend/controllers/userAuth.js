@@ -36,7 +36,7 @@ const getAccessToken = (req, res) => {
 
     const { code } = req.body;
 
-    async function getUserCridentials() {
+    async function getUserCredentials() {
         try {
             let str = '';
             const response = await axios.post(`https://github.com/login/oauth/access_token?client_id=${client_id}&client_secret=${client_secret}&code=${code}`)
@@ -49,13 +49,26 @@ const getAccessToken = (req, res) => {
                 const [login, id, url, name] = await Promise.all([response2.data.login, response2.data.id, response2.data.url, response2.data.name]);
 
                 // saving user to DB
-                const DBresponse = await User.find({ github_id: id })
-
-                if (!DBresponse) {
+                const DBresponse = await User.find({ github_id: id }).populate()
+                
+                if (DBresponse.length < 1) {
                     const newUser = new User({ login_name: login, github_id: id, url: url, github_name: name });
-
+                    console.log(newUser)
                     newUser.save()
+                        .exec()
+                        .populate()
                         .then((user) => {
+                            generateToken(login, id, url, name).then((token)=> {
+                                res.json({
+                                    username: login,
+                                    accessToken: str,
+                                    jwt: token,
+                                    github_id: id,
+                                    _id: user._id,
+                                    carts: user.carts,
+                                    github_name: user.github_name
+                                });
+                            });
                             console.log('---> success: account created <---');
                         })
                         .catch((err) => {
@@ -71,15 +84,18 @@ const getAccessToken = (req, res) => {
                     accessToken: str,
                     jwt: token,
                     github_id: id,
+                    carts: DBresponse[0].carts,
+                    _id: DBresponse[0]._id,
+                    github_name: DBresponse[0].github_name
                 });
             }
 
         } catch(err) {
-            console.log(err);
+            console.log('err');
         }
         
     }
-    getUserCridentials();
+    getUserCredentials();
 }
 
 const checkUserAuth = (req, res) => {

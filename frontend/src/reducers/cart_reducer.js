@@ -2,23 +2,25 @@ import { GET_CART, NEW_ITEM, DELETE_ITEM } from '../actions';
 // import axios from 'axios';
 const dev = false;
 
-const cartReducer = (state = [], action) => {
+const cartReducer = (state = { packages: [], name: 'Untitled Project'}, action) => {
     switch(action.type) {
         case GET_CART:
             console.log(action.payload.data)
             if (dev) {
-                return Object.assign({}, state, {
-                    packages: action.payload
-                });
+                
             }
             return Object.assign({}, state, {
                 packages: action.payload
             });
         case DELETE_ITEM:
-            const newCart = state.filter(item => item.name !== action.item.name);
-            return newCart
+            const newPacks = state.packages.filter(item => item.name !== action.item.name);
+            return Object.assign({}, state, {
+                packages: newPacks
+            });
         case NEW_ITEM:
-            return state.concat(action.item);
+            return  Object.assign({}, state, {
+                    packages: state.packages.concat(action.item)
+                });
         default:
             return state;
     }
