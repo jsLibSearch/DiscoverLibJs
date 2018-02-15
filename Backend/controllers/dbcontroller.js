@@ -3,6 +3,8 @@ const _progress =  require('cli-progress');
 const didyoumean = require('didyoumean')
 var fs = require('fs');
 
+const path = require('path');
+
 mongoose.connect(`${process.env.MONGO_URI}`, null);
 const Package = require('../DB_Code/Package');
 const Project = require('../DB_Code/Project.js');
@@ -23,10 +25,9 @@ const postUser = (req, res) => {
 
 const searchPackage = (req, res) => {
 
-    
-    // // const contents = fs.readFileSync('./keywords.json', "utf8");
-    // const keywords = JSON.parse(contents);
-    const keywords = [ 'react', 'mongoose', 'axios' ];
+    var filePath = path.join(__dirname, 'keywords.json');
+    const contents = fs.readFileSync(filepath, "utf8");
+    const keywords = JSON.parse(contents);
     const { term, term2 } = req.params;
     const matchedTerm = didyoumean(term, Object.keys(keywords));
     let arr = [];
