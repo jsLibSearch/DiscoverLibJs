@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Dropdown, DropdownToggle, DropdownItem, DropdownMenu, 
   Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, Popover,
   PopoverHeader, PopoverBody } from 'reactstrap';
+import axios from 'axios';
 import '../App.css';
 import { customColors as c } from '../custom/colors.js';
 import { connect } from 'react-redux';
@@ -141,6 +142,20 @@ export class UserPage extends Component {
     if (this.state.renameText.length < 1) {
       return;
     }
+    const cart = this.state.userCarts[this.state.cartToRename].cart.map((pkg) => pkg._id);
+    const cartid = this.state.userCarts[this.state.cartToRename]._id;
+    const name = this.state.renameText;
+
+    axios.put(`http://localhost:8080/edit-cart`, { cartid, cart, name }).then(() => {
+      this.setState({
+        renaming: false,
+        cartToRename: null,
+        loadedCarts: false,
+        userCarts: []
+      })
+      this.props.loadCarts(this.props.userState.user.github_id);
+      return;
+    })
     this.setState({
       renaming: false,
       cartToRename: null
@@ -186,6 +201,18 @@ export class UserPage extends Component {
   onDescriptionTextChange(e) {
     e.preventDefault();
     this.setState({ description: e.target.value });
+  }
+
+  deleteCart(id) {
+    console.log(id)
+    axios.delete(`http://localhost:8080/delete-cart`, { data : { cartid: id } }).then((response) => {
+      this.setState({
+        loadedCarts: false,
+        userCarts: []
+      })
+      this.props.loadCarts(this.props.userState.user.github_id);
+      return;
+    })
   }
 
   onCreateRepoClick() {
@@ -257,7 +284,6 @@ export class UserPage extends Component {
                       margin: '0em',
                       fontSize: '.7em',
                       padding: '0em 0.8em',
-                      fontSize: '0.7em',
                       border: 'none' }}
                     size="sm"
                     outline
@@ -268,7 +294,7 @@ export class UserPage extends Component {
                     <DropdownItem id='rename' onClick={this.toggleRename.bind(this, i)}>Rename</DropdownItem>
                     <DropdownItem color="secondary" onClick={this.toggleModal.bind(this, i)}> Create A Repo </DropdownItem>
                     <DropdownItem divider />
-                    <DropdownItem>Delete Project</DropdownItem>
+                    <DropdownItem onClick={this.deleteCart.bind(this, this.state.userCarts[i]._id)}>Delete Project</DropdownItem>
                   </DropdownMenu>
                 </Dropdown>) : null}
           </div>

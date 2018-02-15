@@ -1,11 +1,9 @@
 import { GET_CART, NEW_ITEM, DELETE_ITEM, SET_CART_NAME, CLEAR_CART } from '../actions';
 // import axios from 'axios';
-const dev = false;
 
 const cartReducer = (state = { packages: [], name: 'Untitled Project', _id: null}, action) => {
     switch(action.type) {
         case GET_CART:
-            console.log(action.payload.data)
             return Object.assign({}, state, {
                 packages: action.payload.data.cart,
                 name: action.payload.data.name

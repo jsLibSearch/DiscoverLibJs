@@ -1,5 +1,4 @@
 import axios from 'axios';
-import testPackages from '../custom/dummy_data.json';
 const dev = false;
 const apiURL = dev ? 'http://localhost:8080/' : 'http://localhost:8080/';
 const DB_URL = dev ? 'http://localhost:8080/' : 'http://localhost:8080/';

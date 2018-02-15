@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Dropdown, DropdownToggle, DropdownDropdown, DropdownItem, DropdownMenu, 
-  Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, FormText, Popover,
+import { Dropdown, DropdownToggle, DropdownItem, DropdownMenu, 
+  Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, Popover,
   PopoverHeader, PopoverBody } from 'reactstrap';
 import { CSSTransitionGroup } from 'react-transition-group';
 import { deleteItem, newItem, addCartToUser, setCartName } from '../actions';
@@ -325,14 +325,13 @@ class Cart extends Component {
         </Dropdown>
         </div>
         <div className='CartDiv'>
-        <div>
-        {/* <CSSTransitionGroup
+        <CSSTransitionGroup
                 transitionName="background"
                 transitionAppear
                 transitionAppearTimeout={0}
                 transitionEnterTimeout={500}
                 transitionLeaveTimeout={500}
-                component='div'> */}
+                component='div'>
             {this.state.cart ?
             this.state.cart.map((item, i) => {
             return (
@@ -384,8 +383,7 @@ class Cart extends Component {
             )
             })
             : null}
-          {/* </CSSTransitionGroup> */}
-          </div>
+          </CSSTransitionGroup>
         </div>
         <Modal isOpen={this.state.modal} toggle={() => this.toggleModal()}>
           <ModalHeader toggle={() => this.toggleModal()}>Short Info</ModalHeader>
