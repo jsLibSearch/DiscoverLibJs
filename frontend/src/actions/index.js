@@ -28,6 +28,8 @@ export const SEARCH_REC = 'SEARCH_REC';
 export const LOADING_RECS = 'LOADING_RECS';
 export const GET_RECS = 'GET_RECS';
 
+export const GET_CATALOG = 'GET_CATALOG';
+
 const setStatusLoading = () => {
     return {
             type: 'LOADING'
@@ -240,4 +242,24 @@ export const addCartToUser = (cart, user, name) => {
                 });
             });
     }
+}
+
+
+export const getCatalog = () => {
+
+    return (dispatch) => {
+       
+        axios.get(`${apiURL}get-all-catalog`)
+            .then((result) => {
+                dispatch({
+                    type: 'GET_CATALOG',
+                    payload: result.data
+                })
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+
+    }
+
 }

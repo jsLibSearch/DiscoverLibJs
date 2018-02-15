@@ -301,13 +301,14 @@ class Cart extends Component {
         </Dropdown>
         </div>
         <div className='CartDiv'>
-        <CSSTransitionGroup
+        <div>
+        {/* <CSSTransitionGroup
                 transitionName="background"
                 transitionAppear
                 transitionAppearTimeout={0}
                 transitionEnterTimeout={500}
                 transitionLeaveTimeout={500}
-                component='div'>
+                component='div'> */}
             {this.state.cart ?
             this.state.cart.map((item, i) => {
             return (
@@ -359,7 +360,8 @@ class Cart extends Component {
             )
             })
             : null}
-          </CSSTransitionGroup>
+          {/* </CSSTransitionGroup> */}
+          </div>
         </div>
         <Modal isOpen={this.state.modal} toggle={() => this.toggleModal()}>
           <ModalHeader toggle={() => this.toggleModal()}>Short Info</ModalHeader>

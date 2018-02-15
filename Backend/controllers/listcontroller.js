@@ -27,7 +27,7 @@ const getReadme = (req, res) => {
             // const response = await axios.get( `https://api.github.com/search/repositories?q=language:javascript%20${repoName}%20in:name`, {
             //     headers: { Authorization: process.env.GITHUB_TOKEN }
             // } );
-            const q = `language:javascript ${repoName} in:name`
+            const q = `${repoName} in:name sort:stars`; //language:javascript 
             const response = await gb.search.repos({ q })
             
     
