@@ -30,16 +30,16 @@ const getReadme = (req, res) => {
             const q = `${repoName} in:name sort:stars`; //language:javascript 
             const response = await gb.search.repos({ q })
             
-    
+
             if (response.data) {
                 
                 const [ owner, repo ] = [ response.data.items[0].owner.login, response.data.items[0].name ];
                 
-                const response2 = await axios.get(`https://api.github.com/repos/${owner}/${repo}/readme`, {
-                    headers: { Accept: mediaType, Authorization: process.env.GITHUB_TOKEN }
-                });
+                // const response2 = await axios.get(`https://api.github.com/repos/${owner}/${repo}/readme`, {
+                //     headers: { Accept: mediaType, Authorization: process.env.GITHUB_TOKEN }
+                // });
 
-                // const response2 = await gb.repos.getContent({ owner, repo, path: `README.md` })
+                const response2 = await gb.repos.getContent({ owner, repo, path: `readme` })
     
                 if (response2.data) {
                     // const data = nacl.util.decodeUTF8(response2.data.content);
