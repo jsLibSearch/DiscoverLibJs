@@ -1,14 +1,13 @@
 const mongoose = require("mongoose");
 const _progress =  require('cli-progress');
 
+mongoose.connect(`${process.env.MONGO_URI}`, null);
 const Package = require('../DB_Code/Package');
 const Project = require('../DB_Code/Project.js');
 const Edge = require('../DB_Code/Edge.js');
 const KeyEdge = require('../DB_Code/KeyEdge.js');
 const User = require('../DB_Code/User.js');
 const Cart = require('../DB_Code/Cart.js');
-mongoose.connect(`${process.env.MONGO_URI}`, null);
-
 const STATUS_USER_ERROR = 422;
 
 
@@ -22,13 +21,17 @@ const postUser = (req, res) => {
 
 const searchPackage = (req, res) => {
 
-    const { term } = req.params;
+    
+    const contents = fs.readFileSync('../DB_Code/keywords.json', "utf8");
+    const keywords = JSON.parse(contents);
+    const { term, term2 } = req.params;
+    const matchedTerm = didyoumean(term, Object.keys(keywords));
     let arr = [];
     Package.find({ $query: { name: {$regex : `.*${term}.*`}}, $sort: { freq : -1 }  }, (err, foundPackages) => {
         if (err) {
             return res.status(STATUS_USER_ERROR).json(err);
         }
-            Package.find({ $query: { keywords: {$regex : `.*${term}.*`} }, $sort: { freq : -1 }  }, (err, foundKeys) => {
+            Package.find({ $query: { keywords: {$regex : `.*${matchedTerm}.*`} }, $sort: { freq : -1 }  }, (err, foundKeys) => {
                 if (err) {
                     return res.status(STATUS_USER_ERROR).json(err);
                 }
@@ -39,7 +42,8 @@ const searchPackage = (req, res) => {
                             return seen.hasOwnProperty(item.name) ? false : (seen[item.name] = true)
                         });
                     }
-                    res.json(removeDuplicates(arr).sort((a,b) => b.freq - a.freq));
+                    if (term2 === 'some') return res.json(removeDuplicates(arr).sort((a,b) => b.freq - a.freq).slice(0, 100));
+                    else return res.json(removeDuplicates(arr).sort((a,b) => b.freq - a.freq));
             })
         
     });
@@ -63,22 +67,23 @@ const searchWithRecs = (req, res) => {
         .then(()=> {
                 console.log("children", Object.keys(children).length)
                 const keysSorted =  Object.keys(children).sort(function(a,b){return children[b]-children[a]})
-                const keysSliced = keysSorted.slice(0, 300).filter((x) => {
+                let keysSliced = keysSorted.filter((x) => {
                     return cart.indexOf(x) < 0;
-                })
+                }).slice(0, 5)
                 console.log(children[keysSliced[0]], children[keysSliced[keysSliced.length - 1]])
                 Package.find({_id: { $in: keysSliced}})
                 .then(pkgs => {
                     const sortedPkgs =  pkgs.sort(function(a,b){return children[b._id]-children[a._id]})
                     console.log(children[sortedPkgs[0]._id], children[sortedPkgs[sortedPkgs.length - 1]._id])
-                    Package.find({ $or: [{name: { $in: cart }}, {keywords: {$regex : `.*${term}.*`}}, { name: {$regex : `.*${term}.*`}} ]}).sort({freq: -1}).exec()
+                    Package.find({ $or: [{keywords: {$regex : `.*${term}.*`}}, { name: {$regex : `.*${term}.*`}} ]}).sort({freq: -1}).exec()
                     .then(packs => {
                         const final = [];
-                        for (let i = 0, j = 0; i < packs.length, j < sortedPkgs.length; i++, j++) {
-                            final.push(packs[i])
-                            final.push(sortedPkgs[j])
-                        }
-                        res.json(final);
+                        final.push(sortedPkgs);
+                        final.push(packs);
+                        return res.json(final);
+                    })
+                    .catch((err) => {
+                        console.log(err)
                     })
                 })
                 .catch((err) => {
@@ -127,7 +132,8 @@ const getAllProjects = (req, res) => {
 const requestRecommendations = (req, res) => {
 
     const bar = new _progress.Bar({}, _progress.Presets.shades_classic);
-    const { cart } = req.body;
+    const { cart, getAll } = req.body;
+    if (getAll === undefined) getAll = false;
     
 
     let arr = cart.map(ele => new mongoose.Types.ObjectId(ele));
@@ -149,9 +155,12 @@ const requestRecommendations = (req, res) => {
         })
         .then(()=> {
                 const keysSorted =  Object.keys(children).sort(function(a,b){return children[b]-children[a]})
-                const keysSliced = keysSorted.slice(0, 300).filter((x) => {
+                let keysSliced = keysSorted.filter((x) => {
                     return cart.indexOf(x) < 0;
                 })
+                if (getAll === false) {
+                    keysSliced = keysSliced.slice(0, 10)
+                }
                 Package.find({_id: { $in: keysSliced}})
                 .then(pkgs => {
                     const sortedPkgs =  pkgs.sort(function(a,b){return children[b._id]-children[a._id]})
@@ -194,7 +203,7 @@ const requestKeyRecommendations = (req, res) => {
             if (Object.keys(children).length < 1) return null;
                 console.log("children", Object.keys(children).length)
                 const keysSorted =  Object.keys(children).sort(function(a,b){return children[b]-children[a]})
-                const keysSliced = keysSorted.slice(0, 300).filter((x) => {
+                const keysSliced = keysSorted.slice(0, 10).filter((x) => {
                     return cart.indexOf(x) < 0;
                 })
                 console.log(children[keysSliced[0]], children[keysSliced[keysSliced.length - 1]])

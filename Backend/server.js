@@ -1,6 +1,9 @@
 const bodyParser = require('body-parser');
 const express = require('express');
 const cors = require('cors');
+const mongoose = require("mongoose");
+const _progress =  require('cli-progress');
+
 const routes = require('./routes/routes');
 
 const server = express();
