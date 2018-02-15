@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const _progress =  require('cli-progress');
 const didyoumean = require('didyoumean')
-var fs = require('fs');
+const fs = require('fs');
 
 const path = require('path');
 
@@ -25,7 +25,7 @@ const postUser = (req, res) => {
 
 const searchPackage = (req, res) => {
 
-    var filePath = path.join(__dirname, 'keywords.json');
+    const filePath = path.join(__dirname, 'keywords.json');
     const contents = fs.readFileSync(filepath, "utf8");
     const keywords = JSON.parse(contents);
     const { term, term2 } = req.params;
