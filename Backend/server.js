@@ -15,6 +15,9 @@ const corsOptions = {
 };
 
 server.use(cors(corsOptions));
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static('../Frontend/build'));
+}
 server.use(bodyParser.json());
 routes(server);
 

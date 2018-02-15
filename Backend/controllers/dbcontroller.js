@@ -294,7 +294,6 @@ const editCart = (req, res) => {
 
 const deleteCart = (req, res) => {
     const { cartid } = req.body;
-    console.log(cartid)
     User.findOne({carts: cartid })
     .then(user => {
         if (!user) return res.status(STATUS_USER_ERROR).json({err: 'cart does not exist'})
@@ -317,7 +316,6 @@ const deleteCart = (req, res) => {
     .catch((err) => {
         return res.status(STATUS_USER_ERROR).send(err);
     });
-
 }
 
 
