@@ -1,14 +1,3 @@
-// Collaborative filtering
-
-/**
- * 
- *  
- * 
- */
-const repo_name = process.argv[3];
-const pkgs = process.argv.slice(4);
-const f = process.argv[2];
-
 const path = require('path');
 const writePkg = require('write-pkg');
 const readPkg = require('read-pkg');
@@ -16,6 +5,9 @@ const nacl = require('tweetnacl');
 nacl.util = require('tweetnacl-util');
 const fs = require('fs');
 
+const repo_name = process.argv[3];
+const pkgs = process.argv.slice(4);
+const f = process.argv[2];
 
 const p = './packages/package.json';
 const dirname = './packages';
@@ -31,7 +23,7 @@ function readFile() {
 
 function writeFile(repo_name, params) { 
 
-    let dependencies = {}
+    let dependencies = {};
 
     for (let i = 0; i < params.length; i++) {
         dependencies[params[i]] = '*'; // <-------- npm upadate --save
@@ -50,21 +42,3 @@ module.exports = {
 }
 
 
-// const t = process.argv[2];
-
-// (async function recommend(params) {
-
-//     try {
-
-//         // +1 +2 +3 +4
-//         // it checks every project that have this item = 20
-//         // get all items that appear in all 20 projects
-//         // if mangoose appears more then other items recommend it as a 1st 
-//         console.log(params);
-//     } catch(e) {
-
-//         console.log(e);
-
-//     }
-    
-// })(t);

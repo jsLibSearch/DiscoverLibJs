@@ -4,8 +4,12 @@ import { Link } from 'react-router-dom';
 import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink,
   ListGroup, ListGroupItem } from 'reactstrap';
 
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import { getCatalog } from '../actions';
 
-import AnimationList from './AnimationList';
+
+import ListOfPckgs from './ListOfPckgs';
 
 const sideBar = [ 'Animation', 'Application Tools', 'Audio' ];
 
@@ -22,6 +26,7 @@ class Home extends Component {
         development: false,
         utilities: false,
         applications: false,
+        list: [],
     }
   }
 
@@ -30,6 +35,9 @@ class Home extends Component {
     this.setState({
       windowHeight: window.innerHeight - 40
     })
+
+    this.props.getCatalog();
+
   }
 
   componentWillUnmount() {
@@ -74,12 +82,144 @@ class Home extends Component {
     this.setState({ applications: !this.state.applications });
   }
 
-  test() {
-    console.log('123')
+  test(str) {
+    switch (str) {
+      case 'appFrameWorks':
+        this.setState({ list: this.props.catalog.appFrameWorks })
+        // console.log(this.props.catalog.appFrameWorks)
+        return;
+      case 'mobileFrameWorks':
+        this.setState({ list: this.props.catalog.mobileFrameWorks })
+        // console.log(this.props.catalog.mobileFrameWorks)
+        return;
+      case 'realTimeFrameWorks':
+        this.setState({ list: this.props.catalog.realTimeFrameWorks })
+        // console.log(this.props.catalog.realTimeFrameWorks)
+        return;
+      case 'testingFrameWorks':
+        this.setState({ list: this.props.catalog.testingFrameWorks })
+        // console.log(this.props.catalog.testingFrameWorks)
+        return;
+      case 'uiFrameWorks':
+        this.setState({ list: this.props.catalog.uiFrameWorks })
+        // console.log(this.props.catalog.uiFrameWorks)
+        return;
+      case 'windowsModalsPopups':
+        this.setState({ list: this.props.catalog.windowsModalsPopups })
+        // console.log(this.props.catalog.windowsModalsPopups)
+        return;
+      case'keyboardWrappers':
+        this.setState({ list: this.props.catalog.keyboardWrappers })
+        // console.log(this.props.catalog.keyboardWrappers)
+        return;
+      case'formWidgets':
+        this.setState({ list: this.props.catalog.formWidgets })
+        // console.log(this.props.catalog.formWidgets)
+        return;
+      case'gameEngines':
+        this.setState({ list: this.props.catalog.gameEngines })
+        // console.log(this.props.catalog.gameEngines)
+        return;
+      case'physicsLib':
+        this.setState({ list: this.props.catalog.physicsLib })
+        // console.log(this.props.catalog.physicsLib)
+        return;
+      case'animationLib':
+        this.setState({ list: this.props.catalog.animationLib })
+        // console.log(this.props.catalog.animationLib)
+        return;
+      case'presentationLib':
+        this.setState({ list: this.props.catalog.presentationLib })
+        // console.log(this.props.catalog.animationLib)
+        return;
+      case'canvasWrappers':
+        this.setState({ list: this.props.catalog.canvasWrappers })
+        // console.log(this.props.catalog.canvasWrappers)
+        return;
+      case'WebGL':
+        this.setState({ list: this.props.catalog.WebGL })
+        // console.log(this.props.catalog.WebGL)
+        return;
+      case'ImageManipulation':
+        this.setState({ list: this.props.catalog.ImageManipulation })
+        // console.log(this.props.catalog.ImageManipulation)
+        return;
+      case'visualizationLib':
+        this.setState({ list: this.props.catalog.visualizationLib })
+        // console.log(this.props.catalog.visualizationLib)
+        return;
+      case'dataStructures':
+        this.setState({ list: this.props.catalog.dataStructures })
+        // console.log(this.props.catalog.dataStructures)
+        return;
+      case'dateLib':
+        this.setState({ list: this.props.catalog.dateLib })
+        // console.log(this.props.catalog.dateLib)
+        return;
+      case'storageLib':
+        this.setState({ list: this.props.catalog.storageLib })
+        // console.log(this.props.catalog.storageLib)
+        return;
+      case'validationLib':
+        this.setState({ list: this.props.catalog.validationLib })
+        // console.log(this.props.catalog.validationLib)
+        return;
+      case'packageManagers':
+        this.setState({ list: this.props.catalog.packageManagers })
+        // console.log(this.props.catalog.packageManagers)
+        return;
+      case'timingLib':
+        this.setState({ list: this.props.catalog.timingLib })
+        // console.log(this.props.catalog.timingLib)
+        return;
+      case'toolkits':
+        this.setState({ list: this.props.catalog.toolkits })
+        // console.log(this.props.catalog.toolkits)
+        return;
+      case'codeProtectionLibs':
+        this.setState({ list: this.props.catalog.codeProtectionLibs })
+        // console.log(this.props.catalog.codeProtectionLibs)
+        return;
+      case'DOM':
+        this.setState({ list: this.props.catalog.DOM })
+        // console.log(this.props.catalog.DOM)
+        return;
+      case'ACFL':
+        this.setState({ list: this.props.catalog.ACFL })
+        // console.log(this.props.catalog.ACFL)
+        return;
+      case'functionalProgramming':
+        this.setState({ list: this.props.catalog.functionalProgramming })
+        // console.log(this.props.catalog.functionalProgramming)
+        return;
+      case'mathLibs':
+        this.setState({ list: this.props.catalog.mathLibs })
+        // console.log(this.props.catalog.mathLibs)
+        return;
+      case'html5Apps':
+        this.setState({ list: this.props.catalog.html5Apps })
+        // console.log(this.props.catalog.html5Apps)
+        return;
+      case'siteGenerators':
+        this.setState({ list: this.props.catalog.siteGenerators })
+        // console.log(this.props.catalog.siteGenerators)
+        return;
+      case'codeEditors':
+        this.setState({ list: this.props.catalog.codeEditors })
+        // console.log(this.props.catalog.codeEditors)
+        return;
+      case'designAndPrototyping':
+        this.setState({ list: this.props.catalog.designAndPrototyping })
+        // console.log(this.props.catalog.designAndPrototyping)
+        return;
+      default: 
+        console.log('default');
+    }
+    
+
   }
   
   render() {
-    const list = <AnimationList />;
     return (
       <div>
         <h4 className='Catalog1'>Directories</h4>
@@ -92,16 +232,16 @@ class Home extends Component {
               <Collapse isOpen={this.state.essentials} navbar>
                 <Nav navbar>
                   <NavItem >
-                    <NavLink onClick={ () => this.test() } href="#">Application Frameworks</NavLink>
+                    <NavLink onClick={ () => this.test('appFrameWorks') } href="#">Application Frameworks</NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink onClick={ () => this.test() } href="#">Mobile Frameworks</NavLink>
+                    <NavLink onClick={ () => this.test('mobileFrameWorks') } href="#">Mobile Frameworks</NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink onClick={ () => this.test() } href="#">Realtime Frameworks</NavLink>
+                    <NavLink onClick={ () => this.test('realTimeFrameWorks') } href="#">Realtime Frameworks</NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink onClick={ () => this.test() } href="#">Testing Frameworks</NavLink>
+                    <NavLink onClick={ () => this.test('testingFrameWorks') } href="#">Testing Frameworks</NavLink>
                   </NavItem>
                 </Nav>
               </Collapse>
@@ -109,16 +249,16 @@ class Home extends Component {
               <Collapse isOpen={this.state.ui} navbar>
                 <Nav navbar>
                   <NavItem >
-                    <NavLink onClick={ () => this.test() } href="#">UI Frameworks</NavLink>
+                    <NavLink onClick={ () => this.test('uiFrameWorks') } href="#">UI Frameworks</NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink onClick={ () => this.test() } href="#">Windows, Modals, Popups</NavLink>
+                    <NavLink onClick={ () => this.test('windowsModalsPopups') } href="#">Windows, Modals, Popups</NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink onClick={ () => this.test() } href="#">Keyboard Wrappers</NavLink>
+                    <NavLink onClick={ () => this.test('keyboardWrappers') } href="#">Keyboard Wrappers</NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink onClick={ () => this.test() } href="#">Form Widgets</NavLink>
+                    <NavLink onClick={ () => this.test('formWidgets') } href="#">Form Widgets</NavLink>
                   </NavItem>
                 </Nav>
               </Collapse>
@@ -126,16 +266,16 @@ class Home extends Component {
               <Collapse isOpen={this.state.multimedia} navbar>
                 <Nav navbar>
                   <NavItem >
-                    <NavLink onClick={ () => this.test() } href="#">Game Engines</NavLink>
+                    <NavLink onClick={ () => this.test('gameEngines') } href="#">Game Engines</NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink onClick={ () => this.test() } href="#">Physics Libraries</NavLink>
+                    <NavLink onClick={ () => this.test('physicsLib') } href="#">Physics Libraries</NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink onClick={ () => this.test() } href="#">Animation Libraries</NavLink>
+                    <NavLink onClick={ () => this.test('animationLib') } href="#">Animation Libraries</NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink onClick={ () => this.test() } href="#">Presentation Libraries</NavLink>
+                    <NavLink onClick={ () => this.test('presentationLib') } href="#">Presentation Libraries</NavLink>
                   </NavItem>
                 </Nav>
               </Collapse>
@@ -143,16 +283,16 @@ class Home extends Component {
               <Collapse isOpen={this.state.graphics} navbar>
                 <Nav navbar>
                   <NavItem >
-                    <NavLink onClick={ () => this.test() } href="#">Canvas Wrappers</NavLink>
+                    <NavLink onClick={ () => this.test('canvasWrappers') } href="#">Canvas Wrappers</NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink onClick={ () => this.test() } href="#">WebGL</NavLink>
+                    <NavLink onClick={ () => this.test('WebGL') } href="#">WebGL</NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink onClick={ () => this.test() } href="#">Image Manipulation</NavLink>
+                    <NavLink onClick={ () => this.test('ImageManipulation') } href="#">Image Manipulation</NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink onClick={ () => this.test() } href="#">Visualization Libraries</NavLink>
+                    <NavLink onClick={ () => this.test('visualizationLib') } href="#">Visualization Libraries</NavLink>
                   </NavItem>
                 </Nav>
               </Collapse>
@@ -160,16 +300,16 @@ class Home extends Component {
               <Collapse isOpen={this.state.data} navbar>
                 <Nav navbar>
                   <NavItem >
-                    <NavLink onClick={ () => this.test() } href="#">Data Structures</NavLink>
+                    <NavLink onClick={ () => this.test('dataStructures') } href="#">Data Structures</NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink onClick={ () => this.test() } href="#">Date Libraries</NavLink>
+                    <NavLink onClick={ () => this.test('dateLib') } href="#">Date Libraries</NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink onClick={ () => this.test() } href="#">Storage Libraries</NavLink>
+                    <NavLink onClick={ () => this.test('storageLib') } href="#">Storage Libraries</NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink onClick={ () => this.test() } href="#">Validation</NavLink>
+                    <NavLink onClick={ () => this.test('validationLib') } href="#">Validation</NavLink>
                   </NavItem>
                 </Nav>
               </Collapse>
@@ -177,16 +317,16 @@ class Home extends Component {
               <Collapse isOpen={this.state.development} navbar>
                 <Nav navbar>
                   <NavItem >
-                    <NavLink onClick={ () => this.test() } href="#">Package Managers</NavLink>
+                    <NavLink onClick={ () => this.test('packageManagers') } href="#">Package Managers</NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink onClick={ () => this.test() } href="#">Timing</NavLink>
+                    <NavLink onClick={ () => this.test('timingLib') } href="#">Timing</NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink onClick={ () => this.test() } href="#">Toolkits</NavLink>
+                    <NavLink onClick={ () => this.test('toolkits') } href="#">Toolkits</NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink onClick={ () => this.test() } href="#">Code Protection</NavLink>
+                    <NavLink onClick={ () => this.test('codeProtectionLibs') } href="#">Code Protection</NavLink> {/* <---- this doesnt have any libs */}
                   </NavItem>
                 </Nav>
               </Collapse>
@@ -194,16 +334,16 @@ class Home extends Component {
               <Collapse isOpen={this.state.utilities} navbar>
                 <Nav navbar>
                   <NavItem >
-                    <NavLink onClick={ () => this.test() } href="#">DOM</NavLink>
+                    <NavLink onClick={ () => this.test('DOM') } href="#">DOM</NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink onClick={ () => this.test() } href="#">Async, Control Flow, Event</NavLink>
+                    <NavLink onClick={ () => this.test('ACFL') } href="#">Async, Control Flow, Event</NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink onClick={ () => this.test() } href="#">Functional Programming</NavLink>
+                    <NavLink onClick={ () => this.test('functionalProgramming') } href="#">Functional Programming</NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink onClick={ () => this.test() } href="#">Math Libraries</NavLink>
+                    <NavLink onClick={ () => this.test('mathLibs') } href="#">Math Libraries</NavLink>
                   </NavItem>
                 </Nav>
               </Collapse>
@@ -211,16 +351,16 @@ class Home extends Component {
               <Collapse isOpen={this.state.applications} navbar>
                 <Nav navbar>
                   <NavItem >
-                    <NavLink onClick={ () => this.test() } href="#">Html5 Apps</NavLink>
+                    <NavLink onClick={ () => this.test('html5Apps') } href="#">Html5 Apps</NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink onClick={ () => this.test() } href="#">Static Site Generators</NavLink>
+                    <NavLink onClick={ () => this.test('siteGenerators') } href="#">Static Site Generators</NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink onClick={ () => this.test() } href="#">Code Editors</NavLink>
+                    <NavLink onClick={ () => this.test('codeEditors') } href="#">Code Editors</NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink onClick={ () => this.test() } href="#">Design And Prtotyping</NavLink>
+                    <NavLink onClick={ () => this.test('designAndPrototyping') } href="#">Design And Prototyping</NavLink>
                   </NavItem>
                 </Nav>
               </Collapse>
@@ -228,7 +368,7 @@ class Home extends Component {
             </Navbar>
             </div>
           <div className="Items">
-            { list }
+            <ListOfPckgs data={this.state.list}/>
           </div>
           <div className="Box">
             TEST
@@ -239,7 +379,15 @@ class Home extends Component {
   }
 }
 
-export default Home;
+const mapStateToProps = (state, ownProps) => {
+  return {
+    catalog: state.catalog
+  };
+};
+
+export default withRouter(connect(mapStateToProps, { getCatalog })(Home));
+
+
 /**
  * <nav className="navigation">
         <ul class="mainmenu">

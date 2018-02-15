@@ -4,7 +4,9 @@ import accessTokenSaver from './accessToken';
 import userReducer from './userReducer';
 // import userLogStatus from './userLogStatus';
 import cartReducer from './cart_reducer';
-import recReducer from './rec_reducer.js'
+import recReducer from './rec_reducer.js';
+import catalog from './catalogReducer';
+import catalogReducer from './catalogReducer';
 
 const rootReducer = combineReducers({
     packages: packageReducer,
@@ -12,7 +14,8 @@ const rootReducer = combineReducers({
     recState: recReducer,
     userStatusReducer: userReducer,
     // logInStatus: userLogStatus,
-    cart: cartReducer
+    cart: cartReducer,
+    catalog: catalogReducer,
 })
 
 export default rootReducer;

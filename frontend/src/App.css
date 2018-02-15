@@ -259,6 +259,7 @@ pink_red:      #C75058
 
 .SearchResults {
   border-right: 1px solid #91AC7C;
+  margin: 0 auto;
   width: 30em;
 }
 
@@ -312,7 +313,6 @@ pink_red:      #C75058
   width: 20%;
   font-size: 12px;
   color: #d61e2a;
-  height: 100%;
 }
 /* #e7e7aa <------------ body*/
 .Items {
@@ -338,7 +338,12 @@ pink_red:      #C75058
 
 .navbar-brand {
   font-size: 12px;
-  color: #d61e2a;
+  color: #c75058;
+}
+
+.navbar-brand:hover {
+  font-size: 12px;
+  color: #552428;
 }
 
 
@@ -350,10 +355,12 @@ pink_red:      #C75058
   color: rgb(247, 223, 30);
 }
 
+.navbar-nav .nav-link {
+  color: rgb(182, 88, 21);
+}
 
-
-a:hover {
-  color: rgb(247, 223, 30);
+.navbar-nav .nav-link:hover {
+  color: rgb(0, 0, 0);
 }
 
 .list-group-item {

@@ -3,6 +3,9 @@ const accessController = require('../controllers/userAuth');
 const repoController = require('../controllers/createRepo');
 const dbController = require('../controllers/dbcontroller');
 const listController = require('../controllers/listcontroller');
+const directoriesController = require('../controllers/directoriesController');
+const getAll = require('../controllers/getAll');
+
 
 
 module.exports = (app) => {
@@ -111,5 +114,159 @@ module.exports = (app) => {
     app
         .route('/get-recommends')
         .post(listController.getRecommendations);
+
+
+
+
+/*****************************************************
+ *  CATALOG/DIRECTORIES
+ ****************************************************/
+
+    // Essentials
+    app 
+        .route('/get-app-frameworks')
+        .get(directoriesController.getAppFrameWorks);
+
+    app
+        .route('/get-mobile-frameworks')
+        .get(directoriesController.getMobileFrameWorks);
+
+    app
+        .route('/get-realtime-frameworks')
+        .get(directoriesController.getRealTimeFrameWorks);
+
+    app 
+        .route('/get-testing-frameworks')
+        .get(directoriesController.getTestingFrameWorks);
+
+    
+    //UI
+    app
+        .route('/get-ui-frameworks')
+        .get(directoriesController.getUiFrameWorks);
+    
+    app
+        .route('/get-win-modal-popups')
+        .get(directoriesController.getWindowsModalsPopups);
+
+    app
+        .route('/get-keyboard-wrappers')
+        .get(directoriesController.getKeyboardWrappers);
+
+    app
+        .route('/get-form-widgets')
+        .get(directoriesController.getFormWidgets);
+
+
+    //Multimedia
+    app
+        .route('/get-game-engines')
+        .get(directoriesController.getGameEngines);
+
+    app
+        .route('/get-physics-libraries')
+        .get(directoriesController.getPhysicsLibraries);
+
+    app
+        .route('/get-animation-libraries')
+        .get(directoriesController.getAnimationLibraries);
+
+    app
+        .route('/get-presentation-libraries')
+        .get(directoriesController.getPresentationLibraries);
+
+
+    //Graphics
+    app
+        .route('/get-canvas-wrappers')
+        .get(directoriesController.getCanvasWrappers);
+
+    app
+        .route('/get-webgl')
+        .get(directoriesController.getWebGL);
+
+    app
+        .route('/get-image-manipulation')
+        .get(directoriesController.getImageManipulation);
+    
+    app
+        .route('/get-visualization-libraris')
+        .get(directoriesController.getVisualizationLibraries);
+
+
+    //Data
+    app
+        .route('/get-data-structures')
+        .get(directoriesController.getDataStructures);
+
+    app
+        .route('/get-date-libraries')
+        .get(directoriesController.getDateLibraries);
+
+    app
+        .route('/get-storage-libraries')
+        .get(directoriesController.getStorageLibraries);
+
+    app
+        .route('/get-validation-libraries')
+        .get(directoriesController.getValidationLibraries);
+
+
+    //Development
+    app
+        .route('/get-package-managers')
+        .get(directoriesController.getPackageManagers);
+
+    app
+        .route('/get-timing-libraries')
+        .get(directoriesController.getTimingLibraries);
+
+    app
+        .route('/get-toolkits')
+        .get(directoriesController.getToolkits);
+
+    // app
+    //     .route('/get-code-protection')
+    //     .get(directoriesController.getCodeProtectionLibs);
+
+    //Utilities
+    app
+        .route('/get-dom')
+        .get(directoriesController.getDOM);
+
+    app 
+        .route('/get-acfe') // <-------- acync-control-flow-event
+        .get(directoriesController.getACFL);
+
+    app
+        .route('/get-functional-programming')
+        .get(directoriesController.getFunctionalProgramming);
+
+    app
+        .route('/get-math-libraries')
+        .get(directoriesController.getMathLibs);
+
+
+    //Applications
+    app
+        .route('/get-html5-apps')
+        .get(directoriesController.getHtml5Apps);
+
+    app
+        .route('/get-site-generators')
+        .get(directoriesController.getSiteGenerators);
+
+    app
+        .route('/get-code-editors')
+        .get(directoriesController.getCodeEditors);
+
+    app
+        .route('/get-design-and-prototyping')
+        .get(directoriesController.getDesignAndPrototyping);
+
+    //Get all catalog    
+    app 
+        .route('/get-all-catalog')
+        .get(getAll.getAll)
     
 }
