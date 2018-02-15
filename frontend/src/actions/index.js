@@ -306,6 +306,7 @@ export const getCatalog = () => {
             })
 
     }
+}
 
 
 export const setCartName = (name, _id = null) => {
