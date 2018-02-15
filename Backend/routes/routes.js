@@ -2,6 +2,8 @@ const getPackagesController = require('../controllers/getData');
 const accessController = require('../controllers/userAuth');
 const repoController = require('../controllers/createRepo');
 const dbController = require('../controllers/dbcontroller');
+const listController = require('../controllers/listcontroller');
+
 
 module.exports = (app) => {
     
@@ -14,7 +16,8 @@ module.exports = (app) => {
         .route('/limit')
         .get(getPackagesController.checkLimitRate);
 
-    
+
+
     // User auth routes   
     app
         .route('/login')
@@ -29,10 +32,12 @@ module.exports = (app) => {
         .post(accessController.checkUserAuth);
 
 
+
     // Creates Repo
     app
         .route('/create-repo')
         .post(repoController.createRepo);
+
 
 
     // DB controllers/routes
@@ -95,5 +100,16 @@ module.exports = (app) => {
     app 
         .route('/save-cart')
         .post(dbController.saveCart);
+
+
+    
+    // readme, recommendations
+    app 
+        .route('/get-readme')
+        .post(listController.getReadme);
+
+    app
+        .route('/get-recommends')
+        .post(listController.getRecommendations);
     
 }

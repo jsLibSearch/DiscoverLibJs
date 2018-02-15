@@ -135,6 +135,7 @@ const requestRecommendations = (req, res) => {
     const { cart, getAll } = req.body;
     if (getAll === undefined) getAll = false;
     
+
     let arr = cart.map(ele => new mongoose.Types.ObjectId(ele));
     const cartObj = {}
     cart.forEach((element) => {
@@ -230,7 +231,9 @@ const getUserCarts = (req, res) => {
         if (!foundUser) {
             return res.status(STATUS_USER_ERROR).send({ error: " not a foundUser "})
         }
-        Cart.find({user: foundUser._id}).populate('cart', 'name keywords freq', Package ).exec()
+        Cart.find({user: foundUser._id})
+        .populate('cart', 'name keywords freq', Package )
+        .exec()
         .then((carts) => {
             res.send(carts);
         })

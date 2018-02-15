@@ -29,15 +29,16 @@ export default ComposedComponent => {
         }
 
         componentWillReceiveProps(nextProps) {
-            if (nextProps.user.jwt) {
+            if (nextProps.user.user.jwt && nextProps.user.user.jwt !== this.props.user.user.jwt) {
                 console.log(nextProps.user)
-                sessionStorage.setItem('jwtToken', nextProps.user.jwt);
-                sessionStorage.setItem('username', nextProps.user.username);
+                sessionStorage.setItem('jwtToken', nextProps.user.user.jwt);
+                sessionStorage.setItem('username', nextProps.user.user.username);
                 sessionStorage.setItem('loggedIn', true);
-            }
-            if (nextProps.accessToken) {
-                console.log('nextProps.accessToken')
-            }
+                
+            } // TODO: check following usefulness
+            // if (nextProps.accessToken) {
+            //     console.log('nextProps.accessToken')
+            // }
         }
 
         render() {

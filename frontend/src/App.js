@@ -34,17 +34,18 @@ class App extends Component {
     return (
       <div className="App">
         <Route path='/' component={Header} />
+        
         <div style={{ minHeight: `${ this.state.windowHeight }px`}} className='Main' >
-          <div className='Center' style={{ minHeight: `${this.state.windowHeight}px`}}  >
+          {/* <div className='Center' style={{ minHeight: `${this.state.windowHeight}px`}}  > */}
             <Route path='/search' component={SearchPage}/>
             <Route path='/cart' component={CartPage}/>
             <Route path='/login' component={LogIn}/>
             <Route path='/signup' component={SignUp}/>
             <Route path='/user' component={RequireAuth(UserPage)}/>
             <Route path='/faq' component={FAQ}/>
-            <Route path='/gettingstarted' component={GettingStarted}/>
             <Route exact path='/' component={Home}/>
-          </div>
+            <Route path='/gettingstarted' component={GettingStarted}/>
+          {/* </div> */}
         </div>
       </div>
     );
