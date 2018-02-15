@@ -1,0 +1,38 @@
+{
+  "name": "discoverlibjs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "node ./Backend/server.js",
+    "client": "node ./Frontend/service-worker.js",
+    "dev": "echo \"This command has been deprecated. Use 'npm start'\" && exit 1",
+    "lint": "eslint ."
+  },
+  
+  "engines": {
+    "node": "9.2.0",
+    "npm": "5.5.1",
+    "yarn": "1.3.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jsLibSearch/DiscoverLibJs.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jsLibSearch/DiscoverLibJs/issues"
+  },
+  "homepage": "https://github.com/jsLibSearch/DiscoverLibJs#readme",
+  "dependencies": {
+    "axios": "^0.17.1",
+    "body-parser": "^1.18.2",
+    "cors": "^2.8.4",
+    "express": "^4.16.2",
+    "github": "^13.1.0",
+    "mongoose": "^5.0.2",
+    "node-github-graphql": "^0.2.6"
+  }
+}
