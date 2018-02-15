@@ -41,7 +41,6 @@ class ListOfPckgs extends Component {
         axios
             .post('http://localhost:8080/get-readme', { repoName: `${name}` })
                 .then((res) => {
-                    console.log
                     this.setState({  
                         data: res.data
                     })

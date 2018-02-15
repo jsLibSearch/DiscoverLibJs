@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  font-family: ABeeZee, sans-serif
 }
 
 .Main {
@@ -241,7 +242,7 @@ pink_red:      #C75058
   margin: 0em;
   border: 1px solid #91AC7C;
   border-radius: .5em;
-  color: #91AC7C;
+  color: #313531;
   text-align: left;
   font-size: 0.6em;
 }
@@ -259,8 +260,8 @@ pink_red:      #C75058
 
 .SearchResults {
   border-right: 1px solid #91AC7C;
-  margin: 0 auto;
-  width: 30em;
+  margin: 0em 1em;
+  width: 40em;
 }
 
 .background-enter {

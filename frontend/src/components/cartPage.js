@@ -5,7 +5,6 @@ import Cart from './cart.js';
 import Package from './package.js';
 import { getRecs } from '../actions';
 import '../App.css';
-import { Button } from 'reactstrap';
 import { customColors as c } from '../custom/colors.js';
 
 class CartPage extends Component {
@@ -32,9 +31,6 @@ class CartPage extends Component {
         })
         this.sendRecRequest();
       }
-      if (this.state.cart && this.state.cart.length > 0 && this.state.recs.length === 0 && !this.props.recState.loading && !this.state.loading) {
-        this.sendRecRequest();
-      }
     }
     if (this.props.recState.loading && !this.state.loading) {
       this.setState({
@@ -59,7 +55,6 @@ class CartPage extends Component {
     let currentCart = [];
     if (this.props.cart.packages.length > 0) {
       currentCart = this.props.cart.packages
-      console.log('hay')
       this.sendRecRequest();
     }
 
@@ -84,7 +79,6 @@ class CartPage extends Component {
 
   sendRecRequest() {
     if (this.state.cart && this.state.cart.length > 0) {
-      console.log('sending rec request');      
       this.props.getRecs(this.props.cart.packages);
     }
   }

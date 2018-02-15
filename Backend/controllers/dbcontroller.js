@@ -293,21 +293,26 @@ const editCart = (req, res) => {
 
 
 const deleteCart = (req, res) => {
-
     const { cartid } = req.body;
-    User.find({carts: cartid })
-    .then(users => {
-        users.forEach(user => {
-            user.carts.splice(user.carts.indexOf(cartid), 1);
-            user.save();
+    console.log(cartid)
+    User.findOne({carts: cartid })
+    .then(user => {
+        if (!user) return res.status(STATUS_USER_ERROR).json({err: 'cart does not exist'})
+        user.carts = user.carts.filter(c => c._id !== cartid);
+        user.save()
+            .then(() => {
+                Cart.deleteOne({_id: cartid})
+                    .then(() => {
+                        return res.json({success: true});
+                    })
+                    .catch((err) => {
+                        return res.status(STATUS_USER_ERROR).send(err);
+                    })
+            .catch((err) => {
+                return res.status(STATUS_USER_ERROR).json(err)
+            })
         })
-        Cart.deleteOne({_id: cartid})
-        .then(() => {
-            return res.json({success: true});
-        })
-        .catch((err) => {
-            return res.status(STATUS_USER_ERROR).send(err);
-        })
+        
     })
     .catch((err) => {
         return res.status(STATUS_USER_ERROR).send(err);
