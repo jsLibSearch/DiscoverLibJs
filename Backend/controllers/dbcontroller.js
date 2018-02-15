@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const _progress =  require('cli-progress');
+const didyoumean = require('didyoumean')
+var fs = require('fs');
 
 mongoose.connect(`${process.env.MONGO_URI}`, null);
 const Package = require('../DB_Code/Package');
@@ -22,7 +24,7 @@ const postUser = (req, res) => {
 const searchPackage = (req, res) => {
 
     
-    const contents = fs.readFileSync('../DB_Code/keywords.json', "utf8");
+    const contents = fs.readFileSync('../Backend/DB_Code/keywords.json', "utf8");
     const keywords = JSON.parse(contents);
     const { term, term2 } = req.params;
     const matchedTerm = didyoumean(term, Object.keys(keywords));
@@ -133,7 +135,8 @@ const requestRecommendations = (req, res) => {
 
     const bar = new _progress.Bar({}, _progress.Presets.shades_classic);
     const { cart, getAll } = req.body;
-    if (getAll === undefined) getAll = false;
+    let getAll2 = getAll
+    if (getAll === undefined) getAll2 = false;
     
 
     let arr = cart.map(ele => new mongoose.Types.ObjectId(ele));
@@ -158,7 +161,7 @@ const requestRecommendations = (req, res) => {
                 let keysSliced = keysSorted.filter((x) => {
                     return cart.indexOf(x) < 0;
                 })
-                if (getAll === false) {
+                if (getAll2 === false) {
                     keysSliced = keysSliced.slice(0, 10)
                 }
                 Package.find({_id: { $in: keysSliced}})
