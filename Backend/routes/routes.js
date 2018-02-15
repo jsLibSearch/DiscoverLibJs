@@ -53,6 +53,11 @@ module.exports = (app) => {
     .post(dbController.postUser);
 
     app 
+        .route('/search-package/:term/:term2')
+        .get(dbController.searchPackage);
+
+
+        app 
         .route('/search-package/:term')
         .get(dbController.searchPackage);
 
