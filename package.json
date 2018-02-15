@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "\"npm run server\"",
+    "start": "node ./Backend/server.js",
     "server": "node ./Backend/server.js",
     "client": "node ./Frontend/service-worker.js",
     "dev": "echo \"This command has been deprecated. Use 'npm start'\" && exit 1",
