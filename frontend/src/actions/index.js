@@ -14,6 +14,9 @@ export const CHECK_USER_AUTH = 'CHECK_USER_AUTH';
 export const SET_USER_LOG_STATUS = 'SET_USER_LOG_STATUS';
 export const SET_USER_STATUS_LOADING = 'SET_USER_STATUS_LOADING';
 export const USER_LOGGED_IN = 'USER_LOGGED_IN';
+export const LOG_OUT_USER = 'LOG_OUT_USER';
+export const LOAD_CARTS = 'LOAD_CARTS';
+export const SET_USER_CARTS_LOADING = 'SET_USER_CARTS_LOADING';
 
 export const ADD_CART = 'ADD_CART';
 
@@ -23,12 +26,46 @@ export const NEW_SEARCH = 'NEW_SEARCH'; // useless?
 export const GET_CART = 'GET_CART';
 export const NEW_ITEM = 'NEW_ITEM';
 export const DELETE_ITEM = 'DELETE_ITEM';
+export const SET_CART_NAME = 'SET_CART_NAME';
+export const CLEAR_CART = 'CLEAR_CART';
 
 export const SEARCH_REC = 'SEARCH_REC';
 export const LOADING_RECS = 'LOADING_RECS';
 export const GET_RECS = 'GET_RECS';
 
 export const GET_CATALOG = 'GET_CATALOG';
+
+export const clearCart = () => {
+    return (dispatch) => {
+        dispatch({
+            type: 'CLEAR_CART'
+        })
+    }
+}
+
+export const loadCarts = (github_id) => {
+    return (dispatch) => {
+        dispatch(setLoadingTo('SET_USER_CARTS'));
+        axios.get(`${DB_URL}user-carts/${github_id}`, {
+            validateStatus: function (status) {
+                return status < 500; // Reject only if the status code is greater than or equal to 500
+            }
+        })
+            .then((response) => {
+                dispatch({
+                    type: 'LOAD_CARTS',
+                    payload: response.data
+                });
+            })
+            .catch(() => {
+                dispatch({
+                    type: 'LOAD_CARTS',
+                    payload: []
+                });
+            });
+    }
+}
+
 
 const setStatusLoading = () => {
     return {
@@ -122,6 +159,14 @@ export const saveAccessToken = (code) => {
 
 }
 
+export const logOutUser = () => {
+    return (dispatch) => {
+        dispatch({
+            type: LOG_OUT_USER
+        })
+    }
+}
+
 export const makeServerCalls = (jwtToken, github_id) => {
 
     return (dispatch) => {
@@ -174,7 +219,7 @@ export const getRecs = (cart) => {
     const ids = cart.map(pkg => pkg._id);
     return (dispatch) => {
         dispatch(setRecStatusLoading())
-        axios.post(`${DB_URL}key-recs`, { cart: ids },{
+        axios.post(`${DB_URL}rec`, { cart: ids },{
             validateStatus: function (status) {
                 return status < 500; // Reject only if the status code is greater than or equal to 500
             }
@@ -262,4 +307,13 @@ export const getCatalog = () => {
 
     }
 
+
+export const setCartName = (name, _id = null) => {
+    return (dispatch) => {
+        dispatch({
+            type: 'SET_CART_NAME',
+            name: name,
+            _id: _id
+        })
+    }
 }
