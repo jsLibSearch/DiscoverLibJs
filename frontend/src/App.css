@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  font-family: ABeeZee, sans-serif
 }
 
 .Main {
@@ -8,8 +9,8 @@
 }
 
 .Center {
-  background-color: #2022201a;
-  width: 40em;
+  background-color: #20222011;
+  width: 50em;
 }
 
 .App-logo {
@@ -165,7 +166,7 @@
 }
 
 body {
-  background-color: #e7e7ea;
+  background-color: #e1e1e2;
 }
 
 /* 
@@ -241,7 +242,7 @@ pink_red:      #C75058
   margin: 0em;
   border: 1px solid #91AC7C;
   border-radius: .5em;
-  color: #91AC7C;
+  color: #313531;
   text-align: left;
   font-size: 0.6em;
 }
@@ -259,7 +260,8 @@ pink_red:      #C75058
 
 .SearchResults {
   border-right: 1px solid #91AC7C;
-  width: 30em;
+  margin: 0em 1em;
+  width: 40em;
 }
 
 .background-enter {
@@ -312,7 +314,6 @@ pink_red:      #C75058
   width: 20%;
   font-size: 12px;
   color: #d61e2a;
-  height: 100%;
 }
 /* #e7e7aa <------------ body*/
 .Items {
@@ -338,7 +339,12 @@ pink_red:      #C75058
 
 .navbar-brand {
   font-size: 12px;
-  color: #d61e2a;
+  color: #c75058;
+}
+
+.navbar-brand:hover {
+  font-size: 12px;
+  color: #552428;
 }
 
 
@@ -350,10 +356,12 @@ pink_red:      #C75058
   color: rgb(247, 223, 30);
 }
 
+.navbar-nav .nav-link {
+  color: rgb(182, 88, 21);
+}
 
-
-a:hover {
-  color: rgb(247, 223, 30);
+.navbar-nav .nav-link:hover {
+  color: rgb(0, 0, 0);
 }
 
 .list-group-item {

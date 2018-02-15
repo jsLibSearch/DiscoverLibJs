@@ -1,5 +1,4 @@
 import axios from 'axios';
-import testPackages from '../custom/dummy_data.json';
 const dev = false;
 const apiURL = dev ? 'http://localhost:8080/' : 'http://localhost:8080/';
 const DB_URL = dev ? 'http://localhost:8080/' : 'http://localhost:8080/';
@@ -33,6 +32,8 @@ export const SEARCH_REC = 'SEARCH_REC';
 export const LOADING_RECS = 'LOADING_RECS';
 export const GET_RECS = 'GET_RECS';
 
+export const GET_CATALOG = 'GET_CATALOG';
+
 export const clearCart = () => {
     return (dispatch) => {
         dispatch({
@@ -63,6 +64,7 @@ export const loadCarts = (github_id) => {
             });
     }
 }
+
 
 const setStatusLoading = () => {
     return {
@@ -285,6 +287,26 @@ export const addCartToUser = (cart, user, name) => {
             });
     }
 }
+
+
+export const getCatalog = () => {
+
+    return (dispatch) => {
+       
+        axios.get(`${apiURL}get-all-catalog`)
+            .then((result) => {
+                dispatch({
+                    type: 'GET_CATALOG',
+                    payload: result.data
+                })
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+
+    }
+}
+
 
 export const setCartName = (name, _id = null) => {
     return (dispatch) => {

@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './custom-bootstrap.css';
 import './index.css';
 import App from './App';
-import AnimThree from './three';
+// import AnimThree from './three';
 import registerServiceWorker from './registerServiceWorker';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -20,5 +20,5 @@ ReactDOM.render(
         </Router>
     </Provider>
 , document.getElementById('root'));
-ReactDOM.render(<AnimThree />, document.getElementById('anim'));
+// ReactDOM.render(<AnimThree />, document.getElementById('anim'));
 registerServiceWorker();

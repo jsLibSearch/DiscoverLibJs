@@ -14,7 +14,7 @@ export class SearchPage extends Component {
         windowHeight: window.innerHeight - 40,
         packages: [],
         query: '',
-        dev: true,
+        dev: false,
         loading: false,
         results: 0
     };

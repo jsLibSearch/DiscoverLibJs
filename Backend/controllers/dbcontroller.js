@@ -293,25 +293,25 @@ const editCart = (req, res) => {
 
 
 const deleteCart = (req, res) => {
-
     const { cartid } = req.body;
     User.findOne({carts: cartid })
     .then(user => {
-        if (!user) return res.status(STATUS_USER_ERROR).json({err: 'no cart on db with id'})
-        
-            user.carts = user.carts.filter(x => x.id !== cartid);
-            user.save().then(() => {
+        if (!user) return res.status(STATUS_USER_ERROR).json({err: 'cart does not exist'})
+        user.carts = user.carts.filter(c => c._id !== cartid);
+        user.save()
+            .then(() => {
                 Cart.deleteOne({_id: cartid})
-                .then(() => {
-                    return res.json({success: true});
-                })
-                .catch((err) => {
-                    return res.status(STATUS_USER_ERROR).send(err);
-                })
+                    .then(() => {
+                        return res.json({success: true});
+                    })
+                    .catch((err) => {
+                        return res.status(STATUS_USER_ERROR).send(err);
+                    })
+            .catch((err) => {
+                return res.status(STATUS_USER_ERROR).json(err)
+            })
         })
-        .catch((err) => {
-            return res.status(STATUS_USER_ERROR).send(err);
-        })
+        
     })
     .catch((err) => {
         return res.status(STATUS_USER_ERROR).send(err);
