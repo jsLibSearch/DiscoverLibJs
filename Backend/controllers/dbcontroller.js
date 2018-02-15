@@ -26,7 +26,7 @@ const postUser = (req, res) => {
 const searchPackage = (req, res) => {
 
     const filePath = path.join(__dirname, 'keywords.json');
-    const contents = fs.readFileSync(filepath, "utf8");
+    const contents = fs.readFileSync(filePath, "utf8");
     const keywords = JSON.parse(contents);
     const { term, term2 } = req.params;
     const matchedTerm = didyoumean(term, Object.keys(keywords));
