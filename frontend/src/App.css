@@ -180,7 +180,10 @@ pink_red:      #C75058
 .Package {
   background-color: #E1E1E2;
   margin: 1em 3em;
-  padding: .8em;
+  padding: 1em;
+  justify-content: center;
+  text-align: center;
+  align-content: center;
 }
 
 .PackDiv {
@@ -206,8 +209,8 @@ pink_red:      #C75058
 
 .PackButtons {
   padding: 0em;
-  margin: 0em 0.25em;
-  width: 98%;
+  margin: 0em;
+  width: 100%;
   display: inline-flex;
   justify-content: space-between
 }
@@ -235,8 +238,7 @@ pink_red:      #C75058
 
 .ExpandBox {
   padding: .3em 0em;
-  margin: 0.4em 0.25em 0.2em 0.25em;
-  width: 98%;
+  margin: 0em;
   border: 1px solid #91AC7C;
   border-radius: .5em;
   color: #91AC7C;

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { newSearch, clearAccessToken, makeServerCalls } from '../actions';
+import { newSearch, clearAccessToken, makeServerCalls, logOutUser, setCartName, newItem } from '../actions';
 import './header.css';
 import { customColors as c } from '../custom/colors.js';
 import { Link } from 'react-router-dom';
@@ -37,6 +37,20 @@ class Header extends Component {
     componentDidMount() {
         window.addEventListener('resize', this.handleResize.bind(this));
         const small = this.state.windowWidth < 697 ? true : false;
+        const lastCart = JSON.parse(sessionStorage.getItem('cart'));
+        if (lastCart !== null) {
+            this.props.setCartName(lastCart.name);
+            lastCart.packages.forEach(element => {
+                this.props.newItem(element);
+            });
+            sessionStorage.removeItem('cart');
+            this.setState({
+                searchedQuery: '',
+                itemsInCart: lastCart.packages.length,
+                windowWidth: window.innerWidth,
+                small: small,
+            });
+        }
         this.setState({
             searchedQuery: '',
             itemsInCart: 0,
@@ -106,7 +120,10 @@ class Header extends Component {
     }
 
     // this will redirect user to GitHub login page
-    handleLogInClick() { 
+    handleLogInClick() {
+        if (this.props.redux.cart.packages.length > 0) {
+            sessionStorage.setItem('cart', JSON.stringify(this.props.redux.cart))
+        }
         axios
             .get('http://localhost:8080/login')
                 .then((response) => {
@@ -118,12 +135,15 @@ class Header extends Component {
     }
 
     handleLogOutClick() {
-        sessionStorage.clear();
+        sessionStorage.removeItem('jwtToken');
+        sessionStorage.removeItem('username');
+        sessionStorage.removeItem('loggedIn');
         this.setState({
             username: '',
             loggedIn: false,
         })
         this.props.clearAccessToken();
+        this.props.logOutUser();
     }
 
     render() {
@@ -143,7 +163,7 @@ class Header extends Component {
                     </div>
                 </div>
                 <div className='HeaderRight'>
-                    <Link to="/signup" className={!this.state.small ? 'Sign' : 'SignSmall'} style={this.state.loggedIn ? {display: 'none'} : null}>Sign Up</Link>
+                    {/* <Link to="/signup" className={!this.state.small ? 'Sign' : 'SignSmall'} style={this.state.loggedIn ? {display: 'none'} : null}>Sign Up</Link> */}
                     <Link to="/login" className={!this.state.small ? 'Sign' : 'SignSmall'} style={this.state.loggedIn ? {display: 'none'} : null} onClick={() => { this.handleLogInClick() }} >Log In</Link>
                     <Link to="/logout" className={!this.state.small ? 'Sign' : 'SignSmall'} style={!this.state.loggedIn ? {display: 'none'} : null} onClick={() => { this.handleLogOutClick() }} >Log Out</Link>
                     <Link to="/user" className={!this.state.small ? 'Username' : 'UsernameSmall'} style={!this.state.loggedIn ? {display: 'none'} : null}>{this.state.username.length > 0 ? this.state.username : ''}</Link>
@@ -168,4 +188,4 @@ const mapStateToProps = (state, ownProps) => {
     };
 };
   
-export default withRouter(connect(mapStateToProps, { newSearch, clearAccessToken, makeServerCalls })(Header));
+export default withRouter(connect(mapStateToProps, { newSearch, clearAccessToken, makeServerCalls, logOutUser, setCartName, newItem })(Header));

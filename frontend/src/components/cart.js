@@ -4,7 +4,7 @@ import { Dropdown, DropdownToggle, DropdownDropdown, DropdownItem, DropdownMenu,
   Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, FormText, Popover,
   PopoverHeader, PopoverBody } from 'reactstrap';
 import { CSSTransitionGroup } from 'react-transition-group';
-import { deleteItem, newItem, addCartToUser } from '../actions';
+import { deleteItem, newItem, addCartToUser, setCartName } from '../actions';
 import '../App.css';
 import { customColors as c } from '../custom/colors.js';
 const axios = require('axios');
@@ -28,8 +28,10 @@ class Cart extends Component {
       cartName: 'UntitledProject',
       newName: '',
       renaming: false,
-      _id: null
+      _id: null,
+      loginModal: false
     };
+    this.toggleLoginModal = this.toggleLoginModal.bind(this);
   }
 
   componentDidUpdate() {
@@ -123,6 +125,12 @@ class Cart extends Component {
     });
   }
 
+  toggleLoginModal() {
+    this.setState({
+      loginModal: !this.state.loginModal
+    });
+  }
+
   onCheckBoxClick() {
     this.setState({ private: !this.state.private });
   }
@@ -145,6 +153,7 @@ class Cart extends Component {
 
   saveCart() {
     if (this.state.cart.length === 0 || this.props.user.status === 'unauthorized') {
+      this.toggleLoginModal();
       return;
     }
     this.props.addCartToUser(this.state.cart, this.props.user.user, this.state.cartName)
@@ -220,6 +229,21 @@ class Cart extends Component {
       renaming: false
     })
 
+  }
+
+  handleLogInClick() {
+    // TODO: Save cart to local storage
+    if (this.props.cart.packages.length > 0) {
+      sessionStorage.setItem('cart', JSON.stringify(this.props.cart))
+    }
+    axios
+        .get('http://localhost:8080/login')
+            .then((response) => {
+                window.location = response.data;
+            })
+            .catch((err) => {
+                console.log(err);
+            });
   }
 
   render() {
@@ -387,6 +411,17 @@ class Cart extends Component {
             <Button color="primary" onClick={() => this.onCreateRepoClick()}>Submit</Button>
             <Button color="secondary" onClick={() => this.toggleModal()}>Cancel</Button>
           </ModalFooter>
+        </Modal>
+
+        <Modal isOpen={this.state.loginModal} toggle={this.toggleLoginModal.bind(this)}>
+          <ModalHeader toggle={this.toggleLoginModal.bind(this)}>Log in</ModalHeader>
+          <ModalBody>
+            You must be logged in via GitHub to save a project.
+          </ModalBody>
+          <ModalFooter>
+            <Button color="primary" onClick={this.handleLogInClick.bind(this)}>Log-In</Button>
+            <Button color="secondary" onClick={this.toggleLoginModal.bind(this)}>No thanks</Button>
+          </ModalFooter>
         </Modal> 
       </div>
     );
@@ -400,4 +435,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { deleteItem, newItem, addCartToUser })(Cart);
+export default connect(mapStateToProps, { deleteItem, newItem, addCartToUser, setCartName })(Cart);

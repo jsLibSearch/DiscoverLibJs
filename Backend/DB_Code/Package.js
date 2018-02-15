@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Cart = require("./Cart.js");
 
 mongoose.models = {};
 mongoose.modelSchemas = {};
