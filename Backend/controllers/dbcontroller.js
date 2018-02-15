@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const _progress =  require('cli-progress');
-
+const didyoumean = require('didyoumean');
 mongoose.connect(`${process.env.MONGO_URI}`, null);
 const Package = require('../DB_Code/Package');
 const Project = require('../DB_Code/Project.js');
@@ -9,7 +9,7 @@ const KeyEdge = require('../DB_Code/KeyEdge.js');
 const User = require('../DB_Code/User.js');
 const Cart = require('../DB_Code/Cart.js');
 const STATUS_USER_ERROR = 422;
-
+const fs = require('fs');
 
 const postUser = (req, res) => {
     const { info } = req.body;
@@ -22,7 +22,7 @@ const postUser = (req, res) => {
 const searchPackage = (req, res) => {
 
     
-    const contents = fs.readFileSync('../DB_Code/keywords.json', "utf8");
+    const contents = fs.readFileSync('../Backend/DB_Code/keywords.json', "utf8");
     const keywords = JSON.parse(contents);
     const { term, term2 } = req.params;
     const matchedTerm = didyoumean(term, Object.keys(keywords));
