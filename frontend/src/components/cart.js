@@ -237,7 +237,7 @@ class Cart extends Component {
       sessionStorage.setItem('cart', JSON.stringify(this.props.cart))
     }
     axios
-        .get('http://localhost:8080/login')
+        .get('https://javascript-library-discovery2.herokuapp.com/login')
             .then((response) => {
                 window.location = response.data;
             })

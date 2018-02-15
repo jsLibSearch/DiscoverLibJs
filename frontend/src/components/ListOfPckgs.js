@@ -39,7 +39,7 @@ class ListOfPckgs extends Component {
 
     toggle(name, idx) {
         axios
-            .post('http://localhost:8080/get-readme', { repoName: `${name}` })
+            .post('https://javascript-library-discovery2.herokuapp.com/get-readme', { repoName: `${name}` })
                 .then((res) => {
                     this.setState({  
                         data: res.data

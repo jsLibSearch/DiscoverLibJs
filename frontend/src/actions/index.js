@@ -1,7 +1,7 @@
 import axios from 'axios';
-const dev = false;
-const apiURL = dev ? 'http://localhost:8080/' : 'http://localhost:8080/';
-const DB_URL = dev ? 'http://localhost:8080/' : 'http://localhost:8080/';
+const dev = true;
+const apiURL = dev ? 'https://javascript-library-discovery2.herokuapp.com/' : 'http://localhost:8080/';
+const DB_URL = dev ? 'https://javascript-library-discovery2.herokuapp.com/' : 'http://localhost:8080/';
 
 export const GET_PACKAGES = 'GET_PACKAGES';
 export const LOADING = 'LOADING';

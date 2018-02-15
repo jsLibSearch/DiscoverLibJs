@@ -146,7 +146,7 @@ export class UserPage extends Component {
     const cartid = this.state.userCarts[this.state.cartToRename]._id;
     const name = this.state.renameText;
 
-    axios.put(`http://localhost:8080/edit-cart`, { cartid, cart, name }).then(() => {
+    axios.put(`https://javascript-library-discovery2.herokuapp.com/edit-cart`, { cartid, cart, name }).then(() => {
       this.setState({
         renaming: false,
         cartToRename: null,
@@ -205,7 +205,7 @@ export class UserPage extends Component {
 
   deleteCart(id) {
     console.log(id)
-    axios.delete(`http://localhost:8080/delete-cart`, { data : { cartid: id } }).then((response) => {
+    axios.delete(`https://javascript-library-discovery2.herokuapp.com/delete-cart`, { data : { cartid: id } }).then((response) => {
       this.setState({
         loadedCarts: false,
         userCarts: []
