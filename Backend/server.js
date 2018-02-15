@@ -21,6 +21,6 @@ if (process.env.NODE_ENV === 'production') {
 server.use(bodyParser.json());
 routes(server);
 
-server.listen(PORT, () => {
+server.listen(.listen(process.env.PORT || PORT), () => {
     console.log(`Server listening on port ${PORT}`);
 });
