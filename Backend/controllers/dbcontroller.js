@@ -26,7 +26,7 @@ const searchPackage = (req, res) => {
     
     // // const contents = fs.readFileSync('./keywords.json', "utf8");
     // const keywords = JSON.parse(contents);
-    const keywords = [ react, mongoose, axios ];
+    const keywords = [ 'react', 'mongoose', 'axios' ];
     const { term, term2 } = req.params;
     const matchedTerm = didyoumean(term, Object.keys(keywords));
     let arr = [];
