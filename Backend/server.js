@@ -10,7 +10,7 @@ const server = express();
 const PORT = 8080;
 
 const corsOptions = {
-    "origin": "http://javascriptlibrarydiscovery.s3-website.us-east-2.amazonaws.com",
+    "origin": "javascriptlibrarydiscovery.com",
     "credentials": true
 };
 
