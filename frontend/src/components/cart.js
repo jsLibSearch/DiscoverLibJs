@@ -30,7 +30,7 @@ class Cart extends Component {
       renaming: false,
       _id: null,
       loginModal: false,
-      server: !dev ? 'https://javascript-library-discovery2.herokuapp.com/' : 'https://localhost:8080/',
+      server: !dev ? 'https://javascript-library-discovery2.herokuapp.com/' : 'http://localhost:8080/',
       usersCart: false,
     };
     this.toggleLoginModal = this.toggleLoginModal.bind(this);
