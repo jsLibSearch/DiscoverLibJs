@@ -10,7 +10,7 @@ const server = express();
 const PORT = 8080;
 
 const corsOptions = {
-    "origin": "https://javascriptlibrarydiscovery.com/",
+    "origin": "https://javascriptlibrarydiscovery.com",
     "credentials": true
 };
 
