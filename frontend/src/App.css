@@ -10,7 +10,7 @@
 
 .Center {
   background-color: #20222011;
-  width: 50em;
+  width: 65em;
 }
 
 .App-logo {
@@ -196,14 +196,14 @@ pink_red:      #C75058
 }
 
 .PackTitle {
-  color: rgb(236, 121, 14);
-  font-size: 1.6em;
+  color: rgb(236, 120, 11);
+  font-size: 2em;
   font-style: italic;
   font-weight: 500;
 }
 .PackDesc {
-  color: rgb(194, 87, 11);
-  font-size: 0.8em;
+  color: rgb(202, 84, 0);
+  font-size: 1.1em;
   margin: 0em;
   font-weight: 100;
 }
@@ -240,11 +240,12 @@ pink_red:      #C75058
 .ExpandBox {
   padding: .3em 0em;
   margin: 0em;
-  border: 1px solid #91AC7C;
+  border: 1px solid rgb(103, 122, 87);
   border-radius: .5em;
-  color: #313531;
+  color: rgb(103, 122, 87);
   text-align: left;
-  font-size: 0.6em;
+  font-size: 0.8em;
+  font-weight: 100;
 }
 
 .SearchHeader {
@@ -261,7 +262,7 @@ pink_red:      #C75058
 .SearchResults {
   border-right: 1px solid #91AC7C;
   margin: 0em 1em;
-  width: 40em;
+  width: 50em;
 }
 
 .background-enter {
