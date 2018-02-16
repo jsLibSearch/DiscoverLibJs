@@ -28,14 +28,20 @@ const searchPackage = (req, res) => {
     const filePath = path.join(__dirname, 'keywords.json');
     const contents = fs.readFileSync(filePath, "utf8");
     const keywords = JSON.parse(contents);
+    
+    const filePath2 = path.join(__dirname, 'finalPackagesish.json');
+    const contents2 = fs.readFileSync(filePath2, "utf8");
+    const packagesFile = JSON.parse(contents2);
+
     const { term, term2 } = req.params;
-    const matchedTerm = didyoumean(term, Object.keys(keywords));
+    const matchedKeyTerm = didyoumean(term, Object.keys(keywords));
+    const matchedPackageTerm = didyoumean(term, Object.keys(packagesFile));
     let arr = [];
-    Package.find({ $query: { name: {$regex : `.*${term}.*`}}, $sort: { freq : -1 }  }, (err, foundPackages) => {
+    Package.find({ $query: { name: {$regex : `.*${matchedPackageTerm}.*`}}, $sort: { freq : -1 }  }, (err, foundPackages) => {
         if (err) {
             return res.status(STATUS_USER_ERROR).json(err);
         }
-            Package.find({ $query: { keywords: {$regex : `.*${matchedTerm}.*`} }, $sort: { freq : -1 }  }, (err, foundKeys) => {
+            Package.find({ $query: { keywords: {$regex : `.*${matchedKeyTerm}.*`} }, $sort: { freq : -1 }  }, (err, foundKeys) => {
                 if (err) {
                     return res.status(STATUS_USER_ERROR).json(err);
                 }
