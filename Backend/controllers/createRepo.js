@@ -20,8 +20,8 @@ github.authenticate({
 
 const createRepo = (req, res) => {
 
-    const { repo_name, description, _private, accessToken } = req.body;
-
+    const { repo_name, description, accessToken, arrOfPckgs } = req.body;
+    helpers.writeFile(repo_name, arrOfPckgs);
 
     async function thatDoesEveryThing(params) {
         
@@ -30,7 +30,7 @@ const createRepo = (req, res) => {
             const result = await axios.post(`https://api.github.com/user/repos?access_token=${accessToken}`, {
                 name: repo_name,
                 description: description,
-                private: _private,
+                private: false,
                 auto_init: true,
             });
             

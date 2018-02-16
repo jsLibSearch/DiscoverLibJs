@@ -114,11 +114,16 @@ class Cart extends Component {
 
 
   onCreateRepoClick() {
-    const [ repo_name, description, _private, accessToken ] = 
-      [ this.state.filename, this.state.description, this.state.private, this.props.user.accessToken ];
+    const [ repo_name, description,  accessToken ] = 
+      [ this.state.filename, this.state.description, this.props.user.accessToken ];
+    let arrOfPckgs = []
+    for (let obj of this.props.cart.packages) {
+      arrOfPckgs.push(obj.name);
+    }
 
-    axios
-      .post(`${this.state.server}create-repo`, { repo_name, description, _private, accessToken })
+    if (arrOfPckgs) {
+      axios
+      .post(`${this.state.server}create-repo`, { repo_name, description, accessToken, arrOfPckgs })
         .then((res) => {
           console.log(res.data);
         })
@@ -126,6 +131,7 @@ class Cart extends Component {
           console.log(err);
         })
 
+    }
 
     this.setState({
       modal: !this.state.modal

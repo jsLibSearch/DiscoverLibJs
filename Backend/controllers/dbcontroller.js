@@ -1,7 +1,9 @@
 const mongoose = require("mongoose");
 const _progress =  require('cli-progress');
 const didyoumean = require('didyoumean')
-var fs = require('fs');
+const fs = require('fs');
+
+const path = require('path');
 
 mongoose.connect(`${process.env.MONGO_URI}`, null);
 const Package = require('../DB_Code/Package');
@@ -23,8 +25,8 @@ const postUser = (req, res) => {
 
 const searchPackage = (req, res) => {
 
-    
-    const contents = fs.readFileSync('../Backend/DB_Code/keywords.json', "utf8");
+    const filePath = path.join(__dirname, 'keywords.json');
+    const contents = fs.readFileSync(filePath, "utf8");
     const keywords = JSON.parse(contents);
     const { term, term2 } = req.params;
     const matchedTerm = didyoumean(term, Object.keys(keywords));
@@ -296,7 +298,6 @@ const editCart = (req, res) => {
 
 const deleteCart = (req, res) => {
     const { cartid } = req.body;
-    console.log(cartid)
     User.findOne({carts: cartid })
     .then(user => {
         if (!user) return res.status(STATUS_USER_ERROR).json({err: 'cart does not exist'})
@@ -319,7 +320,6 @@ const deleteCart = (req, res) => {
     .catch((err) => {
         return res.status(STATUS_USER_ERROR).send(err);
     });
-
 }
 
 
