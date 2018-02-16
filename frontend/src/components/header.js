@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { newSearch, clearAccessToken, makeServerCalls, logOutUser, setCartName, newItem } from '../actions';
+import { newSearch, clearAccessToken, makeServerCalls, logOutUser, setCartName, newItem, dev } from '../actions';
 import './header.css';
 import { customColors as c } from '../custom/colors.js';
 import { Link } from 'react-router-dom';
@@ -16,7 +16,8 @@ class Header extends Component {
             itemsInCart: 0,
             username: '',
             loggedIn: false,
-            windowWidth: window.innerWidth
+            windowWidth: window.innerWidth,
+            server: !dev ? 'https://javascript-library-discovery2.herokuapp.com/' : 'http://localhost:8080/'
         };
     }
 
@@ -124,7 +125,7 @@ class Header extends Component {
             sessionStorage.setItem('cart', JSON.stringify(this.props.redux.cart))
         }
         axios
-            .get('https://javascript-library-discovery2.herokuapp.com/login')
+            .get(`${this.state.server}login`)
                 .then((response) => {
                     window.location = response.data;
                 })

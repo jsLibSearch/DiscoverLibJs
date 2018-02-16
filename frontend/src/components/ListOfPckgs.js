@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import '../App.css';
 import { Collapse, ListGroup, ListGroupItem, CardBody, Card } from 'reactstrap';
+import { dev } from '../actions'
 // Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink, Button 
 const axios = require('axios');
+
 
 
 class ListOfPckgs extends Component {
@@ -13,6 +15,7 @@ class ListOfPckgs extends Component {
             data: null,
             list: [],
             collapses: [],
+            server: !dev ? 'https://javascript-library-discovery2.herokuapp.com/' : 'http://localhost:8080/'
         }
     }
 
@@ -39,7 +42,7 @@ class ListOfPckgs extends Component {
 
     toggle(name, idx) {
         axios
-            .post('https://javascript-library-discovery2.herokuapp.com/get-readme', { repoName: `${name}` })
+            .post(`${this.state.server}get-readme`, { repoName: `${name}` })
                 .then((res) => {
                     this.setState({  
                         data: res.data

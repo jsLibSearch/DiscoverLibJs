@@ -1,7 +1,7 @@
 import axios from 'axios';
-const dev = true;
-const apiURL = dev ? 'https://javascript-library-discovery2.herokuapp.com/' : 'http://localhost:8080/';
-const DB_URL = dev ? 'https://javascript-library-discovery2.herokuapp.com/' : 'http://localhost:8080/';
+export const dev = true;
+const apiURL = !dev ? 'https://javascript-library-discovery2.herokuapp.com/' : 'http://localhost:8080/';
+const DB_URL = !dev ? 'https://javascript-library-discovery2.herokuapp.com/' : 'http://localhost:8080/';
 
 export const GET_PACKAGES = 'GET_PACKAGES';
 export const LOADING = 'LOADING';
@@ -24,6 +24,7 @@ export const NEW_SEARCH = 'NEW_SEARCH'; // useless?
 
 export const GET_CART = 'GET_CART';
 export const NEW_ITEM = 'NEW_ITEM';
+export const SET_AS_SAVED_CART = 'SET_AS_SAVED_CART';
 export const DELETE_ITEM = 'DELETE_ITEM';
 export const SET_CART_NAME = 'SET_CART_NAME';
 export const CLEAR_CART = 'CLEAR_CART';
@@ -278,6 +279,21 @@ export const addCartToUser = (cart, user, name) => {
                     type: 'ADD_CART',
                     payload: response.data
                 });
+                axios.get(`${DB_URL}cart/${response.data._id}`,{
+                    validateStatus: function (status) {
+                        return status < 500; // Reject only if the status code is greater than or equal to 500
+                    }
+                })
+                    .then((res) => {
+                        dispatch({
+                            type: 'SET_AS_SAVED_CART',
+                            name: res.data.name,
+                            _id: res.data._id,
+                            packages: res.data.cart
+                        });
+                    }).catch((err)=>{
+                        console.log(err)
+                    })
             })
             .catch(() => {
                 dispatch({
@@ -288,6 +304,16 @@ export const addCartToUser = (cart, user, name) => {
     }
 }
 
+export const setAsSavedCart = (name, _id, cart) => {
+    return (dispatch) => {
+        dispatch({
+            type: 'SET_AS_SAVED_CART',
+            name: name,
+            _id: _id,
+            packages: cart
+        });
+    }
+}
 
 export const getCatalog = () => {
 

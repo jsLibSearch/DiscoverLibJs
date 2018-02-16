@@ -1,4 +1,4 @@
-import { GET_CART, NEW_ITEM, DELETE_ITEM, SET_CART_NAME, CLEAR_CART } from '../actions';
+import { GET_CART, NEW_ITEM, DELETE_ITEM, SET_CART_NAME, CLEAR_CART, SET_AS_SAVED_CART } from '../actions';
 // import axios from 'axios';
 
 const cartReducer = (state = { packages: [], name: 'Untitled Project', _id: null}, action) => {
@@ -14,9 +14,16 @@ const cartReducer = (state = { packages: [], name: 'Untitled Project', _id: null
                 packages: newPacks
             });
         case NEW_ITEM:
-            return  Object.assign({}, state, {
+            return Object.assign({}, state, {
                     packages: state.packages.concat(action.item)
                 });
+        case SET_AS_SAVED_CART:
+            console.log(action)
+            return Object.assign({}, state, {
+                packages: action.packages,
+                name: action.name,
+                _id: action._id
+            });
         case SET_CART_NAME:
             return Object.assign({}, state, {
                 name: action.name,
