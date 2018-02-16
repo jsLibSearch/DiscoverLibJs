@@ -34,9 +34,19 @@ class App extends Component {
     return (
       <div className="App">
         <Route path='/' component={Header} />
-        
-        <div style={{ minHeight: `${ this.state.windowHeight }px`}} className='Main' >
-          {/* <div className='Center' style={{ minHeight: `${this.state.windowHeight}px`}}  > */}
+        <div style={ this.props.history.location.pathname !== '/' ? { minHeight: `${ this.state.windowHeight }px`, display: 'flex'} : { minHeight: `${ this.state.windowHeight }px`}} className='Main' >
+          {this.props.history.location.pathname !== '/' ?
+            (<div className='Center' style={{ minHeight: `${this.state.windowHeight}px`}}  >
+              <Route path='/search' component={SearchPage}/>
+              <Route path='/cart' component={CartPage}/>
+              <Route path='/login' component={LogIn}/>
+              <Route path='/signup' component={SignUp}/>
+              <Route path='/user' component={RequireAuth(UserPage)}/>
+              <Route path='/faq' component={FAQ}/>
+              <Route exact path='/' component={Home}/>
+              <Route path='/gettingstarted' component={GettingStarted}/>
+            </div>):
+            (<div>
             <Route path='/search' component={SearchPage}/>
             <Route path='/cart' component={CartPage}/>
             <Route path='/login' component={LogIn}/>
@@ -45,7 +55,7 @@ class App extends Component {
             <Route path='/faq' component={FAQ}/>
             <Route exact path='/' component={Home}/>
             <Route path='/gettingstarted' component={GettingStarted}/>
-          {/* </div> */}
+            </div>)}
         </div>
       </div>
     );

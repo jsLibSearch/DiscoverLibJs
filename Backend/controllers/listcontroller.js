@@ -1,6 +1,6 @@
 const axios = require('axios');
 const GitHubApi = require('github');
-const gb = new GitHubApi({ debug: true, requestMedia: 'application/vnd.github.VERSION.raw' });
+const gb = new GitHubApi({ debug: true, requestMedia: 'application/vnd.github.VERSION.html' });
 const nacl = require('tweetnacl');
 nacl.util = require('tweetnacl-util');
 const Package = require('../DB_Code/Package');
@@ -35,11 +35,11 @@ const getReadme = (req, res) => {
                 
                 const [ owner, repo ] = [ response.data.items[0].owner.login, response.data.items[0].name ];
                 
-                // const response2 = await axios.get(`https://api.github.com/repos/${owner}/${repo}/readme`, {
-                //     headers: { Accept: mediaType, Authorization: process.env.GITHUB_TOKEN }
-                // });
+                const response2 = await axios.get(`https://api.github.com/repos/${owner}/${repo}/readme`, {
+                    headers: { Accept: mediaType, Authorization: process.env.GITHUB_TOKEN }
+                });
 
-                const response2 = await gb.repos.getContent({ owner, repo, path: `readme` })
+                // const response2 = await gb.repos.getContent({ owner, repo, path: `README.md` })
     
                 if (response2.data) {
                     // const data = nacl.util.decodeUTF8(response2.data.content);
