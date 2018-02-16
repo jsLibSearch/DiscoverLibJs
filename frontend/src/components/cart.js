@@ -292,7 +292,7 @@ class Cart extends Component {
           <h1 className='PackTitle'>
             {this.state.cartName}
           </h1>
-          <h1 className='PackDesc' style={{ position: 'absolute', bottom: 0, right:0, marginBottom: '0.5rem' }}>
+          <h1 className='PackDesc' style={{ position: 'absolute', bottom: 0, right:0, margin: '0.5rem' }}>
             You have {this.state.cart.length} {this.state.cart.length === 1 ? 'package' : 'packages'} in your project
           </h1>
         </div>
@@ -400,7 +400,7 @@ class Cart extends Component {
             return (
                 <div className='PackCart' style={{ margin: '0am'}} key={item.name}>
                   <h1 key={item._id} className='PackDesc' style={{
-                          margin: '.6em 0em',
+                          margin: '0.3em 0em 0em',
                           verticalAlign: 'middle',
                           display: 'inline-flex'
                       }}>{item.name}</h1>
