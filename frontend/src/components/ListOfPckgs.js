@@ -85,32 +85,6 @@ class ListOfPckgs extends Component {
                             </div>   
                         ) 
                 } )  : null }   
-                {/* <ListGroupItem tag="a" href="#" onClick={() => this.toggle()}>react</ListGroupItem> */}
-                {/* <Collapse isOpen={this.state.collapse}>
-                    <Card>
-                        <CardBody>
-                            <button onClick={() => this.onAddProject()}
-                                style={ {
-                                margin: 0,
-                                padding: '0em 0.8em',
-                                fontStyle: 'italic',
-                                fontSize: '.7em',
-                                color: 'white',
-                                borderColor: 'black',
-                                backgroundColor: 'black' 
-                                } }>Add to Project</button>
-                            <hr/>
-                            <div dangerouslySetInnerHTML={{__html: this.state.data}}/>
-                        </CardBody>
-                    </Card>
-                </Collapse> */}
-                {/* { this.state.list.data ? this.state.list.data.map( (pckg) => {
-                    return <ListGroupItem tag="a" href="#" key={pckg.name} onClick={() => this.toggle(pckg.name)} >{ pckg.name }</ListGroupItem>
-                } ) : null } */}
-                {/* <ListGroupItem tag="a" href="#" >Mongo</ListGroupItem>
-                <ListGroupItem tag="a" href="#" >Express</ListGroupItem>
-                <ListGroupItem tag="a" href="#" >Nacl</ListGroupItem>
-                <ListGroupItem tag="a" href="#" >Cors</ListGroupItem> */}
             </ListGroup>
         )
     }
