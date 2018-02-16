@@ -61,7 +61,6 @@ class Header extends Component {
     }
 
     componentWillReceiveProps(nextProps, nextState) {
-        console.log(nextProps)
         if (nextProps.user.user.hasOwnProperty('username')) {
             this.setState({
                 username: nextProps.user.user.username,

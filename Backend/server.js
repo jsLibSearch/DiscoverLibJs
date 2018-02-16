@@ -8,8 +8,13 @@ const routes = require('./routes/routes');
 
 const server = express();
 const PORT = 8080;
+const dev = true;
 
-const corsOptions = {
+const corsOptions = dev ?
+{
+    "origin": "http://localhost:3000",
+    "credentials": true
+}:{
     "origin": "https://javascriptlibrarydiscovery.com",
     "credentials": true
 };
