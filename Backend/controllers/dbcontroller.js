@@ -1,7 +1,9 @@
 const mongoose = require("mongoose");
 const _progress =  require('cli-progress');
 const didyoumean = require('didyoumean')
-var fs = require('fs');
+const fs = require('fs');
+
+const path = require('path');
 
 mongoose.connect(`${process.env.MONGO_URI}`, null);
 const Package = require('../DB_Code/Package');
@@ -23,17 +25,23 @@ const postUser = (req, res) => {
 
 const searchPackage = (req, res) => {
 
-    
-    const contents = fs.readFileSync('../Backend/DB_Code/keywords.json', "utf8");
+    const filePath = path.join(__dirname, 'keywords.json');
+    const contents = fs.readFileSync(filePath, "utf8");
     const keywords = JSON.parse(contents);
+    
+    const filePath2 = path.join(__dirname, 'finalPackagesish.json');
+    const contents2 = fs.readFileSync(filePath2, "utf8");
+    const packagesFile = JSON.parse(contents2);
+
     const { term, term2 } = req.params;
-    const matchedTerm = didyoumean(term, Object.keys(keywords));
+    const matchedKeyTerm = didyoumean(term, Object.keys(keywords));
+    const matchedPackageTerm = didyoumean(term, Object.keys(packagesFile));
     let arr = [];
-    Package.find({ $query: { name: {$regex : `.*${term}.*`}}, $sort: { freq : -1 }  }, (err, foundPackages) => {
+    Package.find({ $query: { name: {$regex : `.*${matchedPackageTerm}.*`}}, $sort: { freq : -1 }  }, (err, foundPackages) => {
         if (err) {
             return res.status(STATUS_USER_ERROR).json(err);
         }
-            Package.find({ $query: { keywords: {$regex : `.*${matchedTerm}.*`} }, $sort: { freq : -1 }  }, (err, foundKeys) => {
+            Package.find({ $query: { keywords: {$regex : `.*${matchedKeyTerm}.*`} }, $sort: { freq : -1 }  }, (err, foundKeys) => {
                 if (err) {
                     return res.status(STATUS_USER_ERROR).json(err);
                 }
@@ -296,7 +304,6 @@ const editCart = (req, res) => {
 
 const deleteCart = (req, res) => {
     const { cartid } = req.body;
-    console.log(cartid)
     User.findOne({carts: cartid })
     .then(user => {
         if (!user) return res.status(STATUS_USER_ERROR).json({err: 'cart does not exist'})
@@ -319,7 +326,6 @@ const deleteCart = (req, res) => {
     .catch((err) => {
         return res.status(STATUS_USER_ERROR).send(err);
     });
-
 }
 
 

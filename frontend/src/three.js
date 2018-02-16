@@ -20,7 +20,7 @@ class AnimThree extends Component {
 
     componentDidMount() {
         const width = window.innerWidth;
-        const height = width / 6;
+        const height = width / 18;
 
         this.setState({
             width: width,

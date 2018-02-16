@@ -10,14 +10,17 @@ const server = express();
 const PORT = 8080;
 
 const corsOptions = {
-    "origin": "http://localhost:3000",
+    "origin": "https://javascriptlibrarydiscovery.com",
     "credentials": true
 };
 
 server.use(cors(corsOptions));
+if (process.env.NODE_ENV === 'production') {
+    server.use(express.static('../Frontend/build'));
+}
 server.use(bodyParser.json());
 routes(server);
 
-server.listen(PORT, () => {
+server.listen(process.env.PORT || PORT, () => {
     console.log(`Server listening on port ${PORT}`);
 });

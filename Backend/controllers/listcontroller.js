@@ -1,6 +1,6 @@
 const axios = require('axios');
 const GitHubApi = require('github');
-const gb = new GitHubApi({ debug: true, requestMedia: 'application/vnd.github.VERSION.raw' });
+const gb = new GitHubApi({ debug: true, requestMedia: 'application/vnd.github.VERSION.html' });
 const nacl = require('tweetnacl');
 nacl.util = require('tweetnacl-util');
 const Package = require('../DB_Code/Package');
@@ -30,7 +30,7 @@ const getReadme = (req, res) => {
             const q = `${repoName} in:name sort:stars`; //language:javascript 
             const response = await gb.search.repos({ q })
             
-    
+
             if (response.data) {
                 
                 const [ owner, repo ] = [ response.data.items[0].owner.login, response.data.items[0].name ];

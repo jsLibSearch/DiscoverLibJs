@@ -17,6 +17,9 @@ function readFile() {
 
     const content = fs.readFileSync(`${p}`, 'utf8');
     const e = nacl.util.encodeBase64(content);
+    fs.unlink(`${p}`, (err) => {
+        console.log(err);
+    });
     return e;
 }
 
