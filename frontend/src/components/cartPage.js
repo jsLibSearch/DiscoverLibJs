@@ -68,6 +68,25 @@ class CartPage extends Component {
     window.removeEventListener('resize', this.handleResize.bind(this))
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.cart._id !== this.props.cart._id) {
+      if (nextProps.cart.packages.length === 0) {
+        this.setState({
+          recs: [],
+          cart: []
+        })
+      }
+    }
+    if (nextProps.cart.packages.length !== this.props.cart.packages.length) {
+      if (nextProps.cart.packages.length === 0) {
+        this.setState({
+          recs: [],
+          cart: []
+        })
+      }
+    }
+  }
+
   handleResize() {
     if (!this.refs.cartPage) {
       return;

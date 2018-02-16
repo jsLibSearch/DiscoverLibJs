@@ -256,7 +256,9 @@ const getUserCarts = (req, res) => {
 const getCartByID = (req, res) => {
 
     const {cartid} = req.params;
-    Cart.findOne({_id: cartid}).exec().populate('Package')
+    Cart.findOne({_id: cartid})
+        .populate('cart', 'name keywords freq', Package)
+        .exec()
     .then(cart => {
         if (!cart) {
             return res.status(STATUS_USER_ERROR).send({err: "no cart"})

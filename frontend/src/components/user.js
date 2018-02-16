@@ -7,8 +7,7 @@ import '../App.css';
 import { customColors as c } from '../custom/colors.js';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { saveAccessToken, loadCarts, newItem, setCartName, clearCart } from '../actions';
-
+import { saveAccessToken, loadCarts, newItem, setCartName, clearCart, dev } from '../actions';
 
 export class UserPage extends Component {
   constructor(props) {
@@ -28,7 +27,8 @@ export class UserPage extends Component {
         private: false,
         filename: '',
         description: '',
-        cartToRename: null
+        cartToRename: null,
+        server: !dev ? 'https://javascript-library-discovery2.herokuapp.com/' : 'http://localhost:8080/'
     };
   }
 
@@ -146,7 +146,7 @@ export class UserPage extends Component {
     const cartid = this.state.userCarts[this.state.cartToRename]._id;
     const name = this.state.renameText;
 
-    axios.put(`http://localhost:8080/edit-cart`, { cartid, cart, name }).then(() => {
+    axios.put(`${this.state.server}edit-cart`, { cartid, cart, name }).then(() => {
       this.setState({
         renaming: false,
         cartToRename: null,
@@ -160,10 +160,6 @@ export class UserPage extends Component {
       renaming: false,
       cartToRename: null
     })
-    // TODO: RENAME CART IN DB VIA AXIOS
-    // const cartToRename = this.state.userCarts[this.state.cartToRename]
-    // const newName = this.state.renameText
-    console.log('not renaming cart, implement axios put request');
   }
 
   handleRenameText(e) {
@@ -205,7 +201,7 @@ export class UserPage extends Component {
 
   deleteCart(id) {
     console.log(id)
-    axios.delete(`http://localhost:8080/delete-cart`, { data : { cartid: id } }).then((response) => {
+    axios.delete(`${this.state.server}delete-cart`, { data : { cartid: id } }).then((response) => {
       this.setState({
         loadedCarts: false,
         userCarts: []

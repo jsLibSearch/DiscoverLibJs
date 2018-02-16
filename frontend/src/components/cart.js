@@ -4,7 +4,7 @@ import { Dropdown, DropdownToggle, DropdownItem, DropdownMenu,
   Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, Popover,
   PopoverHeader, PopoverBody } from 'reactstrap';
 import { CSSTransitionGroup } from 'react-transition-group';
-import { deleteItem, newItem, addCartToUser, setCartName } from '../actions';
+import { deleteItem, newItem, addCartToUser, setCartName, dev, clearCart, setAsSavedCart } from '../actions';
 import '../App.css';
 import { customColors as c } from '../custom/colors.js';
 const axios = require('axios');
@@ -29,7 +29,9 @@ class Cart extends Component {
       newName: '',
       renaming: false,
       _id: null,
-      loginModal: false
+      loginModal: false,
+      server: !dev ? 'https://javascript-library-discovery2.herokuapp.com/' : 'https://localhost:8080/',
+      usersCart: false,
     };
     this.toggleLoginModal = this.toggleLoginModal.bind(this);
   }
@@ -45,7 +47,8 @@ class Cart extends Component {
           windowHeight: window.innerHeight - 40,
           cart: currentCart,
           cartName: this.props.cart.name,
-          isOpen: openArr
+          isOpen: openArr,
+          _id: this.props.cart._id
         })
       }
     }
@@ -64,10 +67,20 @@ class Cart extends Component {
       this.setState({
         windowHeight: window.innerHeight - 40,
         cart: currentCart,
-        cartName: name
+        cartName: name,
+        _id: this.props.cart._id
       })
     }
+  }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.cart._id !== this.props.cart._id) {
+      this.setState({
+        _id: nextProps.cart._id,
+        cart: nextProps.cart.packages,
+        cartName: nextProps.cart.name
+      })
+    }
   }
 
   componentWillUnmount() {
@@ -110,7 +123,7 @@ class Cart extends Component {
 
     if (arrOfPckgs) {
       axios
-      .post(`${apiURL}create-repo`, { repo_name, description, accessToken, arrOfPckgs })
+      .post(`${this.state.server}create-repo`, { repo_name, description, accessToken, arrOfPckgs })
         .then((res) => {
           console.log(res.data);
         })
@@ -162,7 +175,7 @@ class Cart extends Component {
       this.toggleLoginModal();
       return;
     }
-    this.props.addCartToUser(this.state.cart, this.props.user.user, this.state.cartName)
+    this.props.addCartToUser(this.state.cart, this.props.user.user, this.state.cartName);
   }
 
   selectPackage(item) {
@@ -228,7 +241,7 @@ class Cart extends Component {
     if (this.state.newName.length < 1) {
       return;
     }
-    this.props.setCartName(this.state.newName);
+    this.props.setCartName(this.state.newName, this.state._id);
     this.setState({
       cartName: this.state.newName,
       newName: '',
@@ -243,13 +256,33 @@ class Cart extends Component {
       sessionStorage.setItem('cart', JSON.stringify(this.props.cart))
     }
     axios
-        .get('http://localhost:8080/login')
+        .get(`${this.state.server}login`)
             .then((response) => {
                 window.location = response.data;
             })
             .catch((err) => {
                 console.log(err);
             });
+  }
+
+  overwriteCart() {
+    const cart = this.state.cart.map((pkg) => pkg._id);
+    const cartid = this.state._id;
+    const name = this.state.cartName;
+
+    axios.put(`${this.state.server}edit-cart`, { cartid, cart, name }).then(() => {
+      this.props.setAsSavedCart(this.state.cartName, this.state._id, this.state.cart);
+      return;
+    })
+  }
+
+  clearCart() {
+    this.props.clearCart();
+    this.setState({
+      cart: [],
+      cartName: 'Untitled Project',
+      _id: null
+    })
   }
 
   render() {
@@ -308,6 +341,8 @@ class Cart extends Component {
             caret>
             Project Options
           </DropdownToggle>
+
+          {this.state._id === null ? (
           <DropdownMenu>
             <DropdownItem onClick={this.saveCart.bind(this)}>Save Project</DropdownItem>
             <DropdownItem id='rename'onClick={this.toggleRename.bind(this)}>Rename</DropdownItem>
@@ -326,8 +361,30 @@ class Cart extends Component {
               </PopoverBody>
             </Popover>
             <DropdownItem divider />
-            <DropdownItem>Delete Project</DropdownItem>
+            <DropdownItem onClick={this.clearCart.bind(this)}>Clear Project</DropdownItem>
           </DropdownMenu>
+          ):(
+          <DropdownMenu>
+            <DropdownItem onClick={this.saveCart.bind(this)}>Save As New Project</DropdownItem>
+            <DropdownItem onClick={this.overwriteCart.bind(this)}>Overwrite Project</DropdownItem>
+            <DropdownItem id='rename'onClick={this.toggleRename.bind(this)}>Rename</DropdownItem>
+            <DropdownItem color="secondary" onClick={() => this.toggleModal() }> Create A Repo </DropdownItem>
+            <Popover style={ { backgroundColor: c.body_bg } }  placement='left' isOpen={this.state.renaming} target='options' toggle={this.toggleRename.bind(this)}>
+              <PopoverHeader style={ { backgroundColor: c.header, color: c.body_bg } }>Rename Project</PopoverHeader>
+              <PopoverBody>
+                <Form onSubmit={this.renameCart.bind(this)}>
+                  <FormGroup>
+                    <Label for="rename project" hidden>Rename Project</Label>
+                    <Input bsSize='sm' onChange={this.handleRenameText.bind(this)} placeholder={this.state.cartName} />
+                  </FormGroup>
+                  {' '}
+                  <Button size='sm' color='success' type='submit'>Submit</Button>
+                </Form>
+              </PopoverBody>
+            </Popover>
+            <DropdownItem divider />
+            <DropdownItem onClick={this.clearCart.bind(this)}>Clear Project</DropdownItem>
+          </DropdownMenu>)}
         </Dropdown>
         </div>
         <div className='CartDiv'>
@@ -439,4 +496,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { deleteItem, newItem, addCartToUser, setCartName })(Cart);
+export default connect(mapStateToProps, { deleteItem, newItem, addCartToUser, setCartName, clearCart, setAsSavedCart })(Cart);
