@@ -95,7 +95,7 @@ export class SearchPage extends Component {
     return (
       <div ref='searchPage'>
         {this.state.dev ? (<button onClick={this.fillDevCart.bind(this)}>fill all</button>): null}
-        <div>
+        <div style={{ borderBottom: '1px solid rgb(103, 122, 87)', marginTop: '.2em' }}>
           {this.state.loading ?
             (<h3 className='SearchHeader'>Loading search results for "{this.state.query}"</h3>)
             :!this.props.redux.query ? 

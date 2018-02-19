@@ -106,7 +106,7 @@ class CartPage extends Component {
     return (
       <div ref='cartPage'>
         <Cart />
-        <p style={{ color: c.darker_orange, fontStyle: 'italic', textAlign: 'left', marginLeft: '3.8em' }}>
+        <p className='RecText'>
           {this.state.loading ? 'Loading recommendations' : 'Recommendations'}
         </p>
         {this.state.recs.length > 0 ?
