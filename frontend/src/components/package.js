@@ -116,7 +116,6 @@ class Package extends Component {
                             color: c.body_bg,
                             borderColor: c.off_green,
                             backgroundColor: c.off_green,
-                            backgroundColor: c.off_green
                         } }>
                     {this.state.added ? 'Added to Project' : 'Add to Project'}
                 </button>

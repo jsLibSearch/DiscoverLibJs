@@ -1,7 +1,7 @@
 
 .App-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   background-color: #313531;
   height: 2.5em;
   padding: 0em;
@@ -32,14 +32,14 @@
   font-size: 1.5em;
   padding: 0em;
   margin: 0;
-  color: rgb(182, 88, 21)
+  color: #4459ff
 }
 
 .Logo {
   font-size: 1.25em;
   padding: 0em .5em 0em .15em;
   margin: .3em;
-  color: #C75058;
+  color: #91ac7c;
   text-decoration: none;
 }
 
@@ -51,13 +51,12 @@
 .HeaderLeft {
   display: inline-flex;
   justify-content: flex-start;
-  width: 15em;
+  margin-right: 2em;
 }
 
 .HeaderRight {
   display: inline-flex;
   justify-content: flex-end;
-  width: 15em;
 }
 
 .Sign {
@@ -87,27 +86,27 @@
 
 .Username {
   padding: 0.5em;
-  color: #D86E09;
+  color: #91ac7c;
   font-size: 1em;
   text-decoration: none;
 }
 
 .Username:hover {
-  color: #C75058;
+  color: #4459ff;
   text-decoration: none;
 }
 
 .Cart-Box:hover .Brackets {
-  color: #C75058;
+  color: #91ac7c;
 }
 
 .Cart-Box:hover .Quantity {
-  color: rgb(201, 201, 202)
+  color: #91ac7c
 }
 
 .Quantity {
   font-size: 1.5em;
   padding: 0em .1em 0em 0.1em;
   margin: 0;
-  color: #D86E09
+  color: #4459ff
 }

@@ -8,7 +8,7 @@ const routes = require('./routes/routes');
 
 const server = express();
 const PORT = 8080;
-const dev = false;
+const dev = true;
 
 const corsOptions = dev ?
 {

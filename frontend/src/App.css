@@ -9,7 +9,7 @@
 }
 
 .Center {
-  background-color: #20222011;
+  background-color: #20222000;
   width: 65em;
 }
 
@@ -51,7 +51,7 @@
   font-size: 1.5em;
   padding: 0em;
   margin: 0;
-  color: rgb(182, 88, 21)
+  color: #4459ff
 }
 
 .Logo {
@@ -76,7 +76,6 @@
 .HeaderRight {
   display: inline-flex;
   justify-content: flex-end;
-  width: 15em;
 }
 
 .Sign {
@@ -117,23 +116,23 @@
 
 .Username {
   padding: 0.5em;
-  color: #D86E09;
+  color: #91ac7c;
   font-size: 1em;
   text-decoration: none;
 }
 .Username:hover {
-  color: #C75058;
+  color: #4459ff;
   text-decoration: none;
 }
 
 .UsernameSmall {
   padding: 1em .5em 1em .5em;
-  color: #D86E09;
+  color: #91ac7c;
   font-size: .7em;
   text-decoration: none;
 }
 .UsernameSmall:hover {
-  color: #C75058;
+  color: #4459ff;
   text-decoration: none;
 }
 
@@ -179,12 +178,13 @@ pink_red:      #C75058
  */
 
 .Package {
-  background-color: #E1E1E2;
+  background-color: #8080802e;
   margin: 1em 3em;
   padding: 1em;
   justify-content: center;
   text-align: center;
   align-content: center;
+  border-radius: 1em
 }
 
 .PackDiv {
@@ -196,13 +196,13 @@ pink_red:      #C75058
 }
 
 .PackTitle {
-  color: rgb(236, 120, 11);
+  color: #07169c;
   font-size: 2em;
   font-style: italic;
   font-weight: 500;
 }
 .PackDesc {
-  color: rgb(202, 84, 0);
+  color: #313531;
   font-size: 1.1em;
   margin: 0em;
   font-weight: 100;
@@ -222,10 +222,39 @@ pink_red:      #C75058
   width: 98%;
   display: inline-flex;
   justify-content: space-between;
-  border-bottom: .05em solid #91AC7C;
+  border-bottom: .05em solid #d6d6d6;
   border-radius: 0em;
   height: 2.25em;
   max-height: 2.25em;
+}
+
+.TerminalCopy {
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 1em;
+  margin: .1em;
+  color: #4459ff;
+  background-color: #313531;
+  border-radius: .5em;
+  padding: .5em 1em;
+  text-align: left;
+  overflow: hidden;
+}
+
+.TerminalCopy:hover {
+  color: #E1E1E2;
+}
+
+.TermBox {
+  display: flex;
+  flex: content;
+  background-color: #E1E1E2;
+  border-radius: 1em;
+  padding: 0em 3em;
+  margin: .5em 0em 0em;
+  max-width: 65em;
+  position: relative;
+  width: 65em;
 }
 
 .PackButton {
@@ -235,6 +264,16 @@ pink_red:      #C75058
   width: 98%;
   display: inline-flex;
   justify-content: flex-end;
+}
+
+.RecText {
+  margin-top: 2.5em;
+  font-style: italic;
+  color: rgb(103, 122, 87);
+  text-align: left;
+  margin-left: 2.2em;
+  font-size: 1.8em;
+  font-weight: 100;
 }
 
 .ExpandBox {
@@ -249,20 +288,17 @@ pink_red:      #C75058
 }
 
 .SearchHeader {
-  color: #D86E09;
+  color: rgb(103, 122, 87);
   text-align: left;
-  padding: .5em 1.1em;
-  border-bottom: 1px solid #91AC7C;
+  padding: .5em 3.2em;
   width: 94%;
-  margin-left: .6em;
+  margin: .2em 0em 0em 0em;
   font-size: 1.2em;
   font-style: italic;
 }
 
 .SearchResults {
-  border-right: 1px solid #91AC7C;
-  margin: 0em 1em;
-  width: 50em;
+  margin: 0em 0em;
 }
 
 .background-enter {
@@ -272,16 +308,31 @@ pink_red:      #C75058
   transform: translate(0, 0%);
   transition: transform 500ms ease;
 }
-.background-leave {
+.background-exit {
   display: flex;
   opacity: 1;
   height: 20;
   padding: 0.2em;
 }
-.background-leave.background-leave-active {
+.background-exit.background-exit-active {
   height: 0;
   opacity: 0;
   padding: 0;
+  transition: all 500ms ease;
+}
+
+.Term-enter {
+  opacity: 0
+}
+.Term-enter.background-enter-active {
+  opacity: 1;
+  transition: all 500ms ease;
+}
+.Term-exit {
+  opacity: 1;
+}
+.Term-exit.background-exit-active {
+  opacity: 0;
   transition: all 500ms ease;
 }
 
@@ -292,10 +343,10 @@ pink_red:      #C75058
   transform: translate(0%);
   transition: transform 1000ms ease-in-out;
 }
-.page-leave {
+.page-exit {
   transform: translate(0%);
 }
-.page-leave.background-leave-active {
+.page-exit.background-exit-active {
   transform: translate(-100%);
   transition: transform 1000ms ease-in-out;
 }
@@ -358,7 +409,7 @@ pink_red:      #C75058
 }
 
 .navbar-nav .nav-link {
-  color: rgb(182, 88, 21);
+  color: #4459ff;
 }
 
 .navbar-nav .nav-link:hover {
@@ -376,3 +427,4 @@ pink_red:      #C75058
 .navbar {
   margin-right: 5em; 
 }
+

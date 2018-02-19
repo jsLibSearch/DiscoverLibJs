@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Dropdown, DropdownToggle, DropdownItem, DropdownMenu, 
   Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, Popover,
   PopoverHeader, PopoverBody } from 'reactstrap';
-import { CSSTransitionGroup } from 'react-transition-group';
+import { CSSTransition, TransitionGroup, Transition } from 'react-transition-group';
 import { deleteItem, newItem, addCartToUser, setCartName, dev, clearCart, setAsSavedCart } from '../actions';
 import '../App.css';
 import { customColors as c } from '../custom/colors.js';
@@ -32,6 +32,11 @@ class Cart extends Component {
       loginModal: false,
       server: !dev ? 'https://javascript-library-discovery2.herokuapp.com/' : 'http://localhost:8080/',
       usersCart: false,
+      empty: true,
+      copied: false,
+      value: '',
+      npm: false,
+      yarn: false
     };
     this.toggleLoginModal = this.toggleLoginModal.bind(this);
   }
@@ -41,14 +46,23 @@ class Cart extends Component {
 
       let currentCart = [];
       if (this.props.cart.packages.length > 0) {
-        currentCart = this.props.cart.packages.slice()
-        const openArr = Array(currentCart.length).fill(false)
+        currentCart = this.props.cart.packages.slice();
+        const openArr = Array(currentCart.length).fill(false);
+        let names = '';
+        currentCart.forEach((item) => {
+          names += ' ' + item.name;
+        })
+        const npmStr = 'npm install --save' + names;
+        const yarnStr = 'yarn add' + names;
         this.setState({
           windowHeight: window.innerHeight - 40,
           cart: currentCart,
           cartName: this.props.cart.name,
           isOpen: openArr,
-          _id: this.props.cart._id
+          _id: this.props.cart._id,
+          npmString: npmStr,
+          yarnString: yarnStr,
+          empty: false
         })
       }
     }
@@ -62,23 +76,51 @@ class Cart extends Component {
     if (this.props.cart.packages && this.props.cart.packages.length > 0) {
       currentCart = this.props.cart.packages.slice();
       name = this.props.cart.name;
+      let names = '';
+      currentCart.forEach((item) => {
+        names += ' ' + item.name;
+      })
+      const npmStr = 'npm install --save' + names;
+      const yarnStr = 'yarn add' + names;
+      this.setState({
+        windowHeight: window.innerHeight - 40,
+        cart: currentCart,
+        cartName: name,
+        _id: this.props.cart._id,
+        npmString: npmStr,
+        yarnString: yarnStr,
+        empty: false
+      })
+      return;
     }
     if (this.refs.theCart) {
       this.setState({
         windowHeight: window.innerHeight - 40,
         cart: currentCart,
         cartName: name,
-        _id: this.props.cart._id
+        _id: this.props.cart._id,
+        empty: currentCart.length === 0
       })
     }
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.cart._id !== this.props.cart._id) {
+      let names = '';
+      if (nextProps.cart.packages.length) {
+        nextProps.cart.packages.forEach((item) => {
+          names += ' ' + item.name;
+        })
+      }
+      const npmStr = 'npm install --save' + names;
+      const yarnStr = 'yarn add' + names;
       this.setState({
         _id: nextProps.cart._id,
         cart: nextProps.cart.packages,
-        cartName: nextProps.cart.name
+        cartName: nextProps.cart.name,
+        empty: nextProps.cart.packages.length === 0,
+        npmString: npmStr,
+        yarnString: yarnStr,
       })
     }
   }
@@ -99,8 +141,17 @@ class Cart extends Component {
   removePackage(item, i) {
     const newCart = this.state.cart.filter(pkg => pkg.name !== item.name)
     this.props.deleteItem(item);
+    let names = '';
+    newCart.forEach((i) => {
+      names += ' ' + i.name;
+    })
+    const npmStr = 'npm install --save' + names;
+    const yarnStr = 'yarn add' + names;
     this.setState({
-        cart: newCart
+        cart: newCart,
+        npmString: npmStr,
+        yarnString: yarnStr,
+        empty: newCart.length === 0
     })
   }
 
@@ -196,7 +247,7 @@ class Cart extends Component {
   }
 
   toggleSelectAll() {
-    const newSelected = []
+    const newSelected = [];
     if (this.state.cart.length === this.state.selected.length || this.state.cart.length === 0) {
       this.setState({
         selected: newSelected
@@ -212,14 +263,23 @@ class Cart extends Component {
   }
 
   deleteSelected() {
-    const newCart = this.state.cart.filter(pkg => !this.state.selected.includes(pkg.name))
-    const itemsToDelete = this.state.cart.filter(pkg => this.state.selected.includes(pkg.name))
+    const newCart = this.state.cart.filter(pkg => !this.state.selected.includes(pkg.name));
+    const itemsToDelete = this.state.cart.filter(pkg => this.state.selected.includes(pkg.name));
     itemsToDelete.forEach(item => {
       this.props.deleteItem(item);
     })
+    let names = '';
+    newCart.forEach((i) => {
+      names += ' ' + i.name;
+    })
+    const npmStr = 'npm install --save' + names;
+    const yarnStr = 'yarn add' + names;
     this.setState({
         cart: newCart,
-        selected: []
+        selected: [],
+        npmString: npmStr,
+        yarnString: yarnStr,
+        empty: newCart.length === 0
     })
   }
 
@@ -285,8 +345,23 @@ class Cart extends Component {
     })
   }
 
+  copyString(string) {
+    console.log(string);
+    const optionNPM = string[0] === 'n'
+    const copyText = document.getElementById(optionNPM ? 'npmcopy' : 'yarncopy');
+    copyText.select();
+    document.execCommand('copy');
+    window.getSelection().removeAllRanges();
+    this.setState({
+      npm: optionNPM,
+      yarn: !optionNPM,
+      copied: true
+    })
+  }
+
   render() {
     return (
+      <div>
       <div ref='theCart' className='Package PackDiv'>
         <div className='PackCart' style={{ position: 'relative', padding: 0.2, marginBottom: 6 }}>
           <h1 className='PackTitle'>
@@ -388,16 +463,15 @@ class Cart extends Component {
         </Dropdown>
         </div>
         <div className='CartDiv'>
-        <CSSTransitionGroup
-                transitionName="background"
-                transitionAppear
-                transitionAppearTimeout={0}
-                transitionEnterTimeout={500}
-                transitionLeaveTimeout={500}
-                component='div'>
+        <TransitionGroup>
             {this.state.cart ?
             this.state.cart.map((item, i) => {
             return (
+              <CSSTransition
+                classNames="background"
+                timeout={{exit: 500, enter: 500}}
+                component='div'
+                key={`transition${item._id}`}>
                 <div className='PackCart' style={{ margin: '0am'}} key={item.name}>
                   <h1 key={item._id} className='PackDesc' style={{
                           margin: '0.3em 0em 0em',
@@ -443,10 +517,11 @@ class Cart extends Component {
                     </Dropdown>
                   </div>
                 </div>
+              </CSSTransition>
             )
             })
             : null}
-          </CSSTransitionGroup>
+          </TransitionGroup>
         </div>
         <Modal isOpen={this.state.modal} toggle={() => this.toggleModal()}>
           <ModalHeader toggle={() => this.toggleModal()}>Short Info</ModalHeader>
@@ -484,6 +559,41 @@ class Cart extends Component {
             <Button color="secondary" onClick={this.toggleLoginModal.bind(this)}>No thanks</Button>
           </ModalFooter>
         </Modal> 
+      </div>
+      { !this.state.empty ? (
+          <div className='TermBox'>
+            <p
+              readOnly
+              value={this.state.npmString}
+              className='TerminalCopy'
+              onClick={this.copyString.bind(this, this.state.npmString)}
+              style={ this.state.npm ? { color: '#33aa33', backgroundColor: '#151535' } : {}}>
+                {this.state.npmString}
+            <textarea
+              id='npmcopy'
+              readOnly
+              value={this.state.npmString}
+              style={ { opacity: 0, width: '0.01em', border: 'none', padding: 0, height: '0.01em', fontSize: '1px' }}>
+                {this.state.npmString}
+            </textarea>
+            </p>
+            <p
+              readOnly
+              className='TerminalCopy'
+              value={this.state.yarnString}
+              onClick={this.copyString.bind(this, this.state.yarnString)}
+              style={ this.state.yarn ? { color: '#33aa33', backgroundColor: '#151535' } : {}}>
+                {this.state.yarnString}
+                <textarea
+              readOnly
+              id='yarncopy'
+              value={this.state.yarnString}
+              style={ { opacity:0, width: '0.01em', border: 'none', padding: 0, height: '0.01em', fontSize: '1px' }}>
+                {this.state.yarnString}
+            </textarea>
+            </p>
+          </div>
+        ) : null }
       </div>
     );
   }

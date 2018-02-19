@@ -150,13 +150,13 @@ class Header extends Component {
         return (
             <div className="App-header">
 
-                <div style={this.state.small ? {display: 'inline-flex', width: '20em'} : {display: 'inline-flex', width: '50em'}}>
+                <div style={this.state.small ? {display: 'inline-flex', width: '20em'} : {display: 'inline-flex', paddingLeft: '1em'}}>
                     <Link to='/' className='Logo' style={ this.state.small ? { fontSize: '.6em', marginTop: '.6em' }: null}>JS Lib Discovery</Link>
                     <div className="btn-group"  style={!this.state.small ? {marginTop: '.25em', display: 'flex', justifyContent: 'center', marginBottom: 3, height: '2em', borderColor: c.off_green} : {marginTop: '.35em', display: 'flex', justifyContent: 'center', marginBottom: 3, height: '1.6em', borderColor: c.off_green}}>
-                        <input placeholder='Search for Libraries' style={ !this.state.small ? {color: c.header, fontSize: '1em', backgroundColor: c.body_bg } : {color: c.header, fontSize: '.7em', backgroundColor: c.body_bg, width: '100px' }} className="btn btn-outline-secondary" onKeyPress={this.handleEnter.bind(this)} onChange={this.handleQuery.bind(this)} value={ this.state.searchedQuery } />
+                        <input placeholder='Search for Libraries' style={ !this.state.small ? {color: c.header, fontSize: '1em', backgroundColor: c.body_bg } : {color: c.header, fontSize: '.7em', backgroundColor: c.body_bg }} className="btn btn-outline-secondary" onKeyPress={this.handleEnter.bind(this)} onChange={this.handleQuery.bind(this)} value={ this.state.searchedQuery } />
                         <button style={ !this.state.small ? { color: c.off_green, fontSize: '.75em', backgroundColor: c.body_bg } : { color: c.off_green, fontSize: '.45em', backgroundColor: c.body_bg  }} className="btn btn-outline-secondary" onClick={this.handleSearch.bind(this)}>Search</button>
                     </div>
-                    <div className='HeaderLeft' style={this.state.windowWidth < 912 ? { display: 'none' } : null}>
+                    <div className='HeaderLeft' style={this.state.windowWidth < 1056 ? { display: 'none' } : null}>
                         <Link to="/gettingstarted" className='HeadLink'>Getting Started</Link>
                         <Link to="/faq" className='HeadLink'>FAQ</Link>
                         <a rel="noopener noreferrer" href="https://github.com/jsLibSearch/DiscoverLibJs" target="_blank" className='HeadLink'>GitHub</a>
