@@ -165,8 +165,9 @@ class Cart extends Component {
 
 
   onCreateRepoClick() {
+   
     const [ repo_name, description,  accessToken ] = 
-      [ this.state.filename, this.state.description, this.props.user.accessToken ];
+      [ this.state.filename, this.state.description, this.props.user.user.accessToken ];
     let arrOfPckgs = []
     for (let obj of this.props.cart.packages) {
       arrOfPckgs.push(obj.name);

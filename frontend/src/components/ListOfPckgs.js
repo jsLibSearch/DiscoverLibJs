@@ -61,6 +61,7 @@ class ListOfPckgs extends Component {
     }
 
     render() {
+        console.log(this.state)
         return (
             <ListGroup>
                 { this.state.list ? this.state.list.map( (pckg, idx) => {
