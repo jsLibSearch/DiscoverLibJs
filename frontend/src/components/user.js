@@ -200,7 +200,6 @@ export class UserPage extends Component {
   }
 
   deleteCart(id) {
-    console.log(id)
     axios.delete(`${this.state.server}delete-cart`, { data : { cartid: id } }).then((response) => {
       this.setState({
         loadedCarts: false,
@@ -233,24 +232,28 @@ export class UserPage extends Component {
   render() {
     return (
       <div id='user_page_div'>
+        <div style={{ borderBottom: '1px solid rgb(103, 122, 87)', marginTop: '.2em' }}>
+          <p className='SearchHeader'>
+            {this.state.loadingCarts ? 'Loading projects' : 'Your saved projects'}
+          </p>
+        </div>
         {!this.state.loadingCarts ? (this.state.userCarts.length > 0 ? this.state.userCarts.map((cart, i) => {
           return (
-          <div className='Package' style={this.state.expanded === i ? { paddingBottom: '0.5em' } : {}} key={cart._id}>
+          <div className='Package' style={{ paddingBottom: '0.5em' }} key={cart._id}>
           <div className='PackButtons'>
               <h2 className='PackTitle' style={{ marginBottom: 0 }}>{cart.name}</h2>
-              <button onClick={this.handleExpand.bind(this, i)} className='btn btn-outline-success' style={ { width: '1.6em', height: '1.6em', margin: '0.5em 0em', padding: '0em', fontSize: '.7em' } }>{!(this.state.expanded === i) ? '▼' : '▲'}</button>
+              <button onClick={this.handleExpand.bind(this, i)} className='btn btn-outline-success' style={ { width: '2em', height: '2em', margin: '0.6em 0em', padding: '0em', fontSize: '.7em' } }>{!(this.state.expanded === i) ? '▼' : '▲'}</button>
           </div>
               <div className='ExpandBox' style={ this.state.expanded === i ? {} : {display: 'none'} }>
                   <ul style={{margin: '0em', padding: '0em 3em'}}>
                       {cart.cart ? cart.cart.map((item) => (<li key={item.name}>{item.name}</li>)): null}
                   </ul>
               </div>
-          <div className={this.state.expanded === i ? 'PackButtons' : ''}>
+          <div className='PackButtons'>
               <button
                   onClick={this.handleCart.bind(this, i)}
                   className='btn btn-success'
-                  style={ 
-                      this.state.expanded === i ? {
+                  style={{
                           margin: 0,
                           padding: '0em 0.8em',
                           fontStyle: 'italic',
@@ -259,12 +262,11 @@ export class UserPage extends Component {
                           borderColor: c.off_green,
                           backgroundColor: c.off_green,
                           height: '1.5em'
-                      } : {
-                          display: 'none' } }>
+                      } }>
                   {this.state.current === i ? `Don't use project` : 'Use project'}
               </button>
               {/* dropdown */}
-                {this.state.expanded === i ? (<Dropdown
+                <Dropdown
                   group
                   title='Cart Options'
                   id={`options${cart._id}`}
@@ -289,10 +291,9 @@ export class UserPage extends Component {
                   <DropdownMenu>
                     <DropdownItem id='rename' onClick={this.toggleRename.bind(this, i)}>Rename</DropdownItem>
                     <DropdownItem color="secondary" onClick={this.toggleModal.bind(this, i)}> Create A Repo </DropdownItem>
-                    <DropdownItem divider />
-                    <DropdownItem onClick={this.deleteCart.bind(this, this.state.userCarts[i]._id)}>Delete Project</DropdownItem>
+                    <DropdownItem style={{color: '#ff1111'}} onClick={this.deleteCart.bind(this, this.state.userCarts[i]._id)}>Delete Project</DropdownItem>
                   </DropdownMenu>
-                </Dropdown>) : null}
+                </Dropdown>
           </div>
       </div>
         )}): <p>You do not have any saved projects!</p>) : <h3>Loading Projects</h3>}

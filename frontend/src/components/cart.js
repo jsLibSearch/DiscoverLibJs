@@ -419,7 +419,7 @@ class Cart extends Component {
           </DropdownToggle>
 
           {this.state._id === null ? (
-          <DropdownMenu>
+          <DropdownMenu style={{backgroundColor: c.body_bg, borderRadius: '1em'}}>
             <DropdownItem onClick={this.saveCart.bind(this)}>Save Project</DropdownItem>
             <DropdownItem id='rename'onClick={this.toggleRename.bind(this)}>Rename</DropdownItem>
             <DropdownItem color="secondary" onClick={() => this.toggleModal() }> Create A Repo </DropdownItem>
@@ -436,11 +436,10 @@ class Cart extends Component {
                 </Form>
               </PopoverBody>
             </Popover>
-            <DropdownItem divider />
-            <DropdownItem onClick={this.clearCart.bind(this)}>Clear Project</DropdownItem>
+            <DropdownItem style={{ color: '#ff1111' }} onClick={this.clearCart.bind(this)}>Clear Project</DropdownItem>
           </DropdownMenu>
           ):(
-          <DropdownMenu>
+          <DropdownMenu style={{backgroundColor: c.body_bg, borderRadius: '1em'}}>
             <DropdownItem onClick={this.saveCart.bind(this)}>Save As New Project</DropdownItem>
             <DropdownItem onClick={this.overwriteCart.bind(this)}>Overwrite Project</DropdownItem>
             <DropdownItem id='rename'onClick={this.toggleRename.bind(this)}>Rename</DropdownItem>
@@ -458,8 +457,7 @@ class Cart extends Component {
                 </Form>
               </PopoverBody>
             </Popover>
-            <DropdownItem divider />
-            <DropdownItem onClick={this.clearCart.bind(this)}>Clear Project</DropdownItem>
+            <DropdownItem style={{ color: '#ff1111' }} onClick={this.clearCart.bind(this)}>Clear Project</DropdownItem>
           </DropdownMenu>)}
         </Dropdown>
         </div>
@@ -508,12 +506,9 @@ class Cart extends Component {
                           caret>
                           Options
                         </DropdownToggle>
-                        <DropdownMenu>
-                          <DropdownItem key={`q${item.name}`} onClick={this.removePackage.bind(this, item, i)}>Remove</DropdownItem>
-                          <DropdownItem key={`w${item.name}`}>Move Up</DropdownItem>
-                          <DropdownItem key={`e${item.name}`}>Move Down</DropdownItem>
-                          <DropdownItem key={`r${item.name}`} divider />
-                          <DropdownItem key={`t${item.name}`} rel="noopener noreferrer" target="_blank" href={item.homepage}>Homepage</DropdownItem>
+                        <DropdownMenu style={{backgroundColor: c.body_bg, borderRadius: '1em'}}>
+                          <DropdownItem key={`q${item.name}`} style={{color: '#ff1111'}} onClick={this.removePackage.bind(this, item, i)}>Remove</DropdownItem>
+                          <DropdownItem key={`t${item.name}`} style={{color: c.light_orange}} rel="noopener noreferrer" target="_blank" href={item.homepage}>Homepage</DropdownItem>
                         </DropdownMenu>
                     </Dropdown>
                   </div>
