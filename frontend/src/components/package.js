@@ -103,22 +103,20 @@ class Package extends Component {
                         <li>Keywords: {this.props.keywords ? this.props.keywords.map((keyword, i) => keyword + ' '): null}</li>
                     </ul>
                 </div>
-            <div className={this.state.expanded ? 'PackButtons' : 'PackButton'}>
+            <div className='PackButtons'>
                 <button
                     onClick={this.handleCart.bind(this)}
                     disabled={this.state.added}
                     className='btn btn-success'
-                    style={ 
-                        this.state.expanded ? {
+                    style={ {
                             margin: 0,
                             padding: '0em 0.8em',
                             fontStyle: 'italic',
                             fontSize: '.7em',
                             color: c.body_bg,
                             borderColor: c.off_green,
-                            backgroundColor: c.off_green
-                        } : {
-                            display: 'none' } }>
+                            backgroundColor: c.off_green,
+                        } }>
                     {this.state.added ? 'Added to Project' : 'Add to Project'}
                 </button>
                 <button onClick={this.handleExpand.bind(this)} className='btn btn-outline-success' style={ { width: '1.6em', height: '1.6em', margin: 0, padding: '0em', fontSize: '.7em' } }>{!this.state.expanded ? '▼' : '▲'}</button>

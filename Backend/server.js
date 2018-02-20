@@ -8,6 +8,7 @@ const routes = require('./routes/routes');
 
 const server = express();
 const PORT = 8080;
+const dev = true;
 
 const dev = true;
 const origin = dev ? "http://localhost:3000" : "https://javascriptlibrarydiscovery.com";
