@@ -361,7 +361,7 @@ class Cart extends Component {
 
   render() {
     return (
-      <div>
+      <div className='WrapCart'>
       <div ref='theCart' className='Package PackDiv'>
         <div className='PackCart' style={{ position: 'relative', padding: 0.2, marginBottom: 6 }}>
           <h1 className='PackTitle'>
@@ -512,7 +512,7 @@ class Cart extends Component {
                           <DropdownItem key={`w${item.name}`}>Move Up</DropdownItem>
                           <DropdownItem key={`e${item.name}`}>Move Down</DropdownItem>
                           <DropdownItem key={`r${item.name}`} divider />
-                          <DropdownItem key={`t${item.name}`} href={item.homepage}>Homepage</DropdownItem>
+                          <DropdownItem key={`t${item.name}`} rel="noopener noreferrer" target="_blank" href={item.homepage}>Homepage</DropdownItem>
                         </DropdownMenu>
                     </Dropdown>
                   </div>

@@ -156,11 +156,11 @@ class Header extends Component {
                         <input placeholder='Search for Libraries' style={ !this.state.small ? {color: c.header, fontSize: '1em', backgroundColor: c.body_bg } : {color: c.header, fontSize: '.7em', backgroundColor: c.body_bg }} className="btn btn-outline-secondary" onKeyPress={this.handleEnter.bind(this)} onChange={this.handleQuery.bind(this)} value={ this.state.searchedQuery } />
                         <button style={ !this.state.small ? { color: c.off_green, fontSize: '.75em', backgroundColor: c.body_bg } : { color: c.off_green, fontSize: '.45em', backgroundColor: c.body_bg  }} className="btn btn-outline-secondary" onClick={this.handleSearch.bind(this)}>Search</button>
                     </div>
-                    <div className='HeaderLeft' style={this.state.windowWidth < 1056 ? { display: 'none' } : null}>
+                    {/* <div className='HeaderLeft' style={this.state.windowWidth < 1056 ? { display: 'none' } : null}>
                         <Link to="/gettingstarted" className='HeadLink'>Getting Started</Link>
                         <Link to="/faq" className='HeadLink'>FAQ</Link>
                         <a rel="noopener noreferrer" href="https://github.com/jsLibSearch/DiscoverLibJs" target="_blank" className='HeadLink'>GitHub</a>
-                    </div>
+                    </div> */}
                 </div>
                 <div className='HeaderRight'>
                     {/* <Link to="/signup" className={!this.state.small ? 'Sign' : 'SignSmall'} style={this.state.loggedIn ? {display: 'none'} : null}>Sign Up</Link> */}
