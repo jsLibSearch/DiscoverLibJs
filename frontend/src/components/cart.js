@@ -30,7 +30,7 @@ class Cart extends Component {
       renaming: false,
       _id: null,
       loginModal: false,
-      server: !dev ? 'https://javascript-library-discovery2.herokuapp.com/' : 'https://localhost:8080/',
+      server: !dev ? 'https://javascript-library-discovery2.herokuapp.com/' : 'http://localhost:8080/',
       usersCart: false,
     };
     this.toggleLoginModal = this.toggleLoginModal.bind(this);
@@ -114,8 +114,9 @@ class Cart extends Component {
 
 
   onCreateRepoClick() {
+   
     const [ repo_name, description,  accessToken ] = 
-      [ this.state.filename, this.state.description, this.props.user.accessToken ];
+      [ this.state.filename, this.state.description, this.props.user.user.accessToken ];
     let arrOfPckgs = []
     for (let obj of this.props.cart.packages) {
       arrOfPckgs.push(obj.name);
@@ -388,13 +389,14 @@ class Cart extends Component {
         </Dropdown>
         </div>
         <div className='CartDiv'>
-        <CSSTransitionGroup
+        {/* <CSSTransitionGroup
                 transitionName="background"
                 transitionAppear
                 transitionAppearTimeout={0}
                 transitionEnterTimeout={500}
                 transitionLeaveTimeout={500}
-                component='div'>
+                component='div'> */}
+          <div>
             {this.state.cart ?
             this.state.cart.map((item, i) => {
             return (
@@ -446,7 +448,8 @@ class Cart extends Component {
             )
             })
             : null}
-          </CSSTransitionGroup>
+          {/* </CSSTransitionGroup> */}
+          </div>
         </div>
         <Modal isOpen={this.state.modal} toggle={() => this.toggleModal()}>
           <ModalHeader toggle={() => this.toggleModal()}>Short Info</ModalHeader>
