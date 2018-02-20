@@ -187,6 +187,14 @@ pink_red:      #C75058
   border-radius: 1em
 }
 
+.WrapCart {
+  padding: 0em;
+  justify-content: center;
+  text-align: center;
+  align-content: center;
+  border-radius: 1em
+}
+
 .PackDiv {
   text-align: left;
 }
@@ -197,12 +205,14 @@ pink_red:      #C75058
 
 .PackTitle {
   color: #07169c;
+  display: flex;
   font-size: 2em;
   font-style: italic;
   font-weight: 500;
 }
 .PackDesc {
   color: #313531;
+  display: flex;
   font-size: 1.1em;
   margin: 0em;
   font-weight: 100;
@@ -254,7 +264,6 @@ pink_red:      #C75058
   margin: .5em 0em 0em;
   max-width: 65em;
   position: relative;
-  width: 65em;
 }
 
 .PackButton {
