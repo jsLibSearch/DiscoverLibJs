@@ -13,26 +13,34 @@ const p = './packages/package.json';
 const dirname = './packages';
 
 
-function readFile() {
+async function writeFile(repo_name, params) { 
 
-    const content = fs.readFileSync(`${p}`, 'utf8');
-    const e = nacl.util.encodeBase64(content);
-    fs.unlink(`${p}`, (err) => {
-        console.log(err);
-    });
-    return e;
+    try {
+        let dependencies = {};
+
+        for (let i = 0; i < params.length; i++) {
+            dependencies[params[i]] = '*'; // <-------- npm upadate --save
+        }
+    
+        writePkg.sync(dirname, { name: repo_name, version: "1.0.0", private: true, dependencies: dependencies });
+    } catch(e) {
+        console.log(e);
+    }
 }
 
+async function readFile() {
 
-function writeFile(repo_name, params) { 
+    try {
 
-    let dependencies = {};
+        fs.readFile(`${p}`, 'utf8', (err, data) => {
+            if (err) throw err;
+            const c = nacl.util.encodeBase64(data);
+            return c;
+        });
 
-    for (let i = 0; i < params.length; i++) {
-        dependencies[params[i]] = '*'; // <-------- npm upadate --save
+    } catch(err) {
+        console.log(err);
     }
-
-    writePkg(dirname, { name: repo_name, version: "1.0.0", private: true, dependencies: dependencies });
 }
 
 
@@ -40,8 +48,8 @@ if (f === 'read') readFile();
 if (f === 'write' && pkgs) writeFile(repo_name, pkgs);
 
 module.exports = {
-    readFile,
     writeFile,
+    readFile,
 }
 
 
