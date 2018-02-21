@@ -91,13 +91,13 @@ class Package extends Component {
 
   render() {
     return (
-        <div className='Package'>
+        <div className='Package' style={this.props.style}>
             <div className='PackDiv'>
                 <h2 className='PackTitle'>{this.props.name}</h2>
-                <p className='PackDesc'>{this.props.about}</p>
+                <p className='PackDesc'>{this.props.about && this.props.small && this.props.about.indexOf("http") >= 0 ? this.props.about.substring(0, 50) + '...' : this.props.about}</p>
             </div>
                 <div className='ExpandBox' style={ this.state.expanded ? {} : {display: 'none'} }>
-                    <ul style={{margin: '0em', padding: '0em 3em'}}>
+                    <ul style={{margin: '0em'}}>
                         <li>Found in {this.props.freq} {this.props.freq > 1 ? 'packages' : 'package' }</li>
                         <li>Homepage: <a href={this.props.homepage}>{this.props.homepage}</a></li>
                         <li>Keywords: {this.props.keywords ? this.props.keywords.map((keyword, i) => keyword + ' '): null}</li>

@@ -11,7 +11,8 @@ class CartPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      windowHeight: window.innerHeight - 40,
+      windowWidth: window.innerWidth,
+      small: false,
       cart: [],
       recs: [],
       loading: false,
@@ -26,7 +27,6 @@ class CartPage extends Component {
       if (this.props.cart.packages.length > 0) {
         currentCart = this.props.cart.packages
         this.setState({
-          windowHeight: window.innerHeight - 40,
           cart: currentCart,
         })
         this.sendRecRequest();
@@ -51,7 +51,7 @@ class CartPage extends Component {
 
   componentDidMount() {
     window.addEventListener('resize', this.handleResize.bind(this));
-
+    const small = this.state.windowWidth < 500 ? true : false;
     let currentCart = [];
     if (this.props.cart.packages.length > 0) {
       currentCart = this.props.cart.packages
@@ -59,7 +59,8 @@ class CartPage extends Component {
     }
 
     this.setState({
-      windowHeight: window.innerHeight - 40,
+      windowWidth: window.innerWidth,
+      small: small,
       cart: currentCart
     })
   }
@@ -91,8 +92,10 @@ class CartPage extends Component {
     if (!this.refs.cartPage) {
       return;
     }
+    const small = this.state.windowWidth < 500 ? true : false;
     this.setState({
-      windowHeight: window.innerHeight - 40
+      windowWidth: window.innerWidth,
+      small: small
     })
   }
 
@@ -106,7 +109,7 @@ class CartPage extends Component {
     return (
       <div ref='cartPage'>
         <Cart />
-        <p className='RecText'>
+        <p className='RecText' style={this.state.small ? {textAlign: 'center', margin: '2em 0em 0em'} : {}}>
           {this.state.loading ? 'Loading recommendations' : 'Recommendations'}
         </p>
         {this.state.recs.length > 0 ?
@@ -118,8 +121,9 @@ class CartPage extends Component {
             )
           }
           return (
-            <div key={rec._id + 'id'}>
+            <div key={rec._id + 'id'} style={this.state.small ? {margin: '0.3em'} : {}}>
               <Package
+                style={this.state.small ? { margin: '1em 0em' }:{}}
                 key={i}
                 name={rec.name}
                 about={rec.description}

@@ -14,7 +14,8 @@ class Cart extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      windowHeight: window.innerHeight - 40,
+      windowWidth: window.innerWidth,
+      small: false,
       cart: [],
       npmString: '',
       yarnString: '',
@@ -55,7 +56,7 @@ class Cart extends Component {
         const npmStr = 'npm install --save' + names;
         const yarnStr = 'yarn add' + names;
         this.setState({
-          windowHeight: window.innerHeight - 40,
+          windowWidth: window.innerWidth,
           cart: currentCart,
           cartName: this.props.cart.name,
           isOpen: openArr,
@@ -70,7 +71,7 @@ class Cart extends Component {
 
   componentDidMount() {
     window.addEventListener('resize', this.handleResize.bind(this));
-    
+    const small = this.state.windowWidth < 500 ? true : false;
     let currentCart = [];
     let name = 'Untitled Project';
     if (this.props.cart.packages && this.props.cart.packages.length > 0) {
@@ -83,23 +84,25 @@ class Cart extends Component {
       const npmStr = 'npm install --save' + names;
       const yarnStr = 'yarn add' + names;
       this.setState({
-        windowHeight: window.innerHeight - 40,
+        windowWidth: window.innerWidth,
         cart: currentCart,
         cartName: name,
         _id: this.props.cart._id,
         npmString: npmStr,
         yarnString: yarnStr,
-        empty: false
+        empty: false,
+        small: small
       })
       return;
     }
     if (this.refs.theCart) {
       this.setState({
-        windowHeight: window.innerHeight - 40,
+        windowWidth: window.innerWidth,
         cart: currentCart,
         cartName: name,
         _id: this.props.cart._id,
-        empty: currentCart.length === 0
+        empty: currentCart.length === 0,
+        small: small
       })
     }
   }
@@ -131,10 +134,14 @@ class Cart extends Component {
 
   handleResize() {
     if (!this.refs.theCart) {
+        console.log(this.state.small)
         return;
     }
+    const small = this.state.windowWidth < 500 ? true : false;
+    console.log(this.state.windowWidth)
     this.setState({
-        windowHeight: window.innerHeight - 40
+        windowWidth: window.innerWidth,
+        small: small
     })
   }
   
@@ -362,12 +369,12 @@ class Cart extends Component {
   render() {
     return (
       <div className='WrapCart'>
-      <div ref='theCart' className='Package PackDiv'>
-        <div className='PackCart' style={{ position: 'relative', padding: 0.2, marginBottom: 6 }}>
+      <div ref='theCart' className='Package PackDiv' style={this.state.small ? {width: 'auto', margin: '.3em .3em'}: {}}>
+        <div className='PackCart' style={!this.state.small ? { position: 'relative', padding: 0.2, marginBottom: 6 } : { padding: 0.2, marginBottom: 6, height: 'auto', display: 'block', maxHeight: 'none'}}>
           <h1 className='PackTitle'>
             {this.state.cartName}
           </h1>
-          <h1 className='PackDesc' style={{ position: 'absolute', bottom: 0, right:0, margin: '0.5rem' }}>
+          <h1 className='PackDesc' style={this.state.small ? { textAlign: 'right', marginBottom: '1em' } : { position: 'absolute', bottom: 0, right:0, margin: '0.5rem' }}>
             You have {this.state.cart.length} {this.state.cart.length === 1 ? 'package' : 'packages'} in your project
           </h1>
         </div>
@@ -378,7 +385,13 @@ class Cart extends Component {
             color='success'
             size='sm'
             onClick={this.toggleSelectAll.bind(this)}
-            style={{
+            style={this.state.small ? {
+              height: '2.2em',
+              fontSize: '.8em',
+              border: 'none',
+              margin: 0,
+              padding: '0em .1em'
+            } : {
               height: '2.2em',
               fontSize: '.8em',
               border: 'none',
@@ -410,7 +423,7 @@ class Cart extends Component {
             border: 'none'
           }}>
           <DropdownToggle
-            style={{ border: 'none', margin: '0em' }}
+            style={this.state.small ? { border: 'none', margin: '0em', padding: '0em .3em' } : { border: 'none', margin: '0em' }}
             size="sm"
             outline
             caret>
@@ -470,12 +483,19 @@ class Cart extends Component {
                 timeout={{exit: 500, enter: 500}}
                 component='div'
                 key={`transition${item._id}`}>
-                <div className='PackCart' style={{ margin: '0am'}} key={item.name}>
-                  <h1 key={item._id} className='PackDesc' style={{
-                          margin: '0.3em 0em 0em',
-                          verticalAlign: 'middle',
-                          display: 'inline-flex'
-                      }}>{item.name}</h1>
+                <div className='PackCart' style={this.state.small ? { margin: '0am', maxHeight: 'none', height: 'auto'} : { margin: '0am'} } key={item.name}>
+                  <h1 key={item._id} className='PackDesc' style={
+                        this.state.small ? {
+                        margin: '0.3em 0em 0em',
+                        verticalAlign: 'middle',
+                        display: 'inline-flex',
+                        maxWidth: '9em',
+                        fontSize: '.8em',
+                      } : {
+                        margin: '0.3em 0em 0em',
+                        verticalAlign: 'middle',
+                        display: 'inline-flex',
+                    }}>{item.name}</h1>
                   <div key={`abc${item.name}`}>
                     <Button
                       outline={!this.state.selected.includes(item.name)}
@@ -556,7 +576,7 @@ class Cart extends Component {
         </Modal> 
       </div>
       { !this.state.empty ? (
-          <div className='TermBox'>
+          <div className='TermBox' style={this.state.small ? { display: 'block', padding: '0.3em' } : {}}>
             <p
               readOnly
               value={this.state.npmString}
