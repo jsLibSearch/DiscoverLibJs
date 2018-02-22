@@ -430,10 +430,17 @@ class Cart extends Component {
           </DropdownToggle>
 
           {this.state._id === null ? (
-          <DropdownMenu style={{backgroundColor: c.body_bg, borderRadius: '1em'}}>
-            <DropdownItem onClick={this.saveCart.bind(this)}>Save Project</DropdownItem>
-            <DropdownItem id='rename'onClick={this.toggleRename.bind(this)}>Rename</DropdownItem>
-            <DropdownItem color="secondary" onClick={() => this.toggleModal() }> Create A Repo </DropdownItem>
+          <DropdownMenu style={{backgroundColor: c.header, borderRadius: '1em'}}>
+            <div>
+              <p className={!this.state.small ? 'SignCart' : 'SignCartSmall'} style={{ padding: '0.3em 1em', width: '12em', marginBottom: '0em' }} onClick={this.saveCart.bind(this)}>Save Project</p>
+            </div>
+            <div>
+              <p className={!this.state.small ? 'Sign' : 'SignSmall'} style={{ padding: '0.3em 1em', width: '12em', marginBottom: '0em' }} id='rename'onClick={this.toggleRename.bind(this)}>Rename</p>
+            </div>
+            <div>
+              <p className={!this.state.small ? 'Sign' : 'SignSmall'} style={{ padding: '0.3em 1em', width: '12em', marginBottom: '0em' }} onClick={() => this.toggleModal() }> Create A Repo </p>
+            </div>
+
             <Popover style={ { backgroundColor: c.body_bg } }  placement='left' isOpen={this.state.renaming} target='options' toggle={this.toggleRename.bind(this)}>
               <PopoverHeader style={ { backgroundColor: c.header, color: c.body_bg } }>Rename Project</PopoverHeader>
               <PopoverBody>
@@ -447,14 +454,24 @@ class Cart extends Component {
                 </Form>
               </PopoverBody>
             </Popover>
-            <DropdownItem style={{ color: '#ff1111' }} onClick={this.clearCart.bind(this)}>Clear Project</DropdownItem>
+            <div>
+              <p className={!this.state.small ? 'SignDel' : 'SignDelSmall'} style={{ padding: '0.3em 1em', width: '12em', marginBottom: '0em' }} onClick={this.clearCart.bind(this)}>Clear Project</p>
+            </div>
           </DropdownMenu>
           ):(
-          <DropdownMenu style={{backgroundColor: c.body_bg, borderRadius: '1em'}}>
-            <DropdownItem onClick={this.saveCart.bind(this)}>Save As New Project</DropdownItem>
-            <DropdownItem onClick={this.overwriteCart.bind(this)}>Overwrite Project</DropdownItem>
-            <DropdownItem id='rename'onClick={this.toggleRename.bind(this)}>Rename</DropdownItem>
-            <DropdownItem color="secondary" onClick={() => this.toggleModal() }> Create A Repo </DropdownItem>
+          <DropdownMenu style={{backgroundColor: c.header, borderRadius: '1em'}}>
+            <div>
+              <p className={!this.state.small ? 'SignCart' : 'SignSmall'} style={{ padding: '0.3em 1em', width: '12em', marginBottom: '0em' }} onClick={this.saveCart.bind(this)}>Save As New Project</p>
+            </div>
+            <div>
+              <p className={!this.state.small ? 'SignCart' : 'SignSmall'} style={{ padding: '0.3em 1em', width: '12em', marginBottom: '0em' }} onClick={this.overwriteCart.bind(this)}>Overwrite Project</p>
+            </div>
+            <div>
+              <p className={!this.state.small ? 'Sign' : 'SignSmall'} style={{ padding: '0.3em 1em', width: '12em', marginBottom: '0em' }} id='rename'onClick={this.toggleRename.bind(this)}>Rename</p>
+            </div>
+            <div>
+              <p className={!this.state.small ? 'Sign' : 'SignSmall'} style={{ padding: '0.3em 1em', width: '12em', marginBottom: '0em' }} color="secondary" onClick={() => this.toggleModal() }> Create A Repo </p>
+            </div>
             <Popover style={ { backgroundColor: c.body_bg } }  placement='left' isOpen={this.state.renaming} target='options' toggle={this.toggleRename.bind(this)}>
               <PopoverHeader style={ { backgroundColor: c.header, color: c.body_bg } }>Rename Project</PopoverHeader>
               <PopoverBody>
@@ -468,7 +485,9 @@ class Cart extends Component {
                 </Form>
               </PopoverBody>
             </Popover>
-            <DropdownItem style={{ color: '#ff1111' }} onClick={this.clearCart.bind(this)}>Clear Project</DropdownItem>
+            <div>
+              <p className={!this.state.small ? 'SignDel' : 'SignDelSmall'} style={{ padding: '0.3em 1em', width: '12em', marginBottom: '0em' }} onClick={this.clearCart.bind(this)}>Clear Project</p>
+            </div>
           </DropdownMenu>)}
         </Dropdown>
         </div>
@@ -524,9 +543,13 @@ class Cart extends Component {
                           caret>
                           Options
                         </DropdownToggle>
-                        <DropdownMenu style={{backgroundColor: c.body_bg, borderRadius: '1em'}}>
-                          <DropdownItem key={`q${item.name}`} style={{color: '#ff1111'}} onClick={this.removePackage.bind(this, item, i)}>Remove</DropdownItem>
-                          <DropdownItem key={`t${item.name}`} style={{color: c.light_orange}} rel="noopener noreferrer" target="_blank" href={item.homepage}>Homepage</DropdownItem>
+                        <DropdownMenu style={{backgroundColor: c.header, borderRadius: '1em'}}>
+                        <div>
+                          <p className={!this.state.small ? 'SignDel' : 'SignDelSmall'} style={{ padding: '0em .5em', width: '7em', marginBottom: '0em' }} key={`q${item.name}`} onClick={this.removePackage.bind(this, item, i)}>Remove</p>
+                        </div>  
+                        <div>
+                          <p className={!this.state.small ? 'SignCart' : 'SignCartSmall'} style={{ padding: '0em .5em', width: '7em', marginBottom: '0em' }} key={`t${item.name}`} rel="noopener noreferrer" target="_blank" href={item.homepage}>Homepage</p>
+                        </div>
                         </DropdownMenu>
                     </Dropdown>
                   </div>
