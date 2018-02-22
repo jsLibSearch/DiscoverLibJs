@@ -18,7 +18,6 @@ const cartReducer = (state = { packages: [], name: 'Untitled Project', _id: null
                     packages: state.packages.concat(action.item)
                 });
         case SET_AS_SAVED_CART:
-            console.log(action)
             return Object.assign({}, state, {
                 packages: action.packages,
                 name: action.name,

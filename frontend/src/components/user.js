@@ -37,7 +37,7 @@ export class UserPage extends Component {
     // TODO: test Users carts for package info
     // TODO: retrieve past cart from local storage and send to redux
     if (this.state.userCarts.length === 0 && this.state.loadedCarts === false) {
-      this.props.loadCarts(this.props.userState.user.github_id);
+      this.props.loadCarts(this.props.userState.user);
     }
     window.addEventListener('resize', this.handleResize.bind(this))
     this.setState({
@@ -49,6 +49,7 @@ export class UserPage extends Component {
     if (nextProps.userState.jwt !== this.props.userState.jwt) { 
       sessionStorage.setItem('jwtToken', nextProps.userState.jwt);
       sessionStorage.setItem('username', nextProps.userState.username);
+      sessionStorage.setItem('github_id', nextProps.userState.github_id);
       sessionStorage.setItem('loggedIn', true);
     }
     if (nextProps.userState.loadingCarts !== this.props.userState.loadingCarts) {
@@ -145,15 +146,16 @@ export class UserPage extends Component {
     const cart = this.state.userCarts[this.state.cartToRename].cart.map((pkg) => pkg._id);
     const cartid = this.state.userCarts[this.state.cartToRename]._id;
     const name = this.state.renameText;
-
-    axios.put(`${this.state.server}edit-cart`, { cartid, cart, name }).then(() => {
+    const config = { headers: { authorization: `Bearer ${this.props.userState.user.jwt}`, github_id: this.props.userState.user.github_id }}
+    console.log('user state =', this.props.userState)
+    axios.put(`${this.state.server}edit-cart`, { cartid, cart, name }, config).then(() => {
       this.setState({
         renaming: false,
         cartToRename: null,
         loadedCarts: false,
         userCarts: []
       })
-      this.props.loadCarts(this.props.userState.user.github_id);
+      this.props.loadCarts(this.props.userState.user);
       return;
     })
     this.setState({
@@ -200,12 +202,13 @@ export class UserPage extends Component {
   }
 
   deleteCart(id) {
-    axios.delete(`${this.state.server}delete-cart`, { data : { cartid: id } }).then((response) => {
+    const headers = { authorization: `Bearer ${this.props.userState.user.jwt}`, github_id: this.props.userState.user.github_id };
+    axios.delete(`${this.state.server}delete-cart`, { data : { cartid: id }, headers }).then((response) => {
       this.setState({
         loadedCarts: false,
         userCarts: []
       })
-      this.props.loadCarts(this.props.userState.user.github_id);
+      this.props.loadCarts(this.props.userState.user);
       return;
     })
   }
