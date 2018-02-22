@@ -371,7 +371,7 @@ class Home extends Component {
             <ListOfPckgs data={this.state.list}/>
           </div>
           <div className="Box">
-            TEST
+            Recommendations
           </div>
         </div>
       </div>

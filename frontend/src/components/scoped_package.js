@@ -79,7 +79,7 @@ class ScopedPackages extends Component {
 
   render() {
     return (
-        <div className='Package'>
+        <div className='Package' style={this.props.style}>
             <div className='PackDiv'>
                 <h2 className='PackTitle'>{this.props.name} - scoped packages:</h2>
                 <p className='PackDesc'>{this.props.about}</p>
@@ -87,7 +87,7 @@ class ScopedPackages extends Component {
                 <div className='ExpandBox' style={ this.state.expanded ? {} : {display: 'none'} }>
                     {this.state.packages ? this.state.packages.map((pkg, i) => {
                         return (
-                            <div className='PackButtons' key={pkg.name}>
+                            <div className='PackButtons' style={{padding: '0.2em'}} key={pkg.name}>
                                 <a className='PackDesc'>{pkg.name}</a>
                                 <button 
                                     onClick={this.handleCart.bind(this, i)}
@@ -109,12 +109,12 @@ class ScopedPackages extends Component {
                         )
                     }) : null}
                 </div>
-            <div className={this.state.expanded ? 'PackButtons' : 'PackButton'}>
+            <div className={this.state.expanded ? 'PackButtons' : 'PackButtons'}>
                 <button
                     onClick={this.handleCart.bind(this)}
                     disabled={this.state.added}
                     className='btn btn-success'
-                    style={ { display: 'none' } }>
+                    style={ { opacity: 0 } }>
                 </button>
                 <button
                     onClick={this.handleExpand.bind(this)}

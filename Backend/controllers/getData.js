@@ -14,7 +14,22 @@ const getPackages = (req, res) => {
     const  _page = req.params.page;
     const month = req.params.month;
     //>=YYYY-MM-DD
-    const created = `2017-${month}-01..2017-${month}-28`
+    const monthText = [
+        `2018-${month}-01..2018-${month}-31`,
+        `2017-${month}-01..2017-${month}-28`,
+        `2017-${month}-01..2017-${month}-31`,
+        `2017-${month}-01..2017-${month}-30`,
+        `2017-${month}-01..2017-${month}-31`,
+        `2017-${month}-01..2017-${month}-30`,
+        `2017-${month}-01..2017-${month}-31`,
+        `2017-${month}-01..2017-${month}-31`,
+        `2017-${month}-01..2017-${month}-30`,
+        `2017-${month}-01..2017-${month}-31`,
+        `2017-${month}-01..2017-${month}-30`,
+        `2017-${month}-01..2017-${month}-31`
+    ]
+
+    const created = monthText[Number(month) - 1];
     const q = `language:javascript created:${created}`;
     const sort = 'stars';
     const order = 'desc';
@@ -28,10 +43,15 @@ const getPackages = (req, res) => {
             const a = await result.data.items;
             if (a) {
                 for (let obj of a) {
-                   
                     const name = obj.name;
+                    const git_url = obj.svn_url;
                     const login = obj.owner.login;
-                    let s = [];
+                    let project = {
+                        name: name,
+                        git_url: git_url,
+                        login: login,
+                        children: []
+                    };
                     
                     const response2 = await axios.get(`https://raw.githubusercontent.com/${login}/${name}/master/package.json`, {
                         validateStatus: function (status) {
@@ -39,9 +59,11 @@ const getPackages = (req, res) => {
                         }
                     });
                     if (response2) {
-                        if (response2.data.dependencies) s = s.concat(Object.keys(response2.data.dependencies));
-                        if (response2.data.devDependencies) s = s.concat(Object.keys(response2.data.devDependencies));
-                        arr.push(s);
+                        if (response2.data.dependencies) project.children = project.children.concat(Object.keys(response2.data.dependencies));
+                        if (response2.data.devDependencies) project.children = project.children.concat(Object.keys(response2.data.devDependencies));
+                        if (project.children.length > 0) {
+                            arr.push(project);
+                        }
                     }
                 }  
             }

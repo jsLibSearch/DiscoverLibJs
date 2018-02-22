@@ -11,12 +11,14 @@ export class SearchPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        windowHeight: window.innerHeight - 40,
+        windowWidth: window.innerWidth,
+        small: false,
         packages: [],
         query: '',
         dev: false,
         loading: false,
-        results: 0
+        results: 0,
+        smallLimit: 30
     };
   }
 
@@ -44,6 +46,7 @@ export class SearchPage extends Component {
 
   componentDidMount() {
     window.addEventListener('resize', this.handleResize.bind(this));
+    const small = this.state.windowWidth < 500 ? true : false;
     if (this.props.redux.query.length > 0){
       this.props.getPackages(this.props.redux.query);
     }
@@ -64,7 +67,8 @@ export class SearchPage extends Component {
       return;
     }
     this.setState({
-      windowHeight: window.innerHeight - 40,
+      windowWidth: window.innerWidth,
+      small: small,
       query: this.props.redux.query
     })
   }
@@ -77,8 +81,10 @@ export class SearchPage extends Component {
     if (!this.refs.searchPage) {
       return;
     }
+    const small = this.state.windowWidth < 500 ? true : false;
     this.setState({
-        windowHeight: window.innerHeight - 40
+        windowWidth: window.innerWidth,
+        small: small
     })
   }
   
@@ -91,11 +97,19 @@ export class SearchPage extends Component {
     });
   }
 
+  allowMoreResults() {
+    const allow = this.state.smallLimit + 10;
+    this.setState({
+      smallLimit: allow
+    })
+  }
+
   render() {
+    console.log(this.props.redux)
     return (
       <div ref='searchPage'>
         {this.state.dev ? (<button onClick={this.fillDevCart.bind(this)}>fill all</button>): null}
-        <div>
+        <div style={{ borderBottom: '1px solid rgb(103, 122, 87)', marginTop: '.2em' }}>
           {this.state.loading ?
             (<h3 className='SearchHeader'>Loading search results for "{this.state.query}"</h3>)
             :!this.props.redux.query ? 
@@ -104,6 +118,11 @@ export class SearchPage extends Component {
         </div>
         <div className='SearchResults'>
           {this.props.redux.packages['error'] !== "no packages found" ? Object.keys(this.props.redux.packages).map((pkg, i) => {
+            if (this.state.small && i === this.state.smallLimit) {
+              return <button key={i} onClick={this.allowMoreResults.bind(this)} style={{ width: '98%', margin: '.2em 0em' }} className='btn btn-success'>More results...</button>;
+            } else if (this.state.small && i > this.state.smallLimit) {
+              return null;
+            }
             if (pkg === 'error') {
               return (null)
             }
@@ -114,10 +133,12 @@ export class SearchPage extends Component {
                   return null
                 }
                 return (
-                  <div key={key}>
+                  <div key={key} style={this.state.small ? {margin: '0.3em'} : {}}>
                     <ScopedPackages
                         key={i + key}
                         name={key}
+                        style={this.state.small ? { margin: '1em 0em' } : {}}
+                        small={this.state.small}
                         packages={this.props.redux.packages[pkg][key]}/>
                   </div>
                 )
@@ -126,8 +147,9 @@ export class SearchPage extends Component {
               return null;
             }
             return (
-            <div key={i + 'id'}>
+            <div key={i + 'id'} style={this.state.small ? {margin: '0.3em'} : {}}>
               <Package
+                style={this.state.small ? { margin: '1em 0em' } : {}}
                 key={i}
                 name={this.props.redux.packages[pkg].name}
                 about={this.props.redux.packages[pkg].description}
@@ -135,6 +157,7 @@ export class SearchPage extends Component {
                 keywords={this.props.redux.packages[pkg].keywords}
                 parents={this.props.redux.packages[pkg].parents}
                 _id={this.props.redux.packages[pkg]._id}
+                small={this.state.small}
                 homepage={this.props.redux.packages[pkg].homepage}/>
             </div>)
           }) : null}

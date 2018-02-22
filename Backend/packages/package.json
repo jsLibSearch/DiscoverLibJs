@@ -1,11 +1,10 @@
 {
-	"name": "Test",
+	"name": "Please WORK!",
 	"version": "1.0.0",
 	"private": true,
 	"dependencies": {
-		"axios": "*",
-		"cors": "*",
-		"express": "*",
-		"mongoose": "*"
+		"react-redux": "*",
+		"react-router": "*",
+		"react-router-dom": "*"
 	}
 }

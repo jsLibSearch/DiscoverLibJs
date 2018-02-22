@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { Dropdown, DropdownToggle, DropdownItem, DropdownMenu, 
   Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, Popover,
   PopoverHeader, PopoverBody } from 'reactstrap';
-import { CSSTransitionGroup } from 'react-transition-group';
-import { deleteItem, newItem, addCartToUser, setCartName } from '../actions';
+import { CSSTransition, TransitionGroup, Transition } from 'react-transition-group';
+import { deleteItem, newItem, addCartToUser, setCartName, dev, clearCart, setAsSavedCart } from '../actions';
 import '../App.css';
 import { customColors as c } from '../custom/colors.js';
 const axios = require('axios');
@@ -14,7 +14,8 @@ class Cart extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      windowHeight: window.innerHeight - 40,
+      windowWidth: window.innerWidth,
+      small: false,
       cart: [],
       npmString: '',
       yarnString: '',
@@ -29,7 +30,14 @@ class Cart extends Component {
       newName: '',
       renaming: false,
       _id: null,
-      loginModal: false
+      loginModal: false,
+      server: !dev ? 'https://javascript-library-discovery2.herokuapp.com/' : 'http://localhost:8080/',
+      usersCart: false,
+      empty: true,
+      copied: false,
+      value: '',
+      npm: false,
+      yarn: false
     };
     this.toggleLoginModal = this.toggleLoginModal.bind(this);
   }
@@ -39,13 +47,23 @@ class Cart extends Component {
 
       let currentCart = [];
       if (this.props.cart.packages.length > 0) {
-        currentCart = this.props.cart.packages.slice()
-        const openArr = Array(currentCart.length).fill(false)
+        currentCart = this.props.cart.packages.slice();
+        const openArr = Array(currentCart.length).fill(false);
+        let names = '';
+        currentCart.forEach((item) => {
+          names += ' ' + item.name;
+        })
+        const npmStr = 'npm install --save' + names;
+        const yarnStr = 'yarn add' + names;
         this.setState({
-          windowHeight: window.innerHeight - 40,
+          windowWidth: window.innerWidth,
           cart: currentCart,
           cartName: this.props.cart.name,
-          isOpen: openArr
+          isOpen: openArr,
+          _id: this.props.cart._id,
+          npmString: npmStr,
+          yarnString: yarnStr,
+          empty: false
         })
       }
     }
@@ -53,21 +71,61 @@ class Cart extends Component {
 
   componentDidMount() {
     window.addEventListener('resize', this.handleResize.bind(this));
-    
+    const small = this.state.windowWidth < 500 ? true : false;
     let currentCart = [];
     let name = 'Untitled Project';
     if (this.props.cart.packages && this.props.cart.packages.length > 0) {
       currentCart = this.props.cart.packages.slice();
       name = this.props.cart.name;
+      let names = '';
+      currentCart.forEach((item) => {
+        names += ' ' + item.name;
+      })
+      const npmStr = 'npm install --save' + names;
+      const yarnStr = 'yarn add' + names;
+      this.setState({
+        windowWidth: window.innerWidth,
+        cart: currentCart,
+        cartName: name,
+        _id: this.props.cart._id,
+        npmString: npmStr,
+        yarnString: yarnStr,
+        empty: false,
+        small: small
+      })
+      return;
     }
     if (this.refs.theCart) {
       this.setState({
-        windowHeight: window.innerHeight - 40,
+        windowWidth: window.innerWidth,
         cart: currentCart,
-        cartName: name
+        cartName: name,
+        _id: this.props.cart._id,
+        empty: currentCart.length === 0,
+        small: small
       })
     }
+  }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.cart._id !== this.props.cart._id) {
+      let names = '';
+      if (nextProps.cart.packages.length) {
+        nextProps.cart.packages.forEach((item) => {
+          names += ' ' + item.name;
+        })
+      }
+      const npmStr = 'npm install --save' + names;
+      const yarnStr = 'yarn add' + names;
+      this.setState({
+        _id: nextProps.cart._id,
+        cart: nextProps.cart.packages,
+        cartName: nextProps.cart.name,
+        empty: nextProps.cart.packages.length === 0,
+        npmString: npmStr,
+        yarnString: yarnStr,
+      })
+    }
   }
 
   componentWillUnmount() {
@@ -78,16 +136,27 @@ class Cart extends Component {
     if (!this.refs.theCart) {
         return;
     }
+    const small = this.state.windowWidth < 500 ? true : false;
     this.setState({
-        windowHeight: window.innerHeight - 40
+        windowWidth: window.innerWidth,
+        small: small
     })
   }
   
   removePackage(item, i) {
     const newCart = this.state.cart.filter(pkg => pkg.name !== item.name)
     this.props.deleteItem(item);
+    let names = '';
+    newCart.forEach((i) => {
+      names += ' ' + i.name;
+    })
+    const npmStr = 'npm install --save' + names;
+    const yarnStr = 'yarn add' + names;
     this.setState({
-        cart: newCart
+        cart: newCart,
+        npmString: npmStr,
+        yarnString: yarnStr,
+        empty: newCart.length === 0
     })
   }
 
@@ -101,11 +170,17 @@ class Cart extends Component {
 
 
   onCreateRepoClick() {
-    const [ repo_name, description, _private, accessToken ] = 
-      [ this.state.filename, this.state.description, this.state.private, this.props.user.accessToken ];
+   
+    const [ repo_name, description,  accessToken ] = 
+      [ this.state.filename, this.state.description, this.props.user.user.accessToken ];
+    let arrOfPckgs = []
+    for (let obj of this.props.cart.packages) {
+      arrOfPckgs.push(obj.name);
+    }
 
-    axios
-      .post(`http://localhost:5000/create-repo`, { repo_name, description, _private, accessToken })
+    if (arrOfPckgs) {
+      axios
+      .post(`${this.state.server}create-repo`, { repo_name, description, accessToken, arrOfPckgs })
         .then((res) => {
           console.log(res.data);
         })
@@ -113,6 +188,7 @@ class Cart extends Component {
           console.log(err);
         })
 
+    }
 
     this.setState({
       modal: !this.state.modal
@@ -156,7 +232,7 @@ class Cart extends Component {
       this.toggleLoginModal();
       return;
     }
-    this.props.addCartToUser(this.state.cart, this.props.user.user, this.state.cartName)
+    this.props.addCartToUser(this.state.cart, this.props.user.user, this.state.cartName);
   }
 
   selectPackage(item) {
@@ -177,7 +253,7 @@ class Cart extends Component {
   }
 
   toggleSelectAll() {
-    const newSelected = []
+    const newSelected = [];
     if (this.state.cart.length === this.state.selected.length || this.state.cart.length === 0) {
       this.setState({
         selected: newSelected
@@ -193,14 +269,23 @@ class Cart extends Component {
   }
 
   deleteSelected() {
-    const newCart = this.state.cart.filter(pkg => !this.state.selected.includes(pkg.name))
-    const itemsToDelete = this.state.cart.filter(pkg => this.state.selected.includes(pkg.name))
+    const newCart = this.state.cart.filter(pkg => !this.state.selected.includes(pkg.name));
+    const itemsToDelete = this.state.cart.filter(pkg => this.state.selected.includes(pkg.name));
     itemsToDelete.forEach(item => {
       this.props.deleteItem(item);
     })
+    let names = '';
+    newCart.forEach((i) => {
+      names += ' ' + i.name;
+    })
+    const npmStr = 'npm install --save' + names;
+    const yarnStr = 'yarn add' + names;
     this.setState({
         cart: newCart,
-        selected: []
+        selected: [],
+        npmString: npmStr,
+        yarnString: yarnStr,
+        empty: newCart.length === 0
     })
   }
 
@@ -222,7 +307,7 @@ class Cart extends Component {
     if (this.state.newName.length < 1) {
       return;
     }
-    this.props.setCartName(this.state.newName);
+    this.props.setCartName(this.state.newName, this.state._id);
     this.setState({
       cartName: this.state.newName,
       newName: '',
@@ -237,7 +322,7 @@ class Cart extends Component {
       sessionStorage.setItem('cart', JSON.stringify(this.props.cart))
     }
     axios
-        .get('http://localhost:8080/login')
+        .get(`${this.state.server}login`)
             .then((response) => {
                 window.location = response.data;
             })
@@ -246,14 +331,49 @@ class Cart extends Component {
             });
   }
 
+  overwriteCart() {
+    const cart = this.state.cart.map((pkg) => pkg._id);
+    const cartid = this.state._id;
+    const name = this.state.cartName;
+
+    axios.put(`${this.state.server}edit-cart`, { cartid, cart, name }).then(() => {
+      this.props.setAsSavedCart(this.state.cartName, this.state._id, this.state.cart);
+      return;
+    })
+  }
+
+  clearCart() {
+    this.props.clearCart();
+    this.setState({
+      cart: [],
+      cartName: 'Untitled Project',
+      _id: null
+    })
+  }
+
+  copyString(string) {
+    console.log(string);
+    const optionNPM = string[0] === 'n'
+    const copyText = document.getElementById(optionNPM ? 'npmcopy' : 'yarncopy');
+    copyText.select();
+    document.execCommand('copy');
+    window.getSelection().removeAllRanges();
+    this.setState({
+      npm: optionNPM,
+      yarn: !optionNPM,
+      copied: true
+    })
+  }
+
   render() {
     return (
-      <div ref='theCart' className='Package PackDiv'>
-        <div className='PackCart' style={{ position: 'relative', padding: 0.2, marginBottom: 6 }}>
+      <div className='WrapCart'>
+      <div ref='theCart' className='Package PackDiv' style={this.state.small ? {width: 'auto', margin: '.3em .3em'}: {}}>
+        <div className='PackCart' style={!this.state.small ? { position: 'relative', padding: 0.2, marginBottom: 6 } : { padding: 0.2, marginBottom: 6, height: 'auto', display: 'block', maxHeight: 'none'}}>
           <h1 className='PackTitle'>
             {this.state.cartName}
           </h1>
-          <h1 className='PackDesc' style={{ position: 'absolute', bottom: 0, right:0, marginBottom: '0.5rem' }}>
+          <h1 className='PackDesc' style={this.state.small ? { textAlign: 'right', marginBottom: '1em' } : { position: 'absolute', bottom: 0, right:0, margin: '0.5rem' }}>
             You have {this.state.cart.length} {this.state.cart.length === 1 ? 'package' : 'packages'} in your project
           </h1>
         </div>
@@ -264,7 +384,13 @@ class Cart extends Component {
             color='success'
             size='sm'
             onClick={this.toggleSelectAll.bind(this)}
-            style={{
+            style={this.state.small ? {
+              height: '2.2em',
+              fontSize: '.8em',
+              border: 'none',
+              margin: 0,
+              padding: '0em .1em'
+            } : {
               height: '2.2em',
               fontSize: '.8em',
               border: 'none',
@@ -296,16 +422,25 @@ class Cart extends Component {
             border: 'none'
           }}>
           <DropdownToggle
-            style={{ border: 'none', margin: '0em' }}
+            style={this.state.small ? { border: 'none', margin: '0em', padding: '0em .3em' } : { border: 'none', margin: '0em' }}
             size="sm"
             outline
             caret>
             Project Options
           </DropdownToggle>
-          <DropdownMenu>
-            <DropdownItem onClick={this.saveCart.bind(this)}>Save Project</DropdownItem>
-            <DropdownItem id='rename'onClick={this.toggleRename.bind(this)}>Rename</DropdownItem>
-            <DropdownItem color="secondary" onClick={() => this.toggleModal() }> Create A Repo </DropdownItem>
+
+          {this.state._id === null ? (
+          <DropdownMenu style={{backgroundColor: c.header, borderRadius: '1em'}}>
+            <div>
+              <p className={!this.state.small ? 'SignCart' : 'SignCartSmall'} style={{ padding: '0.3em 1em', width: '12em', marginBottom: '0em' }} onClick={this.saveCart.bind(this)}>Save Project</p>
+            </div>
+            <div>
+              <p className={!this.state.small ? 'Sign' : 'SignSmall'} style={{ padding: '0.3em 1em', width: '12em', marginBottom: '0em' }} id='rename'onClick={this.toggleRename.bind(this)}>Rename</p>
+            </div>
+            <div>
+              <p className={!this.state.small ? 'Sign' : 'SignSmall'} style={{ padding: '0.3em 1em', width: '12em', marginBottom: '0em' }} onClick={() => this.toggleModal() }> Create A Repo </p>
+            </div>
+
             <Popover style={ { backgroundColor: c.body_bg } }  placement='left' isOpen={this.state.renaming} target='options' toggle={this.toggleRename.bind(this)}>
               <PopoverHeader style={ { backgroundColor: c.header, color: c.body_bg } }>Rename Project</PopoverHeader>
               <PopoverBody>
@@ -319,28 +454,66 @@ class Cart extends Component {
                 </Form>
               </PopoverBody>
             </Popover>
-            <DropdownItem divider />
-            <DropdownItem>Delete Project</DropdownItem>
+            <div>
+              <p className={!this.state.small ? 'SignDel' : 'SignDelSmall'} style={{ padding: '0.3em 1em', width: '12em', marginBottom: '0em' }} onClick={this.clearCart.bind(this)}>Clear Project</p>
+            </div>
           </DropdownMenu>
+          ):(
+          <DropdownMenu style={{backgroundColor: c.header, borderRadius: '1em'}}>
+            <div>
+              <p className={!this.state.small ? 'SignCart' : 'SignSmall'} style={{ padding: '0.3em 1em', width: '12em', marginBottom: '0em' }} onClick={this.saveCart.bind(this)}>Save As New Project</p>
+            </div>
+            <div>
+              <p className={!this.state.small ? 'SignCart' : 'SignSmall'} style={{ padding: '0.3em 1em', width: '12em', marginBottom: '0em' }} onClick={this.overwriteCart.bind(this)}>Overwrite Project</p>
+            </div>
+            <div>
+              <p className={!this.state.small ? 'Sign' : 'SignSmall'} style={{ padding: '0.3em 1em', width: '12em', marginBottom: '0em' }} id='rename'onClick={this.toggleRename.bind(this)}>Rename</p>
+            </div>
+            <div>
+              <p className={!this.state.small ? 'Sign' : 'SignSmall'} style={{ padding: '0.3em 1em', width: '12em', marginBottom: '0em' }} color="secondary" onClick={() => this.toggleModal() }> Create A Repo </p>
+            </div>
+            <Popover style={ { backgroundColor: c.body_bg } }  placement='left' isOpen={this.state.renaming} target='options' toggle={this.toggleRename.bind(this)}>
+              <PopoverHeader style={ { backgroundColor: c.header, color: c.body_bg } }>Rename Project</PopoverHeader>
+              <PopoverBody>
+                <Form onSubmit={this.renameCart.bind(this)}>
+                  <FormGroup>
+                    <Label for="rename project" hidden>Rename Project</Label>
+                    <Input bsSize='sm' onChange={this.handleRenameText.bind(this)} placeholder={this.state.cartName} />
+                  </FormGroup>
+                  {' '}
+                  <Button size='sm' color='success' type='submit'>Submit</Button>
+                </Form>
+              </PopoverBody>
+            </Popover>
+            <div>
+              <p className={!this.state.small ? 'SignDel' : 'SignDelSmall'} style={{ padding: '0.3em 1em', width: '12em', marginBottom: '0em' }} onClick={this.clearCart.bind(this)}>Clear Project</p>
+            </div>
+          </DropdownMenu>)}
         </Dropdown>
         </div>
         <div className='CartDiv'>
-        <CSSTransitionGroup
-                transitionName="background"
-                transitionAppear
-                transitionAppearTimeout={0}
-                transitionEnterTimeout={500}
-                transitionLeaveTimeout={500}
-                component='div'>
+        <TransitionGroup>
             {this.state.cart ?
             this.state.cart.map((item, i) => {
             return (
-                <div className='PackCart' style={{ margin: '0am'}} key={item.name}>
-                  <h1 key={item._id} className='PackDesc' style={{
-                          margin: '.6em 0em',
-                          verticalAlign: 'middle',
-                          display: 'inline-flex'
-                      }}>{item.name}</h1>
+              <CSSTransition
+                classNames="background"
+                timeout={{exit: 500, enter: 500}}
+                component='div'
+                key={`transition${item._id}`}>
+                <div className='PackCart' style={this.state.small ? { margin: '0am', maxHeight: 'none', height: 'auto'} : { margin: '0am'} } key={item.name}>
+                  <h1 key={item._id} className='PackDesc' style={
+                        this.state.small ? {
+                        margin: '0.3em 0em 0em',
+                        verticalAlign: 'middle',
+                        display: 'inline-flex',
+                        maxWidth: '9em',
+                        fontSize: '.8em',
+                      } : {
+                        margin: '0.3em 0em 0em',
+                        verticalAlign: 'middle',
+                        display: 'inline-flex',
+                    }}>{item.name}</h1>
                   <div key={`abc${item.name}`}>
                     <Button
                       outline={!this.state.selected.includes(item.name)}
@@ -370,20 +543,22 @@ class Cart extends Component {
                           caret>
                           Options
                         </DropdownToggle>
-                        <DropdownMenu>
-                          <DropdownItem key={`q${item.name}`} onClick={this.removePackage.bind(this, item, i)}>Remove</DropdownItem>
-                          <DropdownItem key={`w${item.name}`}>Move Up</DropdownItem>
-                          <DropdownItem key={`e${item.name}`}>Move Down</DropdownItem>
-                          <DropdownItem key={`r${item.name}`} divider />
-                          <DropdownItem key={`t${item.name}`} href={item.homepage}>Homepage</DropdownItem>
+                        <DropdownMenu style={{backgroundColor: c.header, borderRadius: '1em'}}>
+                        <div>
+                          <p className={!this.state.small ? 'SignDel' : 'SignDelSmall'} style={{ padding: '0em .5em', width: '7em', marginBottom: '0em' }} key={`q${item.name}`} onClick={this.removePackage.bind(this, item, i)}>Remove</p>
+                        </div>  
+                        <div>
+                          <p className={!this.state.small ? 'SignCart' : 'SignCartSmall'} style={{ padding: '0em .5em', width: '7em', marginBottom: '0em' }} key={`t${item.name}`} rel="noopener noreferrer" target="_blank" href={item.homepage}>Homepage</p>
+                        </div>
                         </DropdownMenu>
                     </Dropdown>
                   </div>
                 </div>
+              </CSSTransition>
             )
             })
             : null}
-          </CSSTransitionGroup>
+          </TransitionGroup>
         </div>
         <Modal isOpen={this.state.modal} toggle={() => this.toggleModal()}>
           <ModalHeader toggle={() => this.toggleModal()}>Short Info</ModalHeader>
@@ -422,6 +597,41 @@ class Cart extends Component {
           </ModalFooter>
         </Modal> 
       </div>
+      { !this.state.empty ? (
+          <div className='TermBox' style={this.state.small ? { display: 'block', padding: '0.3em' } : {}}>
+            <p
+              readOnly
+              value={this.state.npmString}
+              className='TerminalCopy'
+              onClick={this.copyString.bind(this, this.state.npmString)}
+              style={ this.state.npm ? { color: '#33aa33', backgroundColor: '#151535' } : {}}>
+                {this.state.npmString}
+            <textarea
+              id='npmcopy'
+              readOnly
+              value={this.state.npmString}
+              style={ { opacity: 0, width: '0.01em', border: 'none', padding: 0, height: '0.01em', fontSize: '1px' }}>
+                {this.state.npmString}
+            </textarea>
+            </p>
+            <p
+              readOnly
+              className='TerminalCopy'
+              value={this.state.yarnString}
+              onClick={this.copyString.bind(this, this.state.yarnString)}
+              style={ this.state.yarn ? { color: '#33aa33', backgroundColor: '#151535' } : {}}>
+                {this.state.yarnString}
+                <textarea
+              readOnly
+              id='yarncopy'
+              value={this.state.yarnString}
+              style={ { opacity:0, width: '0.01em', border: 'none', padding: 0, height: '0.01em', fontSize: '1px' }}>
+                {this.state.yarnString}
+            </textarea>
+            </p>
+          </div>
+        ) : null }
+      </div>
     );
   }
 }
@@ -433,4 +643,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { deleteItem, newItem, addCartToUser, setCartName })(Cart);
+export default connect(mapStateToProps, { deleteItem, newItem, addCartToUser, setCartName, clearCart, setAsSavedCart })(Cart);

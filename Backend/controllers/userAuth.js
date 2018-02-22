@@ -27,8 +27,9 @@ function generateToken(login, id, url, name) {
     });
 }
 
+
 const sendAuthURL = (req, res) => {
-    res.json(`https://github.com/login/oauth/authorize?client_id=${client_id}&scope=repo%20user`);
+    res.json(`https://github.com/login/oauth/authorize?client_id=${client_id}&scope=public_repo%20user`);
 }
 
 
@@ -55,8 +56,6 @@ const getAccessToken = (req, res) => {
                     const newUser = new User({ login_name: login, github_id: id, url: url, github_name: name });
                     console.log(newUser)
                     newUser.save()
-                        .exec()
-                        .populate()
                         .then((user) => {
                             generateToken(login, id, url, name).then((token)=> {
                                 res.json({
