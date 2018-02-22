@@ -4,6 +4,7 @@ const cors = require('cors');
 const session = require('express-session')
 const mongoose = require("mongoose");
 const _progress =  require('cli-progress');
+const expressJWT = require('express-jwt');
 
 const routes = require('./routes/routes');
 
@@ -12,6 +13,7 @@ const PORT = 8080;
 
 const dev = true;
 const origin = dev ? "http://localhost:3000" : "https://javascriptlibrarydiscovery.com";
+const secret = process.env.JWT_SECRET;
 
 const corsOptions = {
     "origin": origin,
