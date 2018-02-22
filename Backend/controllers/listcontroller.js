@@ -14,48 +14,48 @@ gb.authenticate({
 
 const mediaType = 'application/vnd.github.VERSION.html+json';
 
-const getReadme = (req, res) => {
+// const getReadme = (req, res) => {
 
-    const { repoName } = req.body;
+//     const { repoName } = req.body;
 
-    async function getContent(params) {
+//     async function getContent(params) {
 
-        try {
+//         try {
 
-            // const response = await axios.get( `https://api.github.com/search/repositories?q=language:javascript%20${repoName}%20in:name`, {
-            //     headers: { Authorization: process.env.GITHUB_TOKEN }
-            // } );
+//             // const response = await axios.get( `https://api.github.com/search/repositories?q=language:javascript%20${repoName}%20in:name`, {
+//             //     headers: { Authorization: process.env.GITHUB_TOKEN }
+//             // } );
 
-            const q = `${repoName} in:name sort:stars`; //language:javascript 
-            const response = await gb.search.repos({ q })
+//             const q = `${repoName} in:name sort:stars`; //language:javascript 
+//             const response = await gb.search.repos({ q })
             
 
 
-            if (response.data) {
+//             if (response.data) {
                 
-                const [ owner, repo ] = [ response.data.items[0].owner.login, response.data.items[0].name ];
+//                 const [ owner, repo ] = [ response.data.items[0].owner.login, response.data.items[0].name ];
                 
-                const response2 = await axios.get(`https://api.github.com/repos/${owner}/${repo}/readme`, {
-                    headers: { Accept: mediaType, Authorization: process.env.GITHUB_TOKEN }
-                });
+//                 const response2 = await axios.get(`https://api.github.com/repos/${owner}/${repo}/readme`, {
+//                     headers: { Accept: mediaType, Authorization: process.env.GITHUB_TOKEN }
+//                 });
 
-                // const response2 = await gb.repos.getContent({ owner, repo, path: `README.md` })
+//                 // const response2 = await gb.repos.getContent({ owner, repo, path: `README.md` })
     
-                if (response2.data) {
-                    // const data = nacl.util.decodeUTF8(response2.data.content);
-                    res.json(response2.data);
-                }
-            }
+//                 if (response2.data) {
+//                     // const data = nacl.util.decodeUTF8(response2.data.content);
+//                     res.json(response2.data);
+//                 }
+//             }
 
 
-        } catch(e) {
-            console.log(e);
-        }
-        //const q = `language:javascript ${repoName} in:name`;
+//         } catch(e) {
+//             console.log(e);
+//         }
+//         //const q = `language:javascript ${repoName} in:name`;
 
-    }
-    getContent();
-}
+//     }
+//     getContent();
+// }
 
 
 const getRecommendations = (req, res) => {
@@ -110,6 +110,21 @@ const getRecommendations = (req, res) => {
         .catch((err) => {
             res.json(err);
         })
+
+}
+
+
+const getReadme = (req, res) => {
+
+    const { id } = req.params;
+    Package.findById( id )
+        .then((response) => {
+            res.json(response.readme)
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+
 
 }
 
