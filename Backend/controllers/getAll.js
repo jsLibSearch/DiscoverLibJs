@@ -10,7 +10,7 @@ const getAll = (req, res) => {
 
     const getAppFrameWorks = () => {
 
-        Package.find({ keywords: { $all: [ "application", "framework" ] } }).select({ name: true }).exec()
+        Package.find({ keywords: { $all: [ "application", "framework" ] } }).exec()
         .then((result) => {
                 obj.appFrameWorks = result;
             })
@@ -22,7 +22,7 @@ const getAll = (req, res) => {
     
     const getMobileFrameWorks = () => {
     
-        Package.find({ keywords: { $all: [ "mobile" ] } }).select({ name: true }).exec()
+        Package.find({ keywords: { $all: [ "mobile" ] } }).exec()
         .then((result) => {
                 obj.mobileFrameWorks = result;
             })
@@ -35,7 +35,7 @@ const getAll = (req, res) => {
     
     const getRealTimeFrameWorks = () => {
     
-        Package.find({ keywords: { $all: [ "realtime", "framework" ] } }).select({ name: true }).exec()
+        Package.find({ keywords: { $all: [ "realtime", "framework" ] } }).exec()
         .then((result) => {
                 obj.realTimeFrameWorks = result;
             })
@@ -48,7 +48,7 @@ const getAll = (req, res) => {
     
     const getTestingFrameWorks = () => {
     
-        Package.find({ keywords: { $all: [ "test", "framework" ] } }).select({ name: true }).exec()
+        Package.find({ keywords: { $all: [ "test", "framework" ] } }).exec()
         .then((result) => {
                 obj.testingFrameWorks = result;
             })
@@ -62,7 +62,7 @@ const getAll = (req, res) => {
     //UI
     const getUiFrameWorks = () => {
     
-        Package.find({ keywords: { $all: [ "ui", "framework" ] } }).select({ name: true }).exec()
+        Package.find({ keywords: { $all: [ "ui", "framework" ] } }).exec()
         .then((result) => {
                 obj.uiFrameWorks = result;
             })
@@ -75,7 +75,7 @@ const getAll = (req, res) => {
     
     const getWindowsModalsPopups = () => {
     
-        Package.find({ keywords: { $in: [ "modal", "popup" ] } }).select({ name: true }).exec()
+        Package.find({ keywords: { $in: [ "modal", "popup" ] } }).exec()
         .then((result) => {
                 obj.windowsModalsPopups = result;
             })
@@ -88,7 +88,7 @@ const getAll = (req, res) => {
     
     const getKeyboardWrappers = () => {
     
-        Package.find({ keywords: { $all: [ "keyboard" ] } }).select({ name: true }).exec()
+        Package.find({ keywords: { $all: [ "keyboard" ] } }).exec()
         .then((result) => {
                 obj.keyboardWrappers = result;
             })
@@ -101,7 +101,7 @@ const getAll = (req, res) => {
     
     const getFormWidgets = () => {
     
-        Package.find({ keywords: { $all: [ "widget" ] } }).select({ name: true }).exec()
+        Package.find({ keywords: { $all: [ "widget" ] } }).exec()
         .then((result) => {
                 obj.formWidgets = result;
             })
@@ -115,7 +115,7 @@ const getAll = (req, res) => {
     //Multimedia
     const getGameEngines = () => {
     
-        Package.find({ keywords: { $all: [ "game", "engine" ] } }).select({ name: true }).exec()
+        Package.find({ keywords: { $all: [ "game", "engine" ] } }).exec()
         .then((result) => {
                 obj.gameEngines = result;
             })
@@ -128,7 +128,7 @@ const getAll = (req, res) => {
     
     const getPhysicsLib = () => {
     
-        Package.find({ keywords: { $all: [ "physics" ] } }).select({ name: true }).exec()
+        Package.find({ keywords: { $all: [ "physics" ] } }).exec()
         .then((result) => {
                 obj.physicsLib = result;
             })
@@ -141,7 +141,7 @@ const getAll = (req, res) => {
     
     const getAnimationLib = () => {
     
-        Package.find({ keywords: { $all: [ "animation" ] } }).select({ name: true }).exec()
+        Package.find({ keywords: { $all: [ "animation" ] } }).exec()
         .then((result) => {
             obj.animationLib = result;
         })
@@ -154,7 +154,7 @@ const getAll = (req, res) => {
     
     const getPresentationLib = () => {
     
-        Package.find({ keywords: { $all: [ "presentation" ] } }).select({ name: true }).exec()
+        Package.find({ keywords: { $all: [ "presentation" ] } }).exec()
         .then((result) => {
             obj.presentationLib = result;
         })
@@ -168,7 +168,7 @@ const getAll = (req, res) => {
     //Graphics
     const getCanvasWrappers = () => {
     
-        Package.find({ keywords: { $all: [ "canvas" ] } }).select({ name: true }).exec()
+        Package.find({ keywords: { $all: [ "canvas" ] } }).exec()
         .then((result) => {
                 obj.canvasWrappers = result;
             })
@@ -181,7 +181,7 @@ const getAll = (req, res) => {
     
     const getWebGL = () => {
     
-        Package.find({ keywords: { $in: [ "webgl", "webGL", "WebGL" ] } }).select({ name: true }).exec()
+        Package.find({ keywords: { $in: [ "webgl", "webGL", "WebGL" ] } }).exec()
         .then((result) => {
                 obj.WebGL = result;
             })
@@ -194,7 +194,7 @@ const getAll = (req, res) => {
     
     const getImageManipulation = (req, res) => {
     
-        Package.find({ keywords: { $all: [ "image", "manipulation" ] } }).select({ name: true }).exec()
+        Package.find({ keywords: { $all: [ "image", "manipulation" ] } }).exec()
         .then((result) => {
                 obj.ImageManipulation = result;
             })
@@ -207,7 +207,7 @@ const getAll = (req, res) => {
     
     const getVisualizationLib = () => {
     
-        Package.find({ keywords: { $all: [ "visualization" ] } }).select({ name: true }).exec()
+        Package.find({ keywords: { $all: [ "visualization" ] } }).exec()
         .then((result) => {
                 obj.visualizationLib = result;
             })
@@ -221,7 +221,7 @@ const getAll = (req, res) => {
     //Data
     const getDataStructures = () => {
     
-        Package.find({ keywords: { $all: [ "data", "structures" ] } }).select({ name: true }).exec()
+        Package.find({ keywords: { $all: [ "data", "structures" ] } }).exec()
         .then((result) => {
                 obj.dataStructures = result;
             })
@@ -234,7 +234,7 @@ const getAll = (req, res) => {
     
     const getDateLib = () => {
     
-        Package.find({ keywords: { $all: [ "date" ] } }).select({ name: true }).exec()
+        Package.find({ keywords: { $all: [ "date" ] } }).exec()
             .then((result) => {
                 obj.dateLib = result;
             })
@@ -247,7 +247,7 @@ const getAll = (req, res) => {
     
     const getStorageLib = () => {
     
-        Package.find({ keywords: { $all: [ "storage" ] } }).select({ name: true }).exec()
+        Package.find({ keywords: { $all: [ "storage" ] } }).exec()
         .then((result) => {
                 obj.storageLib = result;
             })
@@ -260,7 +260,7 @@ const getAll = (req, res) => {
     
     const getValidationLib = () => {
     
-        Package.find({ keywords: { $all: [ "validation" ] } }).select({ name: true }).exec()
+        Package.find({ keywords: { $all: [ "validation" ] } }).exec()
         .then((result) => {
                 obj.validationLib = result;
             })
@@ -274,7 +274,7 @@ const getAll = (req, res) => {
     //Development
     const getPackageManagers = () => {
     
-        Package.find({ keywords: { $all: [ "package", "manager" ] } }).select({ name: true }).exec()
+        Package.find({ keywords: { $all: [ "package", "manager" ] } }).exec()
         .then((result) => {
                 obj.packageManagers = result;
             })
@@ -286,7 +286,7 @@ const getAll = (req, res) => {
     
     const getTimingLib = () => {
     
-        Package.find({ keywords: { $all: [ "timing" ] } }).select({ name: true }).exec()
+        Package.find({ keywords: { $all: [ "timing" ] } }).exec()
         .then((result) => {
                 obj.timingLib = result;
             })
@@ -299,7 +299,7 @@ const getAll = (req, res) => {
     
     const getToolkits = () => {
     
-        Package.find({ keywords: { $all: [ "toolkit" ] } }).select({ name: true }).exec()
+        Package.find({ keywords: { $all: [ "toolkit" ] } }).exec()
         .then((result) => {
                 obj.toolkits = result;
             })
@@ -312,7 +312,7 @@ const getAll = (req, res) => {
     
     const getCodeProtectionLibs = () => { 
     
-        Package.find({ keywords: { $all: [ "protection" ] } }).select({ name: true }).exec() // <--------- doesnt have any libs
+        Package.find({ keywords: { $all: [ "protection" ] } }).exec() // <--------- doesnt have any libs
         .then((result) => {
                 obj.codeProtectionLibs = result;
             })
@@ -326,7 +326,7 @@ const getAll = (req, res) => {
     //Utilities
     const getDOM = () => {
     
-        Package.find({ keywords: { $in: [ "DOM", "dom", "Dom" ] } }).select({ name: true }).exec() 
+        Package.find({ keywords: { $in: [ "DOM", "dom", "Dom" ] } }).exec() 
         .then((result) => {
                 obj.DOM = result;
             })
@@ -339,7 +339,7 @@ const getAll = (req, res) => {
     
     const getACFL = () => {
     
-        Package.find({ keywords: { $in: [ "acync", "control", "flow", "event" ] } }).select({ name: true }).exec() 
+        Package.find({ keywords: { $in: [ "acync", "control", "flow", "event" ] } }).exec() 
         .then((result) => {
                 obj.ACFL = result;
             })
@@ -352,7 +352,7 @@ const getAll = (req, res) => {
     
     const getFunctionalProgramming = () => {
     
-        Package.find({ keywords: { $all: [ "functional", "programming" ] } }).select({ name: true }).exec() 
+        Package.find({ keywords: { $all: [ "functional", "programming" ] } }).exec() 
         .then((result) => {
                 obj.functionalProgramming = result;
             })
@@ -365,7 +365,7 @@ const getAll = (req, res) => {
     
     const getMathLibs = () => {
     
-        Package.find({ keywords: { $all: [ "math" ] } }).select({ name: true }).exec() 
+        Package.find({ keywords: { $all: [ "math" ] } }).exec() 
         .then((result) => {
                 obj.mathLibs = result;
             })
@@ -379,7 +379,7 @@ const getAll = (req, res) => {
     //Applications
     const getHtml5Apps = () => {
     
-        Package.find({ keywords: { $in: [ "html5", "HTML5", "Html5" ] } }).select({ name: true }).exec() 
+        Package.find({ keywords: { $in: [ "html5", "HTML5", "Html5" ] } }).exec() 
             .then((result) => {
                 obj.html5Apps = result;
             })
@@ -392,7 +392,7 @@ const getAll = (req, res) => {
     
     const getSiteGenerators = () => {
     
-        Package.find({ keywords: { $all: [ "site", "generator" ] } }).select({ name: true }).exec() 
+        Package.find({ keywords: { $all: [ "site", "generator" ] } }).exec() 
             .then((result) => {
                 obj.siteGenerators = result;
             })
@@ -405,7 +405,7 @@ const getAll = (req, res) => {
     
     const getCodeEditors = () => {
 
-        Package.find({ keywords: { $all: [ "code", "editor" ] } }).select({ name: true }).exec() 
+        Package.find({ keywords: { $all: [ "code", "editor" ] } }).exec() 
             .then((result) => {
                 obj.codeEditors = result;
             })
@@ -418,7 +418,7 @@ const getAll = (req, res) => {
     
     const getDesignAndPrototyping = () => {
 
-        Package.find({ keywords: { $in: [ "design", "prototyping" ] } }).select({ name: true }).exec() 
+        Package.find({ keywords: { $in: [ "design", "prototyping" ] } }).exec() 
         .then((result) => {
                 obj.designAndPrototyping = result;
             })

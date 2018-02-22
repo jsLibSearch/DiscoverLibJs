@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import '../App.css';
 import { Collapse, ListGroup, ListGroupItem, CardBody, Card } from 'reactstrap';
 import { dev } from '../actions'
-// Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink, Button 
+import { customColors as c } from '../custom/colors.js';
+import { newItem } from '../actions';
+import { connect } from 'react-redux';
 const axios = require('axios');
-
-
+const ReactMarkdown = require('react-markdown');
 
 class ListOfPckgs extends Component {
     constructor(props) {
@@ -15,24 +16,32 @@ class ListOfPckgs extends Component {
             data: null,
             list: [],
             collapses: [],
-            server: !dev ? 'https://javascript-library-discovery2.herokuapp.com/' : 'http://localhost:8080/'
+            server: !dev ? 'https://javascript-library-discovery2.herokuapp.com/' : 'http://localhost:8080/',
+            added: [],
+            tracker: []
         }
     }
 
 
     componentDidMount() {
-        // if (this.props.data.length) {
-        //     console.log(this.state.list)
-        //     const arr = new Array(this.props.data.length).fill(false);    
-        //     this.setState({ collapses: arr })
-        // }
 
     }
 
     componentWillReceiveProps(nextProps) {
+        console.log(nextProps)
         if (JSON.stringify(this.state.list) !== JSON.stringify(nextProps.data)) {
             const arr = new Array(nextProps.data.length).fill(false); 
-            this.setState({ list: nextProps.data, collapses: arr });
+            
+            const arr2 = nextProps.data.map((p) => {
+                for (let i = 0; i < this.props.cart.packages.length; i++) {
+                    if (p.name === this.props.cart.packages[i].name) {
+                        return true;
+                    }
+                }
+                return false;
+            })
+
+            this.setState({ list: nextProps.data, collapses: arr, tracker: arr2 });
         }
     }
 
@@ -56,33 +65,36 @@ class ListOfPckgs extends Component {
         this.setState({ collapses: arr });
     }
 
-    onAddtoProject() {
-        console.log('test');
+    onAddtoProject(pckg, idx) {
+        this.props.newItem(pckg);
+        let arr = this.state.tracker;
+        arr[idx] = true;
+        this.setState({ tracker: arr });
     }
 
     render() {
-        console.log(this.state)
         return (
             <ListGroup>
                 { this.state.list ? this.state.list.map( (pckg, idx) => {
                     return (
                             <div key={pckg.name}>
-                                <ListGroupItem tag="a" href="#" onClick={() => this.toggle(pckg.name, idx)}>{ pckg.name }</ListGroupItem>
+                                <ListGroupItem className="PackTitle" tag="a" href="#" onClick={() => this.toggle(pckg.name, idx)}>{ pckg.name }</ListGroupItem>
                                 <Collapse isOpen={this.state.collapses[idx]}>
                                     <Card>
                                         <CardBody>
-                                            <button onClick={() => this.onAddtoProject()}
+                                            <button className="btn btn-success" disabled={this.state.tracker[idx]} onClick={this.onAddtoProject.bind(this, pckg, idx)}
                                                 style={ {
-                                                margin: 0,
-                                                padding: '0em 0.8em',
-                                                fontStyle: 'italic',
-                                                fontSize: '.7em',
-                                                color: 'white',
-                                                borderColor: 'black',
-                                                backgroundColor: 'black' 
-                                                } }>Add to Project</button>
+                                                    margin: 0,
+                                                    padding: '0em 0.8em',
+                                                    fontStyle: 'italic',
+                                                    fontSize: '.7em',
+                                                    color: c.body_bg,
+                                                    borderColor: c.off_green,
+                                                    backgroundColor: c.off_green,
+                                                } }>{this.state.tracker[idx] ? 'Added to Project' : 'Add to Project'}</button>
                                             <hr/>
                                             <div dangerouslySetInnerHTML={{__html: this.state.data}}/>
+                                            {/* <ReactMarkdown source={this.state.data} skipHtml={false}/> */}
                                         </CardBody>
                                     </Card>
                                 </Collapse>
@@ -94,8 +106,14 @@ class ListOfPckgs extends Component {
     }
 }
 
+const mapStateToProps = (state) => {
+    return {
+        cart: state.cart,
+    }
+}
 
-export default ListOfPckgs;
+
+export default connect(mapStateToProps, { newItem })(ListOfPckgs);
 
 
 /***

@@ -7,6 +7,7 @@ import { CSSTransition, TransitionGroup, Transition } from 'react-transition-gro
 import { deleteItem, newItem, addCartToUser, setCartName, dev, clearCart, setAsSavedCart } from '../actions';
 import '../App.css';
 import { customColors as c } from '../custom/colors.js';
+import { initGA, logPageView } from './ReactGA';
 const axios = require('axios');
 
 
@@ -105,6 +106,8 @@ class Cart extends Component {
         small: small
       })
     }
+    initGA();
+    logPageView();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -171,7 +174,10 @@ class Cart extends Component {
 
 
   onCreateRepoClick() {
-   
+    if (this.state.cart.length === 0 || this.props.user.status === 'unauthorized') {
+      this.toggleLoginModal();
+      return;
+    }
     const [ repo_name, description,  accessToken ] = 
       [ this.state.filename, this.state.description, this.props.user.user.accessToken ];
     let arrOfPckgs = []
@@ -576,12 +582,6 @@ class Cart extends Component {
                 <Label for="description">Description</Label>
                 <Input type="textarea" name="description" id="description" placeholder="description" onChange={(e) => this.onDescriptionTextChange(e)}/>
               </FormGroup>
-              <FormGroup check >
-              <Label check >
-                <Input type="checkbox" id="checkbox" onClick={() => this.onCheckBoxClick()} />{' '}
-                Private?
-              </Label>
-            </FormGroup>
             </Form>
           </ModalBody>
           <ModalFooter>
@@ -589,7 +589,6 @@ class Cart extends Component {
             <Button color="secondary" onClick={() => this.toggleModal()}>Cancel</Button>
           </ModalFooter>
         </Modal>
-
         <Modal isOpen={this.state.loginModal} toggle={this.toggleLoginModal.bind(this)}>
           <ModalHeader toggle={this.toggleLoginModal.bind(this)}>Log in</ModalHeader>
           <ModalBody>
