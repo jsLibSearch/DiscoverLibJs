@@ -147,7 +147,6 @@ export class UserPage extends Component {
     const cartid = this.state.userCarts[this.state.cartToRename]._id;
     const name = this.state.renameText;
     const config = { headers: { authorization: `Bearer ${this.props.userState.user.jwt}`, github_id: this.props.userState.user.github_id }}
-    console.log('user state =', this.props.userState)
     axios.put(`${this.state.server}edit-cart`, { cartid, cart, name }, config).then(() => {
       this.setState({
         renaming: false,
