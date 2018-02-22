@@ -1,8 +1,10 @@
 {
-	"name": "AAA",
+	"name": "ABCDEF",
 	"version": "1.0.0",
 	"dependencies": {
-		"planck-js": "*",
-		"vorpal": "*"
+		"axios": "*",
+		"axios-mock-adapter": "*",
+		"cannon": "*",
+		"vue-axios": "*"
 	}
 }

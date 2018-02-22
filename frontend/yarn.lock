@@ -157,6 +157,13 @@ argparse@^1.0.7:
   dependencies:
     sprintf-js "~1.0.2"
 
+argparse@~0.1.15:
+  version "0.1.16"
+  resolved "https://registry.yarnpkg.com/argparse/-/argparse-0.1.16.tgz#cfd01e0fbba3d6caed049fbd758d40f65196f57c"
+  dependencies:
+    underscore "~1.7.0"
+    underscore.string "~2.4.0"
+
 aria-query@^0.7.0:
   version "0.7.1"
   resolved "https://registry.yarnpkg.com/aria-query/-/aria-query-0.7.1.tgz#26cbb5aff64144b0a825be1846e0b16cfa00b11e"
@@ -278,6 +285,10 @@ async@^2.1.2, async@^2.1.4, async@^2.4.1:
 asynckit@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
+
+autolinker@~0.15.0:
+  version "0.15.3"
+  resolved "https://registry.yarnpkg.com/autolinker/-/autolinker-0.15.3.tgz#342417d8f2f3461b14cf09088d5edf8791dc9832"
 
 autoprefixer@7.1.6:
   version "7.1.6"
@@ -5354,9 +5365,9 @@ react-ga@^2.4.1:
     prop-types "^15.6.0"
     react "^15.6.2 || ^16.0"
 
-react-markdown@^3.2.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/react-markdown/-/react-markdown-3.2.0.tgz#0fec0629dda35887518559ea9e2cca3e761e24dc"
+react-markdown@^3.2.1:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/react-markdown/-/react-markdown-3.2.1.tgz#cbae4c5bb623cd73d28f0914da5ae7857db159dc"
   dependencies:
     prop-types "^15.6.0"
     remark-parse "^4.0.0"
@@ -5688,6 +5699,13 @@ remark-parse@^4.0.0:
     unist-util-remove-position "^1.0.0"
     vfile-location "^2.0.0"
     xtend "^4.0.1"
+
+remarkable@^1.7.1:
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/remarkable/-/remarkable-1.7.1.tgz#aaca4972100b66a642a63a1021ca4bac1be3bff6"
+  dependencies:
+    argparse "~0.1.15"
+    autolinker "~0.15.0"
 
 remove-trailing-separator@^1.0.1:
   version "1.1.0"
@@ -6540,6 +6558,14 @@ uncontrollable@^4.1.0:
   resolved "https://registry.yarnpkg.com/uncontrollable/-/uncontrollable-4.1.0.tgz#e0358291252e1865222d90939b19f2f49f81c1a9"
   dependencies:
     invariant "^2.1.0"
+
+underscore.string@~2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/underscore.string/-/underscore.string-2.4.0.tgz#8cdd8fbac4e2d2ea1e7e2e8097c42f442280f85b"
+
+underscore@~1.7.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.7.0.tgz#6bbaf0877500d36be34ecaa584e0db9fef035209"
 
 unherit@^1.0.4:
   version "1.1.0"
