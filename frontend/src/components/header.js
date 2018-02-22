@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import { Dropdown, DropdownToggle, DropdownItem, DropdownMenu } from 'reactstrap';
 import { newSearch, clearAccessToken, makeServerCalls, logOutUser, setCartName, newItem, dev } from '../actions';
 import './header.css';
 import { customColors as c } from '../custom/colors.js';
@@ -17,7 +18,8 @@ class Header extends Component {
             username: '',
             loggedIn: false,
             windowWidth: window.innerWidth,
-            server: !dev ? 'https://javascript-library-discovery2.herokuapp.com/' : 'http://localhost:8080/'
+            server: !dev ? 'https://javascript-library-discovery2.herokuapp.com/' : 'http://localhost:8080/',
+            userOptionsOpen: false
         };
     }
 
@@ -37,7 +39,7 @@ class Header extends Component {
 
     componentDidMount() {
         window.addEventListener('resize', this.handleResize.bind(this));
-        const small = this.state.windowWidth < 697 ? true : false;
+        const small = this.state.windowWidth < 500 ? true : false;
         const lastCart = JSON.parse(sessionStorage.getItem('cart'));
         if (lastCart !== null) {
             this.props.setCartName(lastCart.name);
@@ -84,7 +86,7 @@ class Header extends Component {
         this.setState({
             windowWidth: window.innerWidth
         })
-        const small = this.state.windowWidth < 697 ? true : false;
+        const small = this.state.windowWidth < 500 ? true : false;
         this.setState({
             small: small
         })
@@ -142,20 +144,28 @@ class Header extends Component {
         this.setState({
             username: '',
             loggedIn: false,
+            userOptionsOpen: false
         })
         this.props.clearAccessToken();
         this.props.logOutUser();
     }
 
+    toggleUserOptions() {
+        const option = !this.state.userOptionsOpen;
+        this.setState({
+            userOptionsOpen: option
+        })
+    }
+
     render() {
         return (
-            <div className="App-header">
+            <div className="App-header" style={this.state.small ? { justifyContent: 'space-between' } : {}}>
 
-                <div style={this.state.small ? {display: 'inline-flex', width: '20em'} : {display: 'inline-flex', paddingLeft: '1em'}}>
-                    <Link to='/' className='Logo' style={ this.state.small ? { fontSize: '.6em', marginTop: '.6em' }: null}>JS Lib Discovery</Link>
+                <div style={this.state.small ? {display: 'inline-flex', justifyContent: 'space-between'} : {display: 'inline-flex', paddingLeft: '1em', paddingRight: '5em'}}>
+                    <Link to='/' className='Logo' style={ this.state.small ? { fontSize: '.6em', marginTop: '.6em', maxWidth: '5em' }: this.state.windowWidth < 1200 ? {fontSize: '1em', marginTop: '.5em'} : null}>JS Lib Discovery</Link>
                     <div className="btn-group"  style={!this.state.small ? {marginTop: '.25em', display: 'flex', justifyContent: 'center', marginBottom: 3, height: '2em', borderColor: c.off_green} : {marginTop: '.35em', display: 'flex', justifyContent: 'center', marginBottom: 3, height: '1.6em', borderColor: c.off_green}}>
-                        <input placeholder='Search for Libraries' style={ !this.state.small ? {color: c.header, fontSize: '1em', backgroundColor: c.body_bg } : {color: c.header, fontSize: '.7em', backgroundColor: c.body_bg }} className="btn btn-outline-secondary" onKeyPress={this.handleEnter.bind(this)} onChange={this.handleQuery.bind(this)} value={ this.state.searchedQuery } />
-                        <button style={ !this.state.small ? { color: c.off_green, fontSize: '.75em', backgroundColor: c.body_bg } : { color: c.off_green, fontSize: '.45em', backgroundColor: c.body_bg  }} className="btn btn-outline-secondary" onClick={this.handleSearch.bind(this)}>Search</button>
+                        <input placeholder='Search for Libraries' style={ !this.state.small ? {color: c.header, fontSize: '1em', backgroundColor: c.body_bg, width: `${this.state.windowWidth < 1200 ? 15 + (((this.state.windowWidth / 1200)) * 5) : 30}em` } : {color: c.header, fontSize: '.7em', backgroundColor: c.body_bg, width: '15em', borderRadius: '0.25rem' }} className="btn btn-outline-secondary" onKeyPress={this.handleEnter.bind(this)} onChange={this.handleQuery.bind(this)} value={ this.state.searchedQuery } />
+                        <button style={ !this.state.small ? { color: c.off_green, fontSize: '.75em', backgroundColor: c.body_bg } : { color: c.off_green, fontSize: '.45em', backgroundColor: c.body_bg, maxWidth: '8em', padding: '0.2em', display: 'none'  }} className="btn btn-outline-secondary" onClick={this.handleSearch.bind(this)}>Search</button>
                     </div>
                     {/* <div className='HeaderLeft' style={this.state.windowWidth < 1056 ? { display: 'none' } : null}>
                         <Link to="/gettingstarted" className='HeadLink'>Getting Started</Link>
@@ -166,8 +176,31 @@ class Header extends Component {
                 <div className='HeaderRight'>
                     {/* <Link to="/signup" className={!this.state.small ? 'Sign' : 'SignSmall'} style={this.state.loggedIn ? {display: 'none'} : null}>Sign Up</Link> */}
                     <Link to="/login" className={!this.state.small ? 'Sign' : 'SignSmall'} style={this.state.loggedIn ? {display: 'none'} : null} onClick={() => { this.handleLogInClick() }} >Log In</Link>
-                    <Link to="/logout" className={!this.state.small ? 'Sign' : 'SignSmall'} style={!this.state.loggedIn ? {display: 'none'} : null} onClick={() => { this.handleLogOutClick() }} >Log Out</Link>
-                    <Link to="/user" className={!this.state.small ? 'Username' : 'UsernameSmall'} style={!this.state.loggedIn ? {display: 'none'} : null}>{this.state.username.length > 0 ? this.state.username : ''}</Link>
+                    {this.state.loggedIn ? (
+                    <Dropdown
+                        group
+                        title='User Options'
+                        id={`options`}
+                        isOpen={this.state.userOptionsOpen}
+                        toggle={this.toggleUserOptions.bind(this)}
+                        size="sm">
+                    <DropdownToggle
+                        style={this.state.small ? { border: 'none', margin: '0em', padding: '0em .3em' } : { border: 'none', margin: '0em' }}
+                        size="sm"
+                        outline
+                        className={!this.state.small ? 'Username' : 'UsernameSmall'}
+                        caret={false}>
+                        {this.state.username}
+                    </DropdownToggle>
+                        <DropdownMenu style={{backgroundColor: c.header, borderRadius: '1em'}}>
+                            <div>
+                            <Link to="/user" onClick={this.toggleUserOptions.bind(this)} className={!this.state.small ? 'Sign' : 'SignSmall'} style={!this.state.loggedIn ? {display: 'none'} : null}>Your projects</Link>
+                            </div>
+                            <div>
+                            <Link to="/logout" className={!this.state.small ? 'Sign' : 'SignSmall'} style={!this.state.loggedIn ? {display: 'none'} : null} onClick={() => { this.handleLogOutClick() }} >Log Out</Link>
+                            </div>
+                        </DropdownMenu>
+                    </Dropdown>) : null}
                     <div onClick={this.handleCart.bind(this)} className='Cart-Box'>
                         <div className={'Inner-Cart-Box'}>
                             <h2 className='Brackets'>[</h2>
