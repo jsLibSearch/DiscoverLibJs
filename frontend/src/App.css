@@ -83,6 +83,7 @@
   font-size: 1em;
   text-decoration: none;
   color: #E1E1E2;
+  cursor: pointer;
 }
 
 .Sign:hover {
@@ -95,10 +96,63 @@
   font-size: .7em;
   text-decoration: none;
   color: #E1E1E2;
+  cursor: pointer;
 }
 
 .SignSmall:hover {
   color: #C75058;
+  text-decoration: none;
+}
+
+.SignCart {
+  padding: 0.5em;
+  font-size: 1em;
+  text-decoration: none;
+  color: #E1E1E2;
+  cursor: pointer;
+}
+
+.SignCart:hover {
+  color: #91ac7c;
+  text-decoration: none;
+}
+
+.SignCartSmall {
+  padding: 1em .5em 1em .5em;;
+  font-size: .7em;
+  text-decoration: none;
+  color: #E1E1E2;
+  cursor: pointer;
+}
+
+.SignCartSmall:hover {
+  color: #91ac7c;
+  text-decoration: none;
+}
+
+.SignDel {
+  padding: 0.5em;
+  font-size: 1em;
+  text-decoration: none;
+  color: #fd4a4a;
+  cursor: pointer;
+}
+
+.SignDel:hover {
+  color: rgb(255, 28, 28);
+  text-decoration: none;
+}
+
+.SignDelSmall {
+  padding: 1em .5em 1em .5em;;
+  font-size: .7em;
+  text-decoration: none;
+  color: #fd4a4a;
+  cursor: pointer;
+}
+
+.SignDelSmall:hover {
+  color: rgb(255, 28, 28);
   text-decoration: none;
 }
 
@@ -300,7 +354,6 @@ pink_red:      #C75058
   color: rgb(103, 122, 87);
   text-align: left;
   padding: .5em 3.2em;
-  width: 94%;
   margin: .2em 0em 0em 0em;
   font-size: 1.2em;
   font-style: italic;
