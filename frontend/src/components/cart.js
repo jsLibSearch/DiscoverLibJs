@@ -134,11 +134,9 @@ class Cart extends Component {
 
   handleResize() {
     if (!this.refs.theCart) {
-        console.log(this.state.small)
         return;
     }
     const small = this.state.windowWidth < 500 ? true : false;
-    console.log(this.state.windowWidth)
     this.setState({
         windowWidth: window.innerWidth,
         small: small

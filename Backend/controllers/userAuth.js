@@ -55,8 +55,6 @@ const getAccessToken = (req, res) => {
                     const newUser = new User({ login_name: login, github_id: id, url: url, github_name: name });
                     console.log(newUser)
                     newUser.save()
-                        .exec()
-                        .populate()
                         .then((user) => {
                             generateToken(login, id, url, name).then((token)=> {
                                 res.json({
