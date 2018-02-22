@@ -45,17 +45,18 @@ class Home extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.cart.packages.length > this.state.cart.length) {
-      this.setState({ cart: nextProps.cart.packages });
-      axios
-          .get(`${this.state.server}get-recommends`)
-            .then((result) => {
-              console.log(result);
-            })
-            .catch((err) => {
-              console.log(err);
-            })
-    }       
+    // if (nextProps.cart.packages.length > this.state.cart.length) {
+    //   this.setState({ cart: nextProps.cart.packages });
+    //   const arr = nextProps.cart.packages
+    //   axios
+    //       .post(`${this.state.server}get-recommends`)
+    //         .then((result) => {
+    //           console.log(result);
+    //         })
+    //         .catch((err) => {
+    //           console.log(err);
+    //         })
+    // }       
   }
 
   handleResize() {
