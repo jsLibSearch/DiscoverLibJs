@@ -33,6 +33,7 @@ export default ComposedComponent => {
                 console.log(nextProps.user)
                 sessionStorage.setItem('jwtToken', nextProps.user.user.jwt);
                 sessionStorage.setItem('username', nextProps.user.user.username);
+                sessionStorage.setItem('github_id', nextProps.user.user.github_id);
                 sessionStorage.setItem('loggedIn', true);
                 
             } // TODO: check following usefulness
