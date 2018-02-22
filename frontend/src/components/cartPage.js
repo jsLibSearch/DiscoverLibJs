@@ -31,6 +31,7 @@ class CartPage extends Component {
         })
         this.sendRecRequest();
       }
+
     }
     if (this.props.recState.loading && !this.state.loading) {
       this.setState({
