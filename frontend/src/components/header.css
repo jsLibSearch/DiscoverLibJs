@@ -36,11 +36,14 @@
 }
 
 .Logo {
-  font-size: 1.25em;
+  font-size: 2em;
+  text-align: center;
+  text-align-last: center;
   padding: 0em .5em 0em .15em;
-  margin: .3em;
+  margin: -0.05em 1em 0em .6em;
   color: #91ac7c;
   text-decoration: none;
+  overflow: hidden;
 }
 
 .Logo:hover {
