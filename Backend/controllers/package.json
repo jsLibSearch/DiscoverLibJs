@@ -1,9 +1,8 @@
 {
-	"name": "asdasda",
+	"name": "AAA",
 	"version": "1.0.0",
 	"dependencies": {
-		"express": "*",
-		"http-proxy-middleware": "*",
-		"webpack-hot-middleware": "*"
+		"planck-js": "*",
+		"vorpal": "*"
 	}
 }

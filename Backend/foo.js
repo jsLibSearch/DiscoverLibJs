@@ -31,13 +31,11 @@ async function writeFile(repo_name, params) {
 async function readFile() {
 
     try {
-
         fs.readFile(`${p}`, 'utf8', (err, data) => {
             if (err) throw err;
             const c = nacl.util.encodeBase64(data);
             return c;
         });
-
     } catch(err) {
         console.log(err);
     }

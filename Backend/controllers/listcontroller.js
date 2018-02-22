@@ -97,7 +97,7 @@ const getRecommendations = (req, res) => {
                                 for (let i = 0; i < 5; i++) {
                                     top5.push(sortedPkgs[i].name)
                                 }
-                                res.json({ top5, sortedPkgs });
+                                res.json({ top5 });
                             })
                             .catch((err) => {
                                 console.log(err)
