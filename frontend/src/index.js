@@ -20,5 +20,4 @@ ReactDOM.render(
         </Router>
     </Provider>
 , document.getElementById('root'));
-// ReactDOM.render(<AnimThree />, document.getElementById('anim'));
 registerServiceWorker();

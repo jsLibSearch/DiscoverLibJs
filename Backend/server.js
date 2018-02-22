@@ -11,19 +11,15 @@ const server = express();
 const PORT = 8080;
 const dev = true;
 
-const corsOptions = dev ?
-{
-    "origin": "http://localhost:3000",
-    "credentials": true
-}:{
-    "origin": "https://javascriptlibrarydiscovery.com",
+const dev = true;
+const origin = dev ? "http://localhost:3000" : "https://javascriptlibrarydiscovery.com";
+
+const corsOptions = {
+    "origin": origin,
     "credentials": true
 };
 
 server.use(cors(corsOptions));
-if (process.env.NODE_ENV === 'production') {
-    server.use(express.static('../Frontend/build'));
-}
 server.use(bodyParser.json());
 server.use(session({
     secret: process.env.JWT_SECRET,
@@ -33,6 +29,9 @@ server.use(session({
 
 routes(server);
 
+if (process.env.NODE_ENV === 'production') {
+    server.use(express.static('../Frontend/build'));
+}
 server.listen(process.env.PORT || PORT, () => {
     console.log(`Server listening on port ${PORT}`);
 });

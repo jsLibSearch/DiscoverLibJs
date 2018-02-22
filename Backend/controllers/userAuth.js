@@ -28,6 +28,7 @@ function generateToken(login, id, url, name) {
     });
 }
 
+
 const sendAuthURL = (req, res) => {
     res.json(`https://github.com/login/oauth/authorize?client_id=${client_id}&scope=public_repo%20user`);
 }

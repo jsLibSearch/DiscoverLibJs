@@ -105,6 +105,7 @@ export class SearchPage extends Component {
   }
 
   render() {
+    console.log(this.props.redux)
     return (
       <div ref='searchPage'>
         {this.state.dev ? (<button onClick={this.fillDevCart.bind(this)}>fill all</button>): null}
