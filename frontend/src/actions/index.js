@@ -43,13 +43,15 @@ export const clearCart = () => {
     }
 }
 
-export const loadCarts = (github_id) => {
+export const loadCarts = (user) => {
+    const headers = { authorization: `Bearer ${user.jwt}`, github_id: user.github_id }
     return (dispatch) => {
         dispatch(setLoadingTo('SET_USER_CARTS'));
-        axios.get(`${DB_URL}user-carts/${github_id}`, {
+        axios.get(`${DB_URL}user-carts/${user.github_id}`, {
             validateStatus: function (status) {
                 return status < 500; // Reject only if the status code is greater than or equal to 500
-            }
+            },
+            headers: headers
         })
             .then((response) => {
                 dispatch({
@@ -186,8 +188,8 @@ export const makeServerCalls = (jwtToken, github_id) => {
     }
 }
 
-export const getCart = (i) => {
-    const promise = axios.get(`${DB_URL}cart/${i}`);
+export const getCart = (i, token) => {
+    const promise = axios.get(`${DB_URL}cart/${i}`, { headers: { authorization: `Bearer ${token}` } });
     return {
         type: 'GET_CART',
         payload: promise
@@ -222,7 +224,7 @@ export const getRecs = (cart) => {
         axios.post(`${DB_URL}rec`, { cart: ids },{
             validateStatus: function (status) {
                 return status < 500; // Reject only if the status code is greater than or equal to 500
-            }
+            },
         })
             .then((response) => {
                 dispatch({
@@ -267,12 +269,13 @@ export const searchRec = (cart, query) => {
 export const addCartToUser = (cart, user, name) => {
     const ids = cart.map(pkg => pkg._id);
     // { cart, user, name }
-    // { github_id, github_name } = user;
+    const headers = { authorization: `Bearer ${user.jwt}`, github_id: user.github_id }
     return (dispatch) => {
         axios.post(`${DB_URL}save-cart`, { cart: ids, user: user, name: name },{
             validateStatus: function (status) {
                 return status < 500; // Reject only if the status code is greater than or equal to 500
-            }
+            },
+            headers: headers
         })
             .then((response) => {
                 dispatch({
@@ -282,7 +285,8 @@ export const addCartToUser = (cart, user, name) => {
                 axios.get(`${DB_URL}cart/${response.data._id}`,{
                     validateStatus: function (status) {
                         return status < 500; // Reject only if the status code is greater than or equal to 500
-                    }
+                    },
+                    headers: headers
                 })
                     .then((res) => {
                         dispatch({

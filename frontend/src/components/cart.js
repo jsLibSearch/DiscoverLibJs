@@ -158,6 +158,7 @@ class Cart extends Component {
         yarnString: yarnStr,
         empty: newCart.length === 0
     })
+    this.toggleOpen(i);
   }
 
   toggleOpen(i) {
@@ -232,6 +233,7 @@ class Cart extends Component {
       return;
     }
     this.props.addCartToUser(this.state.cart, this.props.user.user, this.state.cartName);
+    this.toggleOpenCartOptions()
   }
 
   selectPackage(item) {
@@ -334,9 +336,10 @@ class Cart extends Component {
     const cart = this.state.cart.map((pkg) => pkg._id);
     const cartid = this.state._id;
     const name = this.state.cartName;
-
-    axios.put(`${this.state.server}edit-cart`, { cartid, cart, name }).then(() => {
+    const config = { headers: { authorization: `Bearer ${this.props.user.user.jwt}`, github_id: this.props.user.user.github_id }}
+    axios.put(`${this.state.server}edit-cart`, { cartid, cart, name }, config).then(() => {
       this.props.setAsSavedCart(this.state.cartName, this.state._id, this.state.cart);
+      this.toggleOpenCartOptions();
       return;
     })
   }
@@ -348,6 +351,7 @@ class Cart extends Component {
       cartName: 'Untitled Project',
       _id: null
     })
+    this.toggleOpenCartOptions()
   }
 
   copyString(string) {
@@ -547,7 +551,7 @@ class Cart extends Component {
                           <p className={!this.state.small ? 'SignDel' : 'SignDelSmall'} style={{ padding: '0em .5em', width: '7em', marginBottom: '0em' }} key={`q${item.name}`} onClick={this.removePackage.bind(this, item, i)}>Remove</p>
                         </div>  
                         <div>
-                          <p className={!this.state.small ? 'SignCart' : 'SignCartSmall'} style={{ padding: '0em .5em', width: '7em', marginBottom: '0em' }} key={`t${item.name}`} rel="noopener noreferrer" target="_blank" href={item.homepage}>Homepage</p>
+                          <a className={!this.state.small ? 'SignCart' : 'SignCartSmall'} style={{ padding: '0em .5em', width: '7em', marginBottom: '0em' }} key={`t${item.name}`} rel="noopener noreferrer" target="_blank" href={item.homepage} onClick={this.toggleOpen.bind(this, i)}>Homepage</a>
                         </div>
                         </DropdownMenu>
                     </Dropdown>

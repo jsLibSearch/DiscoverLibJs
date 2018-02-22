@@ -1,6 +1,7 @@
 // this route authorize user 
 const axios = require('axios');
 const jwt = require('jsonwebtoken');
+const session = require('express-session');
 // user database
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
@@ -57,6 +58,8 @@ const getAccessToken = (req, res) => {
                     newUser.save()
                         .then((user) => {
                             generateToken(login, id, url, name).then((token)=> {
+                                req.session.jwtToken = token;
+                                req.session.github_id = id;
                                 res.json({
                                     username: login,
                                     accessToken: str,
@@ -76,6 +79,9 @@ const getAccessToken = (req, res) => {
 
                 // JWT token
                 const token = await generateToken(login, id, url, name);
+
+                req.session.jwtToken = token;
+                req.session.github_id = id;
 
                 res.json({
                     username: login,
@@ -120,9 +126,36 @@ const checkUserAuth = (req, res) => {
         })
 }
 
+const checkAuth = (req, res, next) => {
+
+    const { authorization, github_id } = req.headers;
+    if (!authorization || !github_id) {
+        res.status(422).json({ error: 'You must be signed in to perform these actions' });
+        return
+    }
+    const jwtToken = authorization.split(" ")[1];
+    User.find({ github_id: github_id })
+        .then((response) => {
+            const result = response[0];
+            jwt.verify(jwtToken, process.env.JWT_SECRET, (e, user) => {
+                if (e) throw e;
+                if (user.id === Number(result.github_id) && user.login === result.login_name) {
+                    next();
+                }
+            })
+        })
+        .catch((err) => {
+            res.json({
+                error: 'something went wrong!'
+            });
+            console.log(err);
+        })
+}
+
 
 module.exports = {
     sendAuthURL,
     getAccessToken,
     checkUserAuth,
+    checkAuth
 }

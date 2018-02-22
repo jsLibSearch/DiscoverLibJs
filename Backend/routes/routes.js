@@ -65,7 +65,7 @@ module.exports = (app) => {
         .get(dbController.searchPackage);
 
 
-        app 
+    app 
         .route('/search-package/:term')
         .get(dbController.searchPackage);
 
@@ -83,8 +83,23 @@ module.exports = (app) => {
 
     app 
         .route('/user-carts/:github_id')
-        .get(dbController.getUserCarts);
+        .get(dbController.getUserCarts)
 
+    app 
+        .use('/user-carts/:github_id', accessController.checkAuth);
+
+    app
+        .use('/edit-cart', accessController.checkAuth);
+
+    app
+        .use('/delete-cart', accessController.checkAuth);
+
+    app
+        .use('/save-cart', accessController.checkAuth);
+        
+    app
+        .use('/cart/:cartid', accessController.checkAuth);
+    
     app
         .route('/cart/:cartid')
         .get(dbController.getCartByID);
