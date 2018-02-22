@@ -1,11 +1,9 @@
 {
-	"name": "PLEASE-WORK!",
+	"name": "asdasda",
 	"version": "1.0.0",
 	"dependencies": {
 		"express": "*",
 		"http-proxy-middleware": "*",
-		"morgan": "*",
-		"serve-favicon": "*",
 		"webpack-hot-middleware": "*"
 	}
 }

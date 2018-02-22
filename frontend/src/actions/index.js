@@ -325,6 +325,7 @@ export const getCatalog = () => {
        
         axios.get(`${apiURL}get-all-catalog`)
             .then((result) => {
+                console.log(result);
                 dispatch({
                     type: 'GET_CATALOG',
                     payload: result.data

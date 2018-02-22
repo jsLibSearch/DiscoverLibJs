@@ -7,9 +7,8 @@ import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink,
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { getCatalog } from '../actions';
-
-
 import ListOfPckgs from './ListOfPckgs';
+import { initGA, logPageView } from './ReactGA';
 
 const sideBar = [ 'Animation', 'Application Tools', 'Audio' ];
 
@@ -35,9 +34,9 @@ class Home extends Component {
     this.setState({
       windowHeight: window.innerHeight - 40
     })
-
     this.props.getCatalog();
-
+    initGA();
+    logPageView();
   }
 
   componentWillUnmount() {
@@ -222,13 +221,12 @@ class Home extends Component {
   render() {
     return (
       <div>
-        <h4 className='Catalog1'>Directories</h4>
+        <h4 className='Catalog1'></h4>
         <div className="Catalog">
-
           <div className="NavBar">
             <Navbar >
-              <ul>
-              <li><NavbarBrand className="Essentials" onClick={ () => this.essentials() } href="#">Essentials</NavbarBrand></li>
+              <ul className="Title">Directories
+              <li className="fa fa-gift fa-lg"><NavbarBrand className="Essentials" onClick={ () => this.essentials() } href="#">Essentials</NavbarBrand></li>
               <Collapse isOpen={this.state.essentials} navbar>
                 <Nav navbar>
                   <NavItem >

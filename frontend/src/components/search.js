@@ -5,7 +5,8 @@ import { getPackages, newItem } from '../actions';
 import '../App.css';
 // import { customColors as c } from '../custom/colors.js';
 import Package from './package.js';
-import ScopedPackages from './scoped_package.js'
+import ScopedPackages from './scoped_package.js';
+import { initGA, logPageView } from './ReactGA';
 
 export class SearchPage extends Component {
   constructor(props) {
@@ -71,6 +72,8 @@ export class SearchPage extends Component {
       small: small,
       query: this.props.redux.query
     })
+    initGA();
+    logPageView();
   }
 
   componentWillUnmount() {
