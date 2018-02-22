@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Dropdown, DropdownToggle, DropdownItem, DropdownMenu, 
+import { Dropdown, DropdownToggle, p, DropdownMenu, 
   Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, Popover,
   PopoverHeader, PopoverBody } from 'reactstrap';
 import axios from 'axios';
@@ -7,8 +7,7 @@ import '../App.css';
 import { customColors as c } from '../custom/colors.js';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { saveAccessToken, loadCarts, newItem, setCartName, clearCart } from '../actions';
-
+import { saveAccessToken, loadCarts, newItem, setCartName, clearCart, dev } from '../actions';
 
 export class UserPage extends Component {
   constructor(props) {
@@ -28,7 +27,8 @@ export class UserPage extends Component {
         private: false,
         filename: '',
         description: '',
-        cartToRename: null
+        cartToRename: null,
+        server: !dev ? 'https://javascript-library-discovery2.herokuapp.com/' : 'http://localhost:8080/'
     };
   }
 
@@ -37,7 +37,7 @@ export class UserPage extends Component {
     // TODO: test Users carts for package info
     // TODO: retrieve past cart from local storage and send to redux
     if (this.state.userCarts.length === 0 && this.state.loadedCarts === false) {
-      this.props.loadCarts(this.props.userState.user.github_id);
+      this.props.loadCarts(this.props.userState.user);
     }
     window.addEventListener('resize', this.handleResize.bind(this))
     this.setState({
@@ -49,6 +49,7 @@ export class UserPage extends Component {
     if (nextProps.userState.jwt !== this.props.userState.jwt) { 
       sessionStorage.setItem('jwtToken', nextProps.userState.jwt);
       sessionStorage.setItem('username', nextProps.userState.username);
+      sessionStorage.setItem('github_id', nextProps.userState.github_id);
       sessionStorage.setItem('loggedIn', true);
     }
     if (nextProps.userState.loadingCarts !== this.props.userState.loadingCarts) {
@@ -145,25 +146,22 @@ export class UserPage extends Component {
     const cart = this.state.userCarts[this.state.cartToRename].cart.map((pkg) => pkg._id);
     const cartid = this.state.userCarts[this.state.cartToRename]._id;
     const name = this.state.renameText;
-
-    axios.put(`http://localhost:8080/edit-cart`, { cartid, cart, name }).then(() => {
+    const config = { headers: { authorization: `Bearer ${this.props.userState.user.jwt}`, github_id: this.props.userState.user.github_id }}
+    console.log('user state =', this.props.userState)
+    axios.put(`${this.state.server}edit-cart`, { cartid, cart, name }, config).then(() => {
       this.setState({
         renaming: false,
         cartToRename: null,
         loadedCarts: false,
         userCarts: []
       })
-      this.props.loadCarts(this.props.userState.user.github_id);
+      this.props.loadCarts(this.props.userState.user);
       return;
     })
     this.setState({
       renaming: false,
       cartToRename: null
     })
-    // TODO: RENAME CART IN DB VIA AXIOS
-    // const cartToRename = this.state.userCarts[this.state.cartToRename]
-    // const newName = this.state.renameText
-    console.log('not renaming cart, implement axios put request');
   }
 
   handleRenameText(e) {
@@ -204,13 +202,13 @@ export class UserPage extends Component {
   }
 
   deleteCart(id) {
-    console.log(id)
-    axios.delete(`http://localhost:8080/delete-cart`, { data : { cartid: id } }).then((response) => {
+    const headers = { authorization: `Bearer ${this.props.userState.user.jwt}`, github_id: this.props.userState.user.github_id };
+    axios.delete(`${this.state.server}delete-cart`, { data : { cartid: id }, headers }).then((response) => {
       this.setState({
         loadedCarts: false,
         userCarts: []
       })
-      this.props.loadCarts(this.props.userState.user.github_id);
+      this.props.loadCarts(this.props.userState.user);
       return;
     })
   }
@@ -237,38 +235,29 @@ export class UserPage extends Component {
   render() {
     return (
       <div id='user_page_div'>
+        <div style={{ borderBottom: '1px solid rgb(103, 122, 87)', marginTop: '.2em' }}>
+          <p className='SearchHeader'>
+            {this.state.loadingCarts ? 'Loading projects' : 'Your saved projects'}
+          </p>
+        </div>
         {!this.state.loadingCarts ? (this.state.userCarts.length > 0 ? this.state.userCarts.map((cart, i) => {
           return (
-          <div className='Package' style={this.state.expanded === i ? { paddingBottom: '0.5em' } : {}} key={cart._id}>
-          <div className='PackButtons'>
+          <div className='Package' style={{ paddingBottom: '0.5em' }} key={cart._id}>
+          <div className='PackButtons' style={this.state.expanded === i ? { marginBottom: '.5em' } : { marginBottom: '.3em' }}>
               <h2 className='PackTitle' style={{ marginBottom: 0 }}>{cart.name}</h2>
-              <button onClick={this.handleExpand.bind(this, i)} className='btn btn-outline-success' style={ { width: '1.6em', height: '1.6em', margin: '0.5em 0em', padding: '0em', fontSize: '.7em' } }>{!(this.state.expanded === i) ? '▼' : '▲'}</button>
           </div>
               <div className='ExpandBox' style={ this.state.expanded === i ? {} : {display: 'none'} }>
                   <ul style={{margin: '0em', padding: '0em 3em'}}>
                       {cart.cart ? cart.cart.map((item) => (<li key={item.name}>{item.name}</li>)): null}
                   </ul>
               </div>
-          <div className={this.state.expanded === i ? 'PackButtons' : ''}>
-              <button
-                  onClick={this.handleCart.bind(this, i)}
-                  className='btn btn-success'
-                  style={ 
-                      this.state.expanded === i ? {
-                          margin: 0,
-                          padding: '0em 0.8em',
-                          fontStyle: 'italic',
-                          fontSize: '.7em',
-                          color: c.body_bg,
-                          borderColor: c.off_green,
-                          backgroundColor: c.off_green,
-                          height: '1.5em'
-                      } : {
-                          display: 'none' } }>
-                  {this.state.current === i ? `Don't use project` : 'Use project'}
-              </button>
+          <div className='PackButtons' style={this.state.expanded === i ? { marginTop: '.5em' } : { marginTop: '.3em' }}>
+          <Button onClick={this.handleExpand.bind(this, i)} size='sm' color='secondary' style={{
+                      margin: '0em',
+                      fontSize: '.7em',
+                      padding: '0em 0.8em'}}>{!(this.state.expanded === i) ? 'Show Packages' : 'Hide Packages'}</Button>
               {/* dropdown */}
-                {this.state.expanded === i ? (<Dropdown
+                <Dropdown
                   group
                   title='Cart Options'
                   id={`options${cart._id}`}
@@ -290,13 +279,21 @@ export class UserPage extends Component {
                     caret>
                     Options
                   </DropdownToggle>
-                  <DropdownMenu>
-                    <DropdownItem id='rename' onClick={this.toggleRename.bind(this, i)}>Rename</DropdownItem>
-                    <DropdownItem color="secondary" onClick={this.toggleModal.bind(this, i)}> Create A Repo </DropdownItem>
-                    <DropdownItem divider />
-                    <DropdownItem onClick={this.deleteCart.bind(this, this.state.userCarts[i]._id)}>Delete Project</DropdownItem>
+                  <DropdownMenu style={{backgroundColor: c.header, borderRadius: '1em'}}>
+                    <div>
+                      <p className={!this.state.small ? 'SignCart' : 'SignCartSmall'} style={ this.state.current !== i ? { padding: '0.3em 1em', width: '10em', marginBottom: '0em' } : { padding: '0.3em 1em', width: '10em', marginBottom: '0em' } } onClick={this.handleCart.bind(this, i)}>{this.state.current === i ? `Don't use project` : 'Use project'}</p>
+                    </div>
+                    <div>
+                      <p className={!this.state.small ? 'Sign' : 'SignSmall'} style={{ padding: '0.3em 1em', width: '10em', marginBottom: '0em' }} id='rename' onClick={this.toggleRename.bind(this, i)}>Rename</p>
+                    </div>
+                    <div>
+                      <p className={!this.state.small ? 'Sign' : 'SignSmall'} style={{ padding: '0.3em 1em', width: '10em', marginBottom: '0em' }} color="secondary" onClick={this.toggleModal.bind(this, i)}> Create A Repo </p>
+                    </div>
+                    <div>
+                      <p className={!this.state.small ? 'SignDel' : 'SignDelSmall'} style={{ padding: '0.3em 1em', width: '10em', marginBottom: '0em' }} onClick={this.deleteCart.bind(this, this.state.userCarts[i]._id)}>Delete Project</p>
+                    </div>
                   </DropdownMenu>
-                </Dropdown>) : null}
+                </Dropdown>
           </div>
       </div>
         )}): <p>You do not have any saved projects!</p>) : <h3>Loading Projects</h3>}

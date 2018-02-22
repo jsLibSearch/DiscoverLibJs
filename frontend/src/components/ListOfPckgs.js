@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import '../App.css';
 import { Collapse, ListGroup, ListGroupItem, CardBody, Card } from 'reactstrap';
+import { dev } from '../actions'
 // Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink, Button 
 const axios = require('axios');
+
 
 
 class ListOfPckgs extends Component {
@@ -13,6 +15,7 @@ class ListOfPckgs extends Component {
             data: null,
             list: [],
             collapses: [],
+            server: !dev ? 'https://javascript-library-discovery2.herokuapp.com/' : 'http://localhost:8080/'
         }
     }
 
@@ -39,7 +42,7 @@ class ListOfPckgs extends Component {
 
     toggle(name, idx) {
         axios
-            .post('http://localhost:8080/get-readme', { repoName: `${name}` })
+            .post(`${this.state.server}get-readme`, { repoName: `${name}` })
                 .then((res) => {
                     this.setState({  
                         data: res.data
@@ -58,6 +61,7 @@ class ListOfPckgs extends Component {
     }
 
     render() {
+        console.log(this.state)
         return (
             <ListGroup>
                 { this.state.list ? this.state.list.map( (pckg, idx) => {
@@ -85,32 +89,6 @@ class ListOfPckgs extends Component {
                             </div>   
                         ) 
                 } )  : null }   
-                {/* <ListGroupItem tag="a" href="#" onClick={() => this.toggle()}>react</ListGroupItem> */}
-                {/* <Collapse isOpen={this.state.collapse}>
-                    <Card>
-                        <CardBody>
-                            <button onClick={() => this.onAddProject()}
-                                style={ {
-                                margin: 0,
-                                padding: '0em 0.8em',
-                                fontStyle: 'italic',
-                                fontSize: '.7em',
-                                color: 'white',
-                                borderColor: 'black',
-                                backgroundColor: 'black' 
-                                } }>Add to Project</button>
-                            <hr/>
-                            <div dangerouslySetInnerHTML={{__html: this.state.data}}/>
-                        </CardBody>
-                    </Card>
-                </Collapse> */}
-                {/* { this.state.list.data ? this.state.list.data.map( (pckg) => {
-                    return <ListGroupItem tag="a" href="#" key={pckg.name} onClick={() => this.toggle(pckg.name)} >{ pckg.name }</ListGroupItem>
-                } ) : null } */}
-                {/* <ListGroupItem tag="a" href="#" >Mongo</ListGroupItem>
-                <ListGroupItem tag="a" href="#" >Express</ListGroupItem>
-                <ListGroupItem tag="a" href="#" >Nacl</ListGroupItem>
-                <ListGroupItem tag="a" href="#" >Cors</ListGroupItem> */}
             </ListGroup>
         )
     }

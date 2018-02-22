@@ -285,7 +285,7 @@ const getUserCarts = (req, res) => {
             return res.status(STATUS_USER_ERROR).send({ error: " not a foundUser "})
         }
         Cart.find({user: foundUser._id})
-        .populate('cart', 'name keywords freq', Package )
+        .populate('cart', 'name keywords freq homepage', Package )
         .exec()
         .then((carts) => {
             res.send(carts);
@@ -304,7 +304,9 @@ const getUserCarts = (req, res) => {
 const getCartByID = (req, res) => {
 
     const {cartid} = req.params;
-    Cart.findOne({_id: cartid}).exec().populate('Package')
+    Cart.findOne({_id: cartid})
+        .populate('cart', 'name keywords freq homepage', Package)
+        .exec()
     .then(cart => {
         if (!cart) {
             return res.status(STATUS_USER_ERROR).send({err: "no cart"})

@@ -91,34 +91,32 @@ class Package extends Component {
 
   render() {
     return (
-        <div className='Package'>
+        <div className='Package' style={this.props.style}>
             <div className='PackDiv'>
                 <h2 className='PackTitle'>{this.props.name}</h2>
-                <p className='PackDesc'>{this.props.about}</p>
+                <p className='PackDesc'>{this.props.about && this.props.small && this.props.about.indexOf("http") >= 0 ? this.props.about.substring(0, 50) + '...' : this.props.about}</p>
             </div>
                 <div className='ExpandBox' style={ this.state.expanded ? {} : {display: 'none'} }>
-                    <ul style={{margin: '0em', padding: '0em 3em'}}>
+                    <ul style={{margin: '0em'}}>
                         <li>Found in {this.props.freq} {this.props.freq > 1 ? 'packages' : 'package' }</li>
                         <li>Homepage: <a href={this.props.homepage}>{this.props.homepage}</a></li>
                         <li>Keywords: {this.props.keywords ? this.props.keywords.map((keyword, i) => keyword + ' '): null}</li>
                     </ul>
                 </div>
-            <div className={this.state.expanded ? 'PackButtons' : 'PackButton'}>
+            <div className='PackButtons'>
                 <button
                     onClick={this.handleCart.bind(this)}
                     disabled={this.state.added}
                     className='btn btn-success'
-                    style={ 
-                        this.state.expanded ? {
+                    style={ {
                             margin: 0,
                             padding: '0em 0.8em',
                             fontStyle: 'italic',
                             fontSize: '.7em',
                             color: c.body_bg,
                             borderColor: c.off_green,
-                            backgroundColor: c.off_green
-                        } : {
-                            display: 'none' } }>
+                            backgroundColor: c.off_green,
+                        } }>
                     {this.state.added ? 'Added to Project' : 'Add to Project'}
                 </button>
                 <button onClick={this.handleExpand.bind(this)} className='btn btn-outline-success' style={ { width: '1.6em', height: '1.6em', margin: 0, padding: '0em', fontSize: '.7em' } }>{!this.state.expanded ? '▼' : '▲'}</button>

@@ -44,11 +44,9 @@ module.exports = (app) => {
 
 
     // DB controllers/routes
-
-    
     app 
-    .route('/search-recs')
-    .post(dbController.searchWithRecs);
+        .route('/search-recs')
+        .post(dbController.searchWithRecs);
 
     app 
     .route('/get-similar-projects')
@@ -56,20 +54,20 @@ module.exports = (app) => {
 
     
     app 
-    .route('/key-recs')
-    .post(dbController.requestKeyRecommendations);
+        .route('/key-recs')
+        .post(dbController.requestKeyRecommendations);
 
     
     app 
-    .route('/save-user')
-    .post(dbController.postUser);
+        .route('/save-user')
+        .post(dbController.postUser);
 
     app 
         .route('/search-package/:term/:term2')
         .get(dbController.searchPackage);
 
 
-        app 
+    app 
         .route('/search-package/:term')
         .get(dbController.searchPackage);
 
@@ -87,8 +85,23 @@ module.exports = (app) => {
 
     app 
         .route('/user-carts/:github_id')
-        .get(dbController.getUserCarts);
+        .get(dbController.getUserCarts)
 
+    app 
+        .use('/user-carts/:github_id', accessController.checkAuth);
+
+    app
+        .use('/edit-cart', accessController.checkAuth);
+
+    app
+        .use('/delete-cart', accessController.checkAuth);
+
+    app
+        .use('/save-cart', accessController.checkAuth);
+        
+    app
+        .use('/cart/:cartid', accessController.checkAuth);
+    
     app
         .route('/cart/:cartid')
         .get(dbController.getCartByID);

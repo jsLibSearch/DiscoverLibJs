@@ -1,7 +1,7 @@
 import axios from 'axios';
-const dev = false;
-const apiURL = dev ? 'http://localhost:8080/' : 'http://localhost:8080/';
-const DB_URL = dev ? 'http://localhost:8080/' : 'http://localhost:8080/';
+export const dev = true;
+const apiURL = !dev ? 'https://javascript-library-discovery2.herokuapp.com/' : 'http://localhost:8080/';
+const DB_URL = !dev ? 'https://javascript-library-discovery2.herokuapp.com/' : 'http://localhost:8080/';
 
 export const GET_PACKAGES = 'GET_PACKAGES';
 export const LOADING = 'LOADING';
@@ -24,6 +24,7 @@ export const NEW_SEARCH = 'NEW_SEARCH'; // useless?
 
 export const GET_CART = 'GET_CART';
 export const NEW_ITEM = 'NEW_ITEM';
+export const SET_AS_SAVED_CART = 'SET_AS_SAVED_CART';
 export const DELETE_ITEM = 'DELETE_ITEM';
 export const SET_CART_NAME = 'SET_CART_NAME';
 export const CLEAR_CART = 'CLEAR_CART';
@@ -42,13 +43,15 @@ export const clearCart = () => {
     }
 }
 
-export const loadCarts = (github_id) => {
+export const loadCarts = (user) => {
+    const headers = { authorization: `Bearer ${user.jwt}`, github_id: user.github_id }
     return (dispatch) => {
         dispatch(setLoadingTo('SET_USER_CARTS'));
-        axios.get(`${DB_URL}user-carts/${github_id}`, {
+        axios.get(`${DB_URL}user-carts/${user.github_id}`, {
             validateStatus: function (status) {
                 return status < 500; // Reject only if the status code is greater than or equal to 500
-            }
+            },
+            headers: headers
         })
             .then((response) => {
                 dispatch({
@@ -185,8 +188,8 @@ export const makeServerCalls = (jwtToken, github_id) => {
     }
 }
 
-export const getCart = (i) => {
-    const promise = axios.get(`${DB_URL}cart/${i}`);
+export const getCart = (i, token) => {
+    const promise = axios.get(`${DB_URL}cart/${i}`, { headers: { authorization: `Bearer ${token}` } });
     return {
         type: 'GET_CART',
         payload: promise
@@ -221,7 +224,7 @@ export const getRecs = (cart) => {
         axios.post(`${DB_URL}rec`, { cart: ids },{
             validateStatus: function (status) {
                 return status < 500; // Reject only if the status code is greater than or equal to 500
-            }
+            },
         })
             .then((response) => {
                 dispatch({
@@ -266,18 +269,35 @@ export const searchRec = (cart, query) => {
 export const addCartToUser = (cart, user, name) => {
     const ids = cart.map(pkg => pkg._id);
     // { cart, user, name }
-    // { github_id, github_name } = user;
+    const headers = { authorization: `Bearer ${user.jwt}`, github_id: user.github_id }
     return (dispatch) => {
         axios.post(`${DB_URL}save-cart`, { cart: ids, user: user, name: name },{
             validateStatus: function (status) {
                 return status < 500; // Reject only if the status code is greater than or equal to 500
-            }
+            },
+            headers: headers
         })
             .then((response) => {
                 dispatch({
                     type: 'ADD_CART',
                     payload: response.data
                 });
+                axios.get(`${DB_URL}cart/${response.data._id}`,{
+                    validateStatus: function (status) {
+                        return status < 500; // Reject only if the status code is greater than or equal to 500
+                    },
+                    headers: headers
+                })
+                    .then((res) => {
+                        dispatch({
+                            type: 'SET_AS_SAVED_CART',
+                            name: res.data.name,
+                            _id: res.data._id,
+                            packages: res.data.cart
+                        });
+                    }).catch((err)=>{
+                        console.log(err)
+                    })
             })
             .catch(() => {
                 dispatch({
@@ -288,6 +308,16 @@ export const addCartToUser = (cart, user, name) => {
     }
 }
 
+export const setAsSavedCart = (name, _id, cart) => {
+    return (dispatch) => {
+        dispatch({
+            type: 'SET_AS_SAVED_CART',
+            name: name,
+            _id: _id,
+            packages: cart
+        });
+    }
+}
 
 export const getCatalog = () => {
 

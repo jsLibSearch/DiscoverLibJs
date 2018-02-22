@@ -24,7 +24,7 @@ const PackageSchema = new Schema({
     }],
     keywords: [ String ],
     homepage: String,
-    readme: String,
+    readme: String
 });
 /*
 */
