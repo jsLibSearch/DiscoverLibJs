@@ -19,11 +19,11 @@ async function readData() {
     const data = await readProjects()
     const final = await data.map(row => {
         
-        if (row.length < 1) return;
-        const project = new Project({processed: false})
+        if (row.children.length < 1) return;
+        const project = new Project({name: row.name, git_url: row.github_url, login: row.login})
         project.save()
         .then(() => {
-            row.forEach((element) => {
+            row.children.forEach((element) => {
                 Package.findOne({name: element})
                 .then((pack) => {
                     if (pack) {
