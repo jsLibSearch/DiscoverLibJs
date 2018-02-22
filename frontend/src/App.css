@@ -426,7 +426,7 @@ pink_red:      #C75058
   position: absolute;
   display: block;
   width: 20%;
-  font-size: 12px;
+  font-size: 16px;
   color: #d61e2a;
 }
 /* #e7e7aa <------------ body*/
@@ -452,12 +452,10 @@ pink_red:      #C75058
 }
 
 .navbar-brand {
-  font-size: 12px;
   color: #c75058;
 }
 
 .navbar-brand:hover {
-  font-size: 12px;
   color: #552428;
 }
 
@@ -489,4 +487,13 @@ pink_red:      #C75058
 .navbar {
   margin-right: 5em; 
 }
+
+.card-body {
+  background: #ffffff55;
+}
+
+.list-group-item:first-child {
+  background: #8080802e;
+}
+
 

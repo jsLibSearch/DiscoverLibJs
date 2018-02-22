@@ -6,12 +6,10 @@ import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink,
 
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { getCatalog } from '../actions';
-
-
+import { getCatalog, getRecs, dev } from '../actions';
 import ListOfPckgs from './ListOfPckgs';
-
-const sideBar = [ 'Animation', 'Application Tools', 'Audio' ];
+import { initGA, logPageView } from './ReactGA';
+const axios = require('axios');
 
 class Home extends Component {
   constructor(props) {
@@ -27,6 +25,8 @@ class Home extends Component {
         utilities: false,
         applications: false,
         list: [],
+        cart: this.props.cart.packages,
+        server: !dev ? 'https://javascript-library-discovery2.herokuapp.com/' : 'http://localhost:8080/',
     }
   }
 
@@ -35,13 +35,28 @@ class Home extends Component {
     this.setState({
       windowHeight: window.innerHeight - 40
     })
-
     this.props.getCatalog();
-
+    initGA();
+    logPageView();
   }
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.handleResize.bind(this))
+  }
+
+  componentWillReceiveProps(nextProps) {
+    // if (nextProps.cart.packages.length > this.state.cart.length) {
+    //   this.setState({ cart: nextProps.cart.packages });
+    //   const arr = nextProps.cart.packages
+    //   axios
+    //       .post(`${this.state.server}get-recommends`)
+    //         .then((result) => {
+    //           console.log(result);
+    //         })
+    //         .catch((err) => {
+    //           console.log(err);
+    //         })
+    // }       
   }
 
   handleResize() {
@@ -82,6 +97,8 @@ class Home extends Component {
     this.setState({ applications: !this.state.applications });
   }
 
+
+ 
   test(str) {
     switch (str) {
       case 'appFrameWorks':
@@ -222,13 +239,12 @@ class Home extends Component {
   render() {
     return (
       <div>
-        <h4 className='Catalog1'>Directories</h4>
+        <h4 className='Catalog1'></h4>
         <div className="Catalog">
-
           <div className="NavBar">
             <Navbar >
-              <ul>
-              <li><NavbarBrand className="Essentials" onClick={ () => this.essentials() } href="#">Essentials</NavbarBrand></li>
+              <ul className="Title">Directories
+              <li className="fa fa-gift fa-lg"><NavbarBrand className="Essentials" onClick={ () => this.essentials() } href="#">Essentials</NavbarBrand></li>
               <Collapse isOpen={this.state.essentials} navbar>
                 <Nav navbar>
                   <NavItem >
@@ -381,11 +397,13 @@ class Home extends Component {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    catalog: state.catalog
+    catalog: state.catalog,
+    cart: state.cart,
+    recState: state.recState,
   };
 };
 
-export default withRouter(connect(mapStateToProps, { getCatalog })(Home));
+export default withRouter(connect(mapStateToProps, { getCatalog, getRecs })(Home));
 
 
 /**

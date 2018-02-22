@@ -1,6 +1,6 @@
 const axios = require('axios');
 const GitHubApi = require('github');
-const gb = new GitHubApi({ debug: true, requestMedia: 'application/vnd.github.VERSION.html' });
+const gb = new GitHubApi({ debug: true, requestMedia: 'application/vnd.github.VERSION.html+json' });
 const nacl = require('tweetnacl');
 nacl.util = require('tweetnacl-util');
 const Package = require('../DB_Code/Package');
@@ -12,7 +12,7 @@ gb.authenticate({
     token: process.env.GITHUB_TOKEN
 });
 
-const mediaType = 'application/vnd.github.VERSION.html';
+const mediaType = 'application/vnd.github.VERSION.html+json';
 
 const getReadme = (req, res) => {
 
@@ -25,10 +25,11 @@ const getReadme = (req, res) => {
             // const response = await axios.get( `https://api.github.com/search/repositories?q=language:javascript%20${repoName}%20in:name`, {
             //     headers: { Authorization: process.env.GITHUB_TOKEN }
             // } );
-            
+
             const q = `${repoName} in:name sort:stars`; //language:javascript 
             const response = await gb.search.repos({ q })
             
+
 
             if (response.data) {
                 
@@ -96,7 +97,7 @@ const getRecommendations = (req, res) => {
                                 for (let i = 0; i < 5; i++) {
                                     top5.push(sortedPkgs[i].name)
                                 }
-                                res.json({ top5, sortedPkgs });
+                                res.json({ top5 });
                             })
                             .catch((err) => {
                                 console.log(err)

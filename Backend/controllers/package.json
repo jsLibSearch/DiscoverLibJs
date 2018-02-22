@@ -1,9 +1,8 @@
 {
-	"name": "awesome",
+	"name": "AAA",
 	"version": "1.0.0",
 	"dependencies": {
-		"connect-mongo": "*",
-		"express-session": "*",
-		"mongoose": "*"
+		"planck-js": "*",
+		"vorpal": "*"
 	}
 }

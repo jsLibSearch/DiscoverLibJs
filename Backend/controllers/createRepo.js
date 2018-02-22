@@ -40,8 +40,9 @@ const createRepo = (req, res) => {
                 let dependencies = {};
 
                 for (let i = 0; i < arrOfPckgs.length; i++) {
-                    dependencies[arrOfPckgs[i]] = '*'; // <-------- npm upadate --save
+                    dependencies[arrOfPckgs[i]] = '*'; // <-------- npm update --save
                 }
+                
                 const p = path.join(__dirname, 'package.json');
                 writePkg(p, { name: repo_name, version: "1.0.0", dependencies: dependencies }).then(() => {
 
@@ -50,7 +51,7 @@ const createRepo = (req, res) => {
                     const message = 'Hello World!';
 
                     const c = fs.readFile(p, 'utf8', (err, data) => {
-                        
+
                         if (err) throw err;
                         const content = nacl.util.encodeBase64(data);
 
