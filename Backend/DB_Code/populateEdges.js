@@ -34,8 +34,8 @@ async function createEdges() {
     try {
         const promises = [];
         const hash = {};
-        const packages = await Package.find({})
-        const projects = await Project.find({})
+        const packages = await Package.find({}).select({ parents: true }).exec()
+        const projects = await Project.find({}).select({ children: true }).exec()
         async function fillUp() {
             try {
                 const bar = new _progress.Bar({}, _progress.Presets.shades_classic);
