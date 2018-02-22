@@ -10,7 +10,6 @@
     "dev": "echo \"This command has been deprecated. Use 'npm start'\" && exit 1",
     "lint": "eslint ."
   },
-  
   "engines": {
     "node": "9.5.0",
     "npm": "5.6.0",

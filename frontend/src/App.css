@@ -449,6 +449,8 @@ pink_red:      #C75058
 .Box {
   width: 20%;
   float: right;
+  height: 40%;
+  border-style: solid;
 }
 
 .navbar-brand {

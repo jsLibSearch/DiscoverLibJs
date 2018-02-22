@@ -25,8 +25,11 @@ class Home extends Component {
         utilities: false,
         applications: false,
         list: [],
-        cart: this.props.cart.packages,
+        cart: [],
         server: !dev ? 'https://javascript-library-discovery2.herokuapp.com/' : 'http://localhost:8080/',
+        loading: false,
+        recs: [],
+        ready: false,
     }
   }
 
@@ -38,25 +41,56 @@ class Home extends Component {
     this.props.getCatalog();
     initGA();
     logPageView();
+
   }
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.handleResize.bind(this))
   }
 
-  componentWillReceiveProps(nextProps) {
-    // if (nextProps.cart.packages.length > this.state.cart.length) {
-    //   this.setState({ cart: nextProps.cart.packages });
-    //   const arr = nextProps.cart.packages
-    //   axios
-    //       .post(`${this.state.server}get-recommends`)
-    //         .then((result) => {
-    //           console.log(result);
-    //         })
-    //         .catch((err) => {
-    //           console.log(err);
-    //         })
-    // }       
+  componentWillReceiveProps(nextProps) {  
+    if (!this.state.ready && Object.keys(nextProps.catalog).length) {
+      this.setState({ ready: true });
+    }
+    //console.log(Object.keys(nextProps.catalog))
+  }
+
+  componentDidUpdate() {
+    if (this.props.cart.packages.length !== this.state.cart.length && this.refs.homePage) {
+      let currentCart = [];
+      if (this.props.cart.packages.length > 0) {
+        currentCart = this.props.cart.packages
+        this.setState({
+          cart: currentCart,
+        })
+        this.sendRecRequest();
+      }
+
+    }
+    if (this.props.recState.loading && !this.state.loading) {
+      this.setState({
+        loading: true,
+      })
+    } else if (!this.props.recState.loading && this.state.loading) {
+      this.setState({
+        loading: false,
+        recs: this.props.recState.recs,
+      })
+    }
+    if (this.state.cart && this.state.cart.length > 0 && this.state.recs.length === 0 && !this.props.recState.loading && !this.state.loading) {
+      this.sendRecRequest();
+    }     
+  }
+
+  sendRecRequest() {
+    if (this.state.cart && this.state.cart.length > 0) {
+      this.props.getRecs(this.props.cart.packages);
+    }
+  }
+
+  displayRecommends(arr) {
+    // this.setState({ recommeds: arr });
+    console.log(this.state.recommeds, '<--------------------RECOMMENDS!');
   }
 
   handleResize() {
@@ -237,161 +271,180 @@ class Home extends Component {
   }
   
   render() {
-    return (
-      <div>
-        <h4 className='Catalog1'></h4>
-        <div className="Catalog">
-          <div className="NavBar">
-            <Navbar >
-              <ul className="Title">Directories
-              <li className="fa fa-gift fa-lg"><NavbarBrand className="Essentials" onClick={ () => this.essentials() } href="#">Essentials</NavbarBrand></li>
-              <Collapse isOpen={this.state.essentials} navbar>
-                <Nav navbar>
-                  <NavItem >
-                    <NavLink onClick={ () => this.test('appFrameWorks') } href="#">Application Frameworks</NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink onClick={ () => this.test('mobileFrameWorks') } href="#">Mobile Frameworks</NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink onClick={ () => this.test('realTimeFrameWorks') } href="#">Realtime Frameworks</NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink onClick={ () => this.test('testingFrameWorks') } href="#">Testing Frameworks</NavLink>
-                  </NavItem>
-                </Nav>
-              </Collapse>
-              <li><NavbarBrand className="UI" onClick={ () => this.ui() } href="#">UI</NavbarBrand></li>
-              <Collapse isOpen={this.state.ui} navbar>
-                <Nav navbar>
-                  <NavItem >
-                    <NavLink onClick={ () => this.test('uiFrameWorks') } href="#">UI Frameworks</NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink onClick={ () => this.test('windowsModalsPopups') } href="#">Windows, Modals, Popups</NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink onClick={ () => this.test('keyboardWrappers') } href="#">Keyboard Wrappers</NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink onClick={ () => this.test('formWidgets') } href="#">Form Widgets</NavLink>
-                  </NavItem>
-                </Nav>
-              </Collapse>
-              <li><NavbarBrand className="UI" onClick={ () => this.multimedia() } href="#">Multimedia</NavbarBrand></li>
-              <Collapse isOpen={this.state.multimedia} navbar>
-                <Nav navbar>
-                  <NavItem >
-                    <NavLink onClick={ () => this.test('gameEngines') } href="#">Game Engines</NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink onClick={ () => this.test('physicsLib') } href="#">Physics Libraries</NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink onClick={ () => this.test('animationLib') } href="#">Animation Libraries</NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink onClick={ () => this.test('presentationLib') } href="#">Presentation Libraries</NavLink>
-                  </NavItem>
-                </Nav>
-              </Collapse>
-              <li><NavbarBrand className="UI" onClick={ () => this.graphics() } href="#">Graphics</NavbarBrand></li>
-              <Collapse isOpen={this.state.graphics} navbar>
-                <Nav navbar>
-                  <NavItem >
-                    <NavLink onClick={ () => this.test('canvasWrappers') } href="#">Canvas Wrappers</NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink onClick={ () => this.test('WebGL') } href="#">WebGL</NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink onClick={ () => this.test('ImageManipulation') } href="#">Image Manipulation</NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink onClick={ () => this.test('visualizationLib') } href="#">Visualization Libraries</NavLink>
-                  </NavItem>
-                </Nav>
-              </Collapse>
-              <li><NavbarBrand className="UI" onClick={ () => this.data() } href="#">Data</NavbarBrand></li>
-              <Collapse isOpen={this.state.data} navbar>
-                <Nav navbar>
-                  <NavItem >
-                    <NavLink onClick={ () => this.test('dataStructures') } href="#">Data Structures</NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink onClick={ () => this.test('dateLib') } href="#">Date Libraries</NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink onClick={ () => this.test('storageLib') } href="#">Storage Libraries</NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink onClick={ () => this.test('validationLib') } href="#">Validation</NavLink>
-                  </NavItem>
-                </Nav>
-              </Collapse>
-              <li><NavbarBrand className="UI" onClick={ () => this.development() } href="#">Development</NavbarBrand></li>
-              <Collapse isOpen={this.state.development} navbar>
-                <Nav navbar>
-                  <NavItem >
-                    <NavLink onClick={ () => this.test('packageManagers') } href="#">Package Managers</NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink onClick={ () => this.test('timingLib') } href="#">Timing</NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink onClick={ () => this.test('toolkits') } href="#">Toolkits</NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink onClick={ () => this.test('codeProtectionLibs') } href="#">Code Protection</NavLink> {/* <---- this doesnt have any libs */}
-                  </NavItem>
-                </Nav>
-              </Collapse>
-              <li><NavbarBrand className="UI" onClick={ () => this.utilities() } href="#">Utilities</NavbarBrand></li>
-              <Collapse isOpen={this.state.utilities} navbar>
-                <Nav navbar>
-                  <NavItem >
-                    <NavLink onClick={ () => this.test('DOM') } href="#">DOM</NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink onClick={ () => this.test('ACFL') } href="#">Async, Control Flow, Event</NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink onClick={ () => this.test('functionalProgramming') } href="#">Functional Programming</NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink onClick={ () => this.test('mathLibs') } href="#">Math Libraries</NavLink>
-                  </NavItem>
-                </Nav>
-              </Collapse>
-              <li><NavbarBrand className="UI" onClick={ () => this.applications() } href="#">Applications</NavbarBrand></li>
-              <Collapse isOpen={this.state.applications} navbar>
-                <Nav navbar>
-                  <NavItem >
-                    <NavLink onClick={ () => this.test('html5Apps') } href="#">Html5 Apps</NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink onClick={ () => this.test('siteGenerators') } href="#">Static Site Generators</NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink onClick={ () => this.test('codeEditors') } href="#">Code Editors</NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink onClick={ () => this.test('designAndPrototyping') } href="#">Design And Prototyping</NavLink>
-                  </NavItem>
-                </Nav>
-              </Collapse>
-              </ul>
-            </Navbar>
+    if (this.state.ready) {
+      return ( 
+        <div ref="homePage">
+          <h4 className='Catalog1'></h4>
+          <div className="Catalog">
+            <div className="NavBar">
+              <Navbar >
+                <ul className="Title">Directories
+                <li className="fa fa-gift fa-lg"><NavbarBrand className="Essentials" onClick={ () => this.essentials() } href="#">Essentials</NavbarBrand></li>
+                <Collapse isOpen={this.state.essentials} navbar>
+                  <Nav navbar>
+                    <NavItem >
+                      <NavLink onClick={ () => this.test('appFrameWorks') } href="#">Application Frameworks</NavLink>
+                    </NavItem>
+                    <NavItem>
+                      <NavLink onClick={ () => this.test('mobileFrameWorks') } href="#">Mobile Frameworks</NavLink>
+                    </NavItem>
+                    <NavItem>
+                      <NavLink onClick={ () => this.test('realTimeFrameWorks') } href="#">Realtime Frameworks</NavLink>
+                    </NavItem>
+                    <NavItem>
+                      <NavLink onClick={ () => this.test('testingFrameWorks') } href="#">Testing Frameworks</NavLink>
+                    </NavItem>
+                  </Nav>
+                </Collapse>
+                <li><NavbarBrand className="UI" onClick={ () => this.ui() } href="#">UI</NavbarBrand></li>
+                <Collapse isOpen={this.state.ui} navbar>
+                  <Nav navbar>
+                    <NavItem >
+                      <NavLink onClick={ () => this.test('uiFrameWorks') } href="#">UI Frameworks</NavLink>
+                    </NavItem>
+                    <NavItem>
+                      <NavLink onClick={ () => this.test('windowsModalsPopups') } href="#">Windows, Modals, Popups</NavLink>
+                    </NavItem>
+                    <NavItem>
+                      <NavLink onClick={ () => this.test('keyboardWrappers') } href="#">Keyboard Wrappers</NavLink>
+                    </NavItem>
+                    <NavItem>
+                      <NavLink onClick={ () => this.test('formWidgets') } href="#">Form Widgets</NavLink>
+                    </NavItem>
+                  </Nav>
+                </Collapse>
+                <li><NavbarBrand className="UI" onClick={ () => this.multimedia() } href="#">Multimedia</NavbarBrand></li>
+                <Collapse isOpen={this.state.multimedia} navbar>
+                  <Nav navbar>
+                    <NavItem >
+                      <NavLink onClick={ () => this.test('gameEngines') } href="#">Game Engines</NavLink>
+                    </NavItem>
+                    <NavItem>
+                      <NavLink onClick={ () => this.test('physicsLib') } href="#">Physics Libraries</NavLink>
+                    </NavItem>
+                    <NavItem>
+                      <NavLink onClick={ () => this.test('animationLib') } href="#">Animation Libraries</NavLink>
+                    </NavItem>
+                    <NavItem>
+                      <NavLink onClick={ () => this.test('presentationLib') } href="#">Presentation Libraries</NavLink>
+                    </NavItem>
+                  </Nav>
+                </Collapse>
+                <li><NavbarBrand className="UI" onClick={ () => this.graphics() } href="#">Graphics</NavbarBrand></li>
+                <Collapse isOpen={this.state.graphics} navbar>
+                  <Nav navbar>
+                    <NavItem >
+                      <NavLink onClick={ () => this.test('canvasWrappers') } href="#">Canvas Wrappers</NavLink>
+                    </NavItem>
+                    <NavItem>
+                      <NavLink onClick={ () => this.test('WebGL') } href="#">WebGL</NavLink>
+                    </NavItem>
+                    <NavItem>
+                      <NavLink onClick={ () => this.test('ImageManipulation') } href="#">Image Manipulation</NavLink>
+                    </NavItem>
+                    <NavItem>
+                      <NavLink onClick={ () => this.test('visualizationLib') } href="#">Visualization Libraries</NavLink>
+                    </NavItem>
+                  </Nav>
+                </Collapse>
+                <li><NavbarBrand className="UI" onClick={ () => this.data() } href="#">Data</NavbarBrand></li>
+                <Collapse isOpen={this.state.data} navbar>
+                  <Nav navbar>
+                    <NavItem >
+                      <NavLink onClick={ () => this.test('dataStructures') } href="#">Data Structures</NavLink>
+                    </NavItem>
+                    <NavItem>
+                      <NavLink onClick={ () => this.test('dateLib') } href="#">Date Libraries</NavLink>
+                    </NavItem>
+                    <NavItem>
+                      <NavLink onClick={ () => this.test('storageLib') } href="#">Storage Libraries</NavLink>
+                    </NavItem>
+                    <NavItem>
+                      <NavLink onClick={ () => this.test('validationLib') } href="#">Validation</NavLink>
+                    </NavItem>
+                  </Nav>
+                </Collapse>
+                <li><NavbarBrand className="UI" onClick={ () => this.development() } href="#">Development</NavbarBrand></li>
+                <Collapse isOpen={this.state.development} navbar>
+                  <Nav navbar>
+                    <NavItem >
+                      <NavLink onClick={ () => this.test('packageManagers') } href="#">Package Managers</NavLink>
+                    </NavItem>
+                    <NavItem>
+                      <NavLink onClick={ () => this.test('timingLib') } href="#">Timing</NavLink>
+                    </NavItem>
+                    <NavItem>
+                      <NavLink onClick={ () => this.test('toolkits') } href="#">Toolkits</NavLink>
+                    </NavItem>
+                    <NavItem>
+                      <NavLink onClick={ () => this.test('codeProtectionLibs') } href="#">Code Protection</NavLink> {/* <---- this doesnt have any libs */}
+                    </NavItem>
+                  </Nav>
+                </Collapse>
+                <li><NavbarBrand className="UI" onClick={ () => this.utilities() } href="#">Utilities</NavbarBrand></li>
+                <Collapse isOpen={this.state.utilities} navbar>
+                  <Nav navbar>
+                    <NavItem >
+                      <NavLink onClick={ () => this.test('DOM') } href="#">DOM</NavLink>
+                    </NavItem>
+                    <NavItem>
+                      <NavLink onClick={ () => this.test('ACFL') } href="#">Async, Control Flow, Event</NavLink>
+                    </NavItem>
+                    <NavItem>
+                      <NavLink onClick={ () => this.test('functionalProgramming') } href="#">Functional Programming</NavLink>
+                    </NavItem>
+                    <NavItem>
+                      <NavLink onClick={ () => this.test('mathLibs') } href="#">Math Libraries</NavLink>
+                    </NavItem>
+                  </Nav>
+                </Collapse>
+                <li><NavbarBrand className="UI" onClick={ () => this.applications() } href="#">Applications</NavbarBrand></li>
+                <Collapse isOpen={this.state.applications} navbar>
+                  <Nav navbar>
+                    <NavItem >
+                      <NavLink onClick={ () => this.test('html5Apps') } href="#">Html5 Apps</NavLink>
+                    </NavItem>
+                    <NavItem>
+                      <NavLink onClick={ () => this.test('siteGenerators') } href="#">Static Site Generators</NavLink>
+                    </NavItem>
+                    <NavItem>
+                      <NavLink onClick={ () => this.test('codeEditors') } href="#">Code Editors</NavLink>
+                    </NavItem>
+                    <NavItem>
+                      <NavLink onClick={ () => this.test('designAndPrototyping') } href="#">Design And Prototyping</NavLink>
+                    </NavItem>
+                  </Nav>
+                </Collapse>
+                </ul>
+              </Navbar>
+              </div>
+            <div className="Items">
+              <ListOfPckgs data={this.state.list}/>
             </div>
-          <div className="Items">
-            <ListOfPckgs data={this.state.list}/>
-          </div>
-          <div className="Box">
-            Recommendations
+            <div className="Box">
+              <p>Recommendations</p>
+              { this.state.recs.map((item, i) => {
+                  if (this.state.recs.length === i + 1) {
+                    return (
+                      <div key={'scoper2'}>
+                      </div>
+                    )
+                  }
+                return (
+                  <p key={item._id}>{ item.name }</p>
+                )
+              }) }
+            </div>
           </div>
         </div>
-      </div>
-    );
+      );
+    } else {
+      return (
+        <div>
+          <h3> LOADING </h3>
+        </div>
+      )
+    }
   }
 }
 
@@ -406,61 +459,5 @@ const mapStateToProps = (state, ownProps) => {
 export default withRouter(connect(mapStateToProps, { getCatalog, getRecs })(Home));
 
 
-/**
- * <nav className="navigation">
-        <ul class="mainmenu">
-          <li><a>Essentials</a>
-            <ul class="submenu">
-              <li><a href="">Application Frameworks</a></li>
-              <li><a href="">Mobile Frameworks</a></li>
-              <li><a href="">Realtime Frameworks</a></li>
-              <li><a href="">Testing Frameworks</a></li>
-            </ul>
-          </li>
-          <li><a href="">UI</a>
-            <ul class="submenu">
-              <li><a href="">Tops</a></li>
-              <li><a href="">Bottoms</a></li>
-              <li><a href="">Footwear</a></li>
-            </ul>
-          </li>
-          <li><a href="">Multimedia</a>
-            <ul class="submenu">
-              <li><a href="">Tops</a></li>
-              <li><a href="">Bottoms</a></li>
-              <li><a href="">Footwear</a></li>
-            </ul>
-          </li>
-          <li><a href="">Graphics</a>
-            <ul class="submenu">
-              <li><a href="">Tops</a></li>
-              <li><a href="">Bottoms</a></li>
-              <li><a href="">Footwear</a></li>
-            </ul>
-          </li>
-          <li><a href="">Data</a>
-            <ul class="submenu">
-              <li><a href="">Tops</a></li>
-              <li><a href="">Bottoms</a></li>
-              <li><a href="">Footwear</a></li>
-            </ul>
-          </li>
-          <li><a href="">Development</a>
-            <ul class="submenu">
-              <li><a href="">Tops</a></li>
-              <li><a href="">Bottoms</a></li>
-              <li><a href="">Footwear</a></li>
-            </ul>
-          </li>
-          <li><a href="">Utilities</a>
-            <ul class="submenu">
-              <li><a href="">Tops</a></li>
-              <li><a href="">Bottoms</a></li>
-              <li><a href="">Footwear</a></li>
-            </ul>
-          </li>
-        </ul>
- *    </nav>
- */
 
 

@@ -5,6 +5,7 @@ import { dev } from '../actions'
 import { customColors as c } from '../custom/colors.js';
 import { newItem } from '../actions';
 import { connect } from 'react-redux';
+// const Remarkable = require('remarkable');
 const axios = require('axios');
 const ReactMarkdown = require('react-markdown');
 
@@ -13,7 +14,7 @@ class ListOfPckgs extends Component {
         super(props);
         this.state = {
             collapse: false,
-            data: null,
+            data: [],
             list: [],
             collapses: [],
             server: !dev ? 'https://javascript-library-discovery2.herokuapp.com/' : 'http://localhost:8080/',
@@ -22,16 +23,16 @@ class ListOfPckgs extends Component {
         }
     }
 
-
     componentDidMount() {
 
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log(nextProps)
+        // TODO get all readmes an onse! 
+
         if (JSON.stringify(this.state.list) !== JSON.stringify(nextProps.data)) {
             const arr = new Array(nextProps.data.length).fill(false); 
-            
+            const markdowns = new Array(nextProps.data.length).fill('');
             const arr2 = nextProps.data.map((p) => {
                 for (let i = 0; i < this.props.cart.packages.length; i++) {
                     if (p.name === this.props.cart.packages[i].name) {
@@ -41,7 +42,7 @@ class ListOfPckgs extends Component {
                 return false;
             })
 
-            this.setState({ list: nextProps.data, collapses: arr, tracker: arr2 });
+            this.setState({ list: nextProps.data, collapses: arr, tracker: arr2, data: markdowns });
         }
     }
 
@@ -49,17 +50,21 @@ class ListOfPckgs extends Component {
         console.log('test');
     }
 
-    toggle(name, idx) {
-        axios
-            .post(`${this.state.server}get-readme`, { repoName: `${name}` })
+    toggle(id, idx) {
+        if (!this.state.data[idx]) {
+            axios
+            .get(`${this.state.server}get-readme/${id}`)
                 .then((res) => {
-                    this.setState({  
-                        data: res.data
-                    })
-                })
+                    console.log(res);
+                    const temp = this.state.data;
+                    temp[idx] = res.data;
+                    this.setState({ data: temp });
+                })                  
                 .catch((err) => {
                     console.log(err);
                 })
+        }
+
         let arr = this.state.collapses.slice();
         arr[idx] = !arr[idx];
         this.setState({ collapses: arr });
@@ -78,10 +83,10 @@ class ListOfPckgs extends Component {
                 { this.state.list ? this.state.list.map( (pckg, idx) => {
                     return (
                             <div key={pckg.name}>
-                                <ListGroupItem className="PackTitle" tag="a" href="#" onClick={() => this.toggle(pckg.name, idx)}>{ pckg.name }</ListGroupItem>
+                                <ListGroupItem className="PackTitle" tag="a" href="#" onClick={() => this.toggle(pckg._id, idx)}>{ pckg.name }</ListGroupItem>
                                 <Collapse isOpen={this.state.collapses[idx]}>
                                     <Card>
-                                        <CardBody>
+                                        <CardBody style={{ overflow: 'hidden' }} >
                                             <button className="btn btn-success" disabled={this.state.tracker[idx]} onClick={this.onAddtoProject.bind(this, pckg, idx)}
                                                 style={ {
                                                     margin: 0,
@@ -93,8 +98,8 @@ class ListOfPckgs extends Component {
                                                     backgroundColor: c.off_green,
                                                 } }>{this.state.tracker[idx] ? 'Added to Project' : 'Add to Project'}</button>
                                             <hr/>
-                                            <div dangerouslySetInnerHTML={{__html: this.state.data}}/>
-                                            {/* <ReactMarkdown source={this.state.data} skipHtml={false}/> */}
+                                            {/* <div dangerouslySetInnerHTML={{__html: this.state.data}} /> */}
+                                            <ReactMarkdown source={this.state.data[idx]}/>
                                         </CardBody>
                                     </Card>
                                 </Collapse>

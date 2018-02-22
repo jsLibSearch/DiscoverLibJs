@@ -125,12 +125,14 @@ module.exports = (app) => {
     
     // readme, recommendations
     app 
-        .route('/get-readme')
-        .post(listController.getReadme);
+        .route('/get-readme/:id')
+        .get(listController.getReadme);
 
     app
         .route('/get-recommends')
         .post(listController.getRecommendations);
+
+
 
 
 

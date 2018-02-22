@@ -1,8 +1,10 @@
 {
-	"name": "AAA",
+	"name": "here it is",
 	"version": "1.0.0",
 	"dependencies": {
-		"planck-js": "*",
-		"vorpal": "*"
+		"connect-mongo": "*",
+		"express-session": "*",
+		"mongoose": "*",
+		"morgan": "*"
 	}
 }

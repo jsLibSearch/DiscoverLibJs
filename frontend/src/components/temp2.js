@@ -74,7 +74,6 @@ class CartPage extends Component {
 
   sendRecRequest() {
     if (this.state.cart && this.state.cart.length > 0) {
-      console.log('sending rec request');      
       this.props.getRecs(this.state.cart);
     }
   }
