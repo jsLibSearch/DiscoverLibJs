@@ -23,7 +23,8 @@ const PackageSchema = new Schema({
         ref: 'Projects'
     }],
     keywords: [ String ],
-    homepage: String
+    homepage: String,
+    readme: String,
 });
 /*
 */

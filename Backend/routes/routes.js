@@ -50,6 +50,10 @@ module.exports = (app) => {
     .route('/search-recs')
     .post(dbController.searchWithRecs);
 
+    app 
+    .route('/get-similar-projects')
+    .post(dbController.requestSimilarProjects);
+
     
     app 
     .route('/key-recs')
