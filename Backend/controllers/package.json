@@ -1,10 +1,9 @@
 {
-	"name": "ABCDEF",
+	"name": "AGGGGG",
 	"version": "1.0.0",
 	"dependencies": {
 		"axios": "*",
 		"axios-mock-adapter": "*",
-		"cannon": "*",
 		"vue-axios": "*"
 	}
 }

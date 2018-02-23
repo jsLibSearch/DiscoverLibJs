@@ -50,6 +50,7 @@ class Home extends Component {
 
   componentWillReceiveProps(nextProps) {  
     if (!this.state.ready && Object.keys(nextProps.catalog).length) {
+      console.log(this.props.catalog)
       this.setState({ ready: true });
     }
     //console.log(Object.keys(nextProps.catalog))

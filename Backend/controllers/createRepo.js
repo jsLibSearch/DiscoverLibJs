@@ -55,9 +55,20 @@ const createRepo = (req, res) => {
                         if (err) throw err;
                         const content = nacl.util.encodeBase64(data);
 
-                        github.repos.createFile({ owner, repo, path: pkgPath, message, content })
-                        res.json(result.data.clone_url);
+                        
 
+                        async function createPckg() {
+                            try {
+                                const result = await github.repos.createFile({ owner, repo, path: pkgPath, message, content })
+                                                        
+                                if (result) {
+                                    res.json(result.data.clone_url);
+                                }
+                            } catch(e) {
+                                console.log(e)
+                            }
+                        }
+                        createPckg();
                     });
                 })
                 .catch((err) => {
