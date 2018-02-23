@@ -33,7 +33,8 @@ const searchPackage = (req, res) => {
     const contents2 = fs.readFileSync(filePath2, "utf8");
     const packagesFile = JSON.parse(contents2);
 
-    const { term, term2 } = req.params;
+    let { term, term2 } = req.params;
+    term = term.toLowerCase();
     const matchedKeyTerm = didyoumean(term, Object.keys(keywords));
     const matchedPackageTerm = didyoumean(term, Object.keys(packagesFile));
     let arr = [];
@@ -61,7 +62,8 @@ const searchPackage = (req, res) => {
 }
 
 const searchWithRecs = (req, res) => {
-    const { cart, term } = req.body;
+    let { cart, term } = req.body;
+    term = term.toLowerCase();
     const children = {};
     Edge.find({$or: [ { right: {$in: cart}}, {  left: {$in: cart}}]}).sort({weight:-1}).exec()
         .then((edges) => {
