@@ -200,13 +200,16 @@ export class UserPage extends Component {
     this.setState({ description: e.target.value });
   }
 
-  deleteCart(id) {
+  deleteCart(id, i) {
     const headers = { authorization: `Bearer ${this.props.userState.user.jwt}`, github_id: this.props.userState.user.github_id };
     axios.delete(`${this.state.server}delete-cart`, { data : { cartid: id }, headers }).then((response) => {
       this.setState({
         loadedCarts: false,
         userCarts: []
       })
+      if (this.state.current === i) {
+        this.props.clearCart();
+      }
       this.props.loadCarts(this.props.userState.user);
       return;
     })
@@ -289,7 +292,7 @@ export class UserPage extends Component {
                       <p className={!this.state.small ? 'Sign' : 'SignSmall'} style={{ padding: '0.3em 1em', width: '10em', marginBottom: '0em' }} color="secondary" onClick={this.toggleModal.bind(this, i)}> Create A Repo </p>
                     </div>
                     <div>
-                      <p className={!this.state.small ? 'SignDel' : 'SignDelSmall'} style={{ padding: '0.3em 1em', width: '10em', marginBottom: '0em' }} onClick={this.deleteCart.bind(this, this.state.userCarts[i]._id)}>Delete Project</p>
+                      <p className={!this.state.small ? 'SignDel' : 'SignDelSmall'} style={{ padding: '0.3em 1em', width: '10em', marginBottom: '0em' }} onClick={this.deleteCart.bind(this, this.state.userCarts[i]._id, i)}>Delete Project</p>
                     </div>
                   </DropdownMenu>
                 </Dropdown>

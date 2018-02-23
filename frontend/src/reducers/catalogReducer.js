@@ -4,7 +4,7 @@ export default (data = {}, action) => {
 
     switch (action.type) {
         case GET_CATALOG: 
-            return data = action.payload;
+            return data = { data: action.payload, ready: true };
         default:
             return data;
     }

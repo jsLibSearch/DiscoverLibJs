@@ -1,5 +1,5 @@
 import axios from 'axios';
-export const dev = false;
+export const dev = true;
 const apiURL = !dev ? 'https://javascript-library-discovery2.herokuapp.com/' : 'http://localhost:8080/';
 const DB_URL = !dev ? 'https://javascript-library-discovery2.herokuapp.com/' : 'http://localhost:8080/';
 
@@ -103,7 +103,29 @@ export const getPackages = (query) => {
                 });
             });
     }
-    
+};
+
+export const getMorePackages = (query, page) => {
+    return (dispatch) => {
+        dispatch(setStatusLoading())
+        axios.get(`${DB_URL}search-package/${query}/${page}`, {
+            validateStatus: function (status) {
+                return status < 500; // Reject only if the status code is greater than or equal to 500
+            }
+        })
+            .then((response) => {
+                dispatch({
+                    type: 'GET_PACKAGES',
+                    payload: response.data
+                });
+            })
+            .catch(() => {
+                dispatch({
+                    type: 'GET_PACKAGES',
+                    payload: []
+                });
+            });
+    }
 };
 
 export const getPackage = (i) => {
@@ -144,7 +166,6 @@ export const saveAccessToken = (code) => {
         axios
             .post(`${apiURL}code`, { code })
                 .then((response) => {
-                    console.log(response.data)
                     dispatch({
                         type: SAVE_ACCESS_TOKEN,
                         payload: response.data.accessToken,
@@ -245,21 +266,26 @@ export const getRecs = (cart) => {
 export const searchRec = (cart, query) => {
     const ids = cart.map(pkg => pkg._id);
     return (dispatch) => {
+        dispatch(setStatusLoading())
         dispatch(setRecStatusLoading())
-        axios.post(`${DB_URL}rec/${query}`, { cart: ids },{
+        axios.post(`${DB_URL}search-recs/`, { cart: ids, term: query },{
             validateStatus: function (status) {
                 return status < 500; // Reject only if the status code is greater than or equal to 500
             }
         })
             .then((response) => {
                 dispatch({
-                    type: 'SEARCH_REC',
-                    payload: response.data
+                    type: 'GET_PACKAGES',
+                    payload: response.data[1]
+                });
+                dispatch({
+                    type: 'GET_RECS',
+                    payload: response.data[0]
                 });
             })
             .catch(() => {
                 dispatch({
-                    type: 'SEARCH_REC',
+                    type: 'GET_PACKAGES',
                     payload: []
                 });
             });
@@ -325,7 +351,6 @@ export const getCatalog = () => {
        
         axios.get(`${apiURL}get-all-catalog`)
             .then((result) => {
-                console.log(result);
                 dispatch({
                     type: 'GET_CATALOG',
                     payload: result.data

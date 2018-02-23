@@ -21,7 +21,6 @@ export default ComposedComponent => {
             if (this.props.location.search.match(/\?code=/g)) {
                 code = this.props.location.search.replace(/\?code=/g, '');
                 if (this.props.user.status === 'unauthorized') {
-                    console.log('trying to save the access token again for some reason')
                     this.props.saveAccessToken(code);
                 }
             }
@@ -30,7 +29,6 @@ export default ComposedComponent => {
 
         componentWillReceiveProps(nextProps) {
             if (nextProps.user.user.jwt && nextProps.user.user.jwt !== this.props.user.user.jwt) {
-                console.log(nextProps.user)
                 sessionStorage.setItem('jwtToken', nextProps.user.user.jwt);
                 sessionStorage.setItem('username', nextProps.user.user.username);
                 sessionStorage.setItem('github_id', nextProps.user.user.github_id);

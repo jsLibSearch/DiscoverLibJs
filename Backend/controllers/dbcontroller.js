@@ -78,20 +78,18 @@ const searchWithRecs = (req, res) => {
             // }
         })
         .then(()=> {
-                console.log("children", Object.keys(children).length)
                 const keysSorted =  Object.keys(children).sort(function(a,b){return children[b]-children[a]})
                 let keysSliced = keysSorted.filter((x) => {
                     return cart.indexOf(x) < 0;
-                }).slice(0, 5)
-                console.log(children[keysSliced[0]], children[keysSliced[keysSliced.length - 1]])
-                Package.find({_id: { $in: keysSliced}}).select( { name: 1, keywords: 1, freq: 1, homepage: 1, description: 1 } )
+                })
+                Package.find({_id: { $in: keysSliced}, $or: [{keywords: {$regex : `.*${term}.*`}}, { name: {$regex : `.*${term}.*`}} ]}).select( { name: 1, keywords: 1, freq: 1, homepage: 1, description: 1 } )
                 .then(pkgs => {
                     const sortedPkgs =  pkgs.sort(function(a,b){return children[b._id]-children[a._id]})
-                    console.log(children[sortedPkgs[0]._id], children[sortedPkgs[sortedPkgs.length - 1]._id])
-                    Package.find({ $or: [{keywords: {$regex : `.*${term}.*`}}, { name: {$regex : `.*${term}.*`}} ], name: { $nin: keysSliced }}).select( { name: 1, keywords: 1, freq: 1, homepage: 1, description: 1 } ).sort({freq: -1}).exec()
+
+                    Package.find({ $or: [{keywords: {$regex : `.*${term}.*`}}, { name: {$regex : `.*${term}.*`}} ]}).select( { name: 1, keywords: 1, freq: 1, homepage: 1, description: 1 } ).sort({freq: -1}).exec()
                     .then(packs => {
                         const final = [];
-                        final.push(sortedPkgs);
+                        final.push(sortedPkgs.slice(0, 10));
                         final.push(packs);
                         return res.json(final);
                     })
