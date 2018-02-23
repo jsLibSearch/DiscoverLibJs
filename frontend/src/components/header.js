@@ -163,7 +163,7 @@ class Header extends Component {
                 <div style={this.state.small ? {display: 'inline-flex', justifyContent: 'space-between'} : {display: 'inline-flex', paddingLeft: '1em', paddingRight: '5em'}}>
                     <Link to='/' className='Logo' style={ this.state.small ? { fontSize: '.8em', margin: '.5em .1em', lineHeight:'1.1em', maxWidth: '6em', fontFamily: 'Barricada-Pro' }: this.state.windowWidth < 1200 ? {fontSize: '1.5em', marginTop: '0.2em', fontFamily: 'Barricada-Pro'} : { fontFamily: 'Barricada-Pro' }}>JS Lib Discovery</Link>
                     <div className="btn-group"  style={!this.state.small ? {marginTop: '.25em', display: 'flex', justifyContent: 'center', marginBottom: 3, height: '2em', borderColor: c.off_green} : {marginTop: '.35em', display: 'flex', justifyContent: 'center', marginBottom: 3, height: '1.6em', borderColor: c.off_green}}>
-                        <input placeholder='Search for Libraries' style={ !this.state.small ? {color: c.header, fontSize: '1em', backgroundColor: c.body_bg, width: `${this.state.windowWidth < 1200 ? 15 + (((this.state.windowWidth / 1200)) * 5) : 30}em` } : {color: c.header, fontSize: '.7em', backgroundColor: c.body_bg, width: '15em', borderRadius: '0.25rem' }} className="btn btn-outline-secondary" onKeyPress={this.handleEnter.bind(this)} onChange={this.handleQuery.bind(this)} value={ this.state.searchedQuery } />
+                        <input placeholder='Search for Libraries' style={ !this.state.small ? {color: c.header, fontSize: '1em', backgroundColor: c.body_bg, width: `${this.state.windowWidth < 1200 ? 15 + (((this.state.windowWidth / 1200)) * 5) : 30}em` } : {color: c.header, fontSize: '.7em', backgroundColor: c.body_bg, width: '40vw', borderRadius: '0.25rem' }} className="btn btn-outline-secondary" onKeyPress={this.handleEnter.bind(this)} onChange={this.handleQuery.bind(this)} value={ this.state.searchedQuery } />
                         <button style={ !this.state.small ? { color: c.off_green, fontSize: '.75em', backgroundColor: c.body_bg } : { color: c.off_green, fontSize: '.45em', backgroundColor: c.body_bg, maxWidth: '8em', padding: '0.2em', display: 'none'  }} className="btn btn-outline-secondary" onClick={this.handleSearch.bind(this)}>Search</button>
                     </div>
                     {/* <div className='HeaderLeft' style={this.state.windowWidth < 1056 ? { display: 'none' } : null}>
@@ -184,7 +184,7 @@ class Header extends Component {
                         toggle={this.toggleUserOptions.bind(this)}
                         size="sm">
                     <DropdownToggle
-                        style={this.state.small ? { border: 'none', margin: '0em', padding: '0em .3em' } : { border: 'none', margin: '0em' }}
+                        style={this.state.small ? { border: 'none', margin: '0em', padding: '0em .3em', fontSize: '3vw' } : { border: 'none', margin: '0em' }}
                         size="sm"
                         outline
                         className={!this.state.small ? 'Username' : 'UsernameSmall'}

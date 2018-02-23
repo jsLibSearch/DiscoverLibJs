@@ -103,7 +103,29 @@ export const getPackages = (query) => {
                 });
             });
     }
-    
+};
+
+export const getMorePackages = (query, page) => {
+    return (dispatch) => {
+        dispatch(setStatusLoading())
+        axios.get(`${DB_URL}search-package/${query}/${page}`, {
+            validateStatus: function (status) {
+                return status < 500; // Reject only if the status code is greater than or equal to 500
+            }
+        })
+            .then((response) => {
+                dispatch({
+                    type: 'GET_PACKAGES',
+                    payload: response.data
+                });
+            })
+            .catch(() => {
+                dispatch({
+                    type: 'GET_PACKAGES',
+                    payload: []
+                });
+            });
+    }
 };
 
 export const getPackage = (i) => {
@@ -244,21 +266,26 @@ export const getRecs = (cart) => {
 export const searchRec = (cart, query) => {
     const ids = cart.map(pkg => pkg._id);
     return (dispatch) => {
+        dispatch(setStatusLoading())
         dispatch(setRecStatusLoading())
-        axios.post(`${DB_URL}rec/${query}`, { cart: ids },{
+        axios.post(`${DB_URL}search-recs/`, { cart: ids, term: query },{
             validateStatus: function (status) {
                 return status < 500; // Reject only if the status code is greater than or equal to 500
             }
         })
             .then((response) => {
                 dispatch({
-                    type: 'SEARCH_REC',
-                    payload: response.data
+                    type: 'GET_PACKAGES',
+                    payload: response.data[1]
+                });
+                dispatch({
+                    type: 'GET_RECS',
+                    payload: response.data[0]
                 });
             })
             .catch(() => {
                 dispatch({
-                    type: 'SEARCH_REC',
+                    type: 'GET_PACKAGES',
                     payload: []
                 });
             });

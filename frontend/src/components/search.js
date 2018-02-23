@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { getPackages, newItem } from '../actions';
+import { getPackages, newItem, searchRec } from '../actions';
 import '../App.css';
 // import { customColors as c } from '../custom/colors.js';
 import Package from './package.js';
 import ScopedPackages from './scoped_package.js';
 import { initGA, logPageView } from './ReactGA';
+import { Button } from 'reactstrap';
 
 export class SearchPage extends Component {
   constructor(props) {
@@ -19,13 +20,17 @@ export class SearchPage extends Component {
         dev: false,
         loading: false,
         results: 0,
-        smallLimit: 30
+        smallLimit: 30,
+        recs: [],
+        loadingRecs: false,
+        loadRecsStarted: false,
+        showMoreRecs: false
     };
   }
 
   componentDidUpdate() {
     if (this.props.redux.query !== this.state.query && this.refs.searchPage) {
-      this.props.getPackages(this.props.redux.query);
+      this.props.cart.packages.length > 0 ? this.props.searchRec(this.props.cart.packages, this.props.redux.query) : this.props.getPackages(this.props.redux.query);
       this.setState({
         query: this.props.redux.query
       })
@@ -43,13 +48,25 @@ export class SearchPage extends Component {
         results: numberOfResults
       })
     }
+    // if (this.props.recState.loading && !this.state.loadingRecs) {
+    //   this.setState({
+    //     loadingRecs: true,
+    //     loadRecsStarted: true
+    //   })
+    // } else if (!this.props.recState.loading && this.state.loadingRecs) {
+    //   console.log('setting recs')
+    //   this.setState({
+    //     loadingRecs: false,
+    //     recs: this.props.recState.recs,
+    //   })
+    // }
   }
 
   componentDidMount() {
     window.addEventListener('resize', this.handleResize.bind(this));
     const small = this.state.windowWidth < 500 ? true : false;
     if (this.props.redux.query.length > 0){
-      this.props.getPackages(this.props.redux.query);
+      this.props.cart.packages.length > 0 ? this.props.searchRec(this.props.cart.packages, this.props.redux.query) : this.props.getPackages(this.props.redux.query);
     }
     if (this.props.redux.loading && !this.state.loading) {
       this.setState({
@@ -62,6 +79,18 @@ export class SearchPage extends Component {
         packages: this.props.redux.packages
       })
     }
+    // if (this.props.recState.loading && !this.state.loadingRecs) {
+    //   this.setState({
+    //     loadingRecs: true,
+    //     loadRecsStarted: true
+    //   })
+    // } else if (!this.props.recState.loading && this.state.loadingRecs) {
+    //   console.log('setting recs')
+    //   this.setState({
+    //     loadingRecs: false,
+    //     recs: this.props.recState.recs,
+    //   })
+    // }
     if (!this.refs.searchPage) {
       return;
     }
@@ -72,6 +101,20 @@ export class SearchPage extends Component {
     })
     initGA();
     logPageView();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.recState.loading && !this.props.recState.loading) {
+      this.setState({
+        loadingRecs: true,
+        loadRecsStarted: true
+      })
+    } else if (!nextProps.recState.loading && this.props.recState.loading) {
+      this.setState({
+        loadingRecs: false,
+        recs: nextProps.recState.recs,
+      })
+    }
   }
 
   componentWillUnmount() {
@@ -105,10 +148,61 @@ export class SearchPage extends Component {
     })
   }
 
+  toggleShowMoreRecs() {
+    this.setState({
+      showMoreRecs: !this.state.showMoreRecs
+    })
+  }
+
   render() {
     return (
       <div ref='searchPage'>
         {this.state.dev ? (<button onClick={this.fillDevCart.bind(this)}>fill all</button>): null}
+        {this.props.cart.packages.length > 0 && this.state.loadRecsStarted ? (
+        <div style={{ borderBottom: '1px solid rgb(103, 122, 87)', marginTop: '.2em' }}>
+          <p className='SearchHeader' style={this.state.small ? {textAlign: 'center', margin: '2em 0em 0em'} : {}}>
+            {this.state.loadingRecs ? 'Loading recommendations' : 'Recommendations'}
+          </p>
+        </div>
+      ): null}
+        {this.state.recs.length > 0 ?
+        this.state.recs.map((rec, i) => {
+          if (this.state.recs.length === i + 1) {
+            return (
+              <div key={'scoper'}>
+              </div>
+            )
+          }
+          if (!this.state.showMoreRecs && i >= 5) {
+            if (i === 5) {
+              return (
+                <div key={'recbutton'}>
+                  <Button size='sm' style={{
+                    height: '2.2em',
+                    fontSize: '.8em',
+                    border: 'none'
+              }} onClick={this.toggleShowMoreRecs.bind(this)}>Show more</Button>
+                </div>
+              )
+            }
+            return (null)
+          }
+          return (
+            <div key={rec._id + 'id'} style={this.state.small ? {margin: '0.3em'} : {}}>
+              <Package
+                style={this.state.small ? { margin: '1em 0em' }:{}}
+                key={i}
+                name={rec.name}
+                about={rec.description}
+                freq={rec.freq}
+                keywords={rec.keywords}
+                parents={rec.parents}
+                _id={rec._id}
+                homepage={rec.homepage}/>
+            </div>
+          )
+        })
+        : null}
         <div style={{ borderBottom: '1px solid rgb(103, 122, 87)', marginTop: '.2em' }}>
           {this.state.loading ?
             (<h3 className='SearchHeader'>Loading search results for "{this.state.query}"</h3>)
@@ -169,8 +263,10 @@ export class SearchPage extends Component {
 
 const mapStateToProps = (state) => {
   return {
-      redux: state.packages
+      redux: state.packages,
+      cart: state.cart,
+      recState: state.recState
   };
 };
 
-export default withRouter(connect(mapStateToProps, { getPackages, newItem })(SearchPage));
+export default withRouter(connect(mapStateToProps, { getPackages, newItem, searchRec })(SearchPage));
