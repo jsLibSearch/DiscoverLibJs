@@ -16,17 +16,17 @@ const pkgs = {};
 
 async function readData(packages) {
     async function readProjects() {
-            const contents = await fs.readFileSync(`../../frontend/src/custom/projects${current}.json`, "utf8");
+            const contents = await fs.readFileSync(`./projectdata/projects${current}.json`, "utf8");
             return JSON.parse(contents);
     };
     const data = await readProjects();
     const projectPromises = [];
     const final = await data.map(row => {
-        if (row.length < 1) return [];
-        const project = new Project({processed: false})
+        if (row.children.length < 1) return [];
+        const project = new Project({name: row.name, git_url: row.git_url, login: row.login})
         projectPromises.push(project.save());
-        return row;
-    }).filter((row) => row.length > 0);
+        return row.children;
+    });
 
     Promise.all(projectPromises).then((allProjects) => {
         console.log('projects initially saved')
