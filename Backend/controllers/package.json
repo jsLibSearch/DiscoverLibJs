@@ -1,7 +1,8 @@
 {
-	"name": "AGGGGG",
+	"name": "TRARAR",
 	"version": "1.0.0",
 	"dependencies": {
+		"apisauce": "*",
 		"axios": "*",
 		"axios-mock-adapter": "*",
 		"vue-axios": "*"
