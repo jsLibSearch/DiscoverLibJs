@@ -33,8 +33,7 @@ const searchPackage = (req, res) => {
     const contents2 = fs.readFileSync(filePath2, "utf8");
     const packagesFile = JSON.parse(contents2);
 
-    let { term, term2 } = req.params;
-    term = term.toLowerCase()
+    const { term, term2 } = req.params;
     const matchedKeyTerm = didyoumean(term, Object.keys(keywords));
     const matchedPackageTerm = didyoumean(term, Object.keys(packagesFile));
     let arr = [];
@@ -62,11 +61,9 @@ const searchPackage = (req, res) => {
 }
 
 const searchWithRecs = (req, res) => {
-    let { cart, term } = req.body;
-    
-    term = term.toLowerCase()
+    const { cart, term } = req.body;
     const children = {};
-    Edge.find({$or: [ { right: {$in: cart}}, {  left: {$in: cart}}], keyword: {$regex : `.*${term}.*`}}).sort({weight:-1}).exec()
+    Edge.find({$or: [ { right: {$in: cart}}, {  left: {$in: cart}}]}).sort({weight:-1}).exec()
         .then((edges) => {
             console.log(edges.length, "edges");              
             edges.forEach((edge) => {
@@ -85,7 +82,6 @@ const searchWithRecs = (req, res) => {
                 Package.find({_id: { $in: keysSliced}, $or: [{keywords: {$regex : `.*${term}.*`}}, { name: {$regex : `.*${term}.*`}} ]}).select( { name: 1, keywords: 1, freq: 1, homepage: 1, description: 1 } )
                 .then(pkgs => {
                     const sortedPkgs =  pkgs.sort(function(a,b){return children[b._id]-children[a._id]})
-
                     Package.find({ $or: [{keywords: {$regex : `.*${term}.*`}}, { name: {$regex : `.*${term}.*`}} ]}).select( { name: 1, keywords: 1, freq: 1, homepage: 1, description: 1 } ).sort({freq: -1}).exec()
                     .then(packs => {
                         const final = [];
