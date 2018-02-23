@@ -38,7 +38,9 @@ class Cart extends Component {
       copied: false,
       value: '',
       npm: false,
-      yarn: false
+      yarn: false,
+      gotURL: false,
+      clone_url: '',
     };
     this.toggleLoginModal = this.toggleLoginModal.bind(this);
   }
@@ -190,6 +192,7 @@ class Cart extends Component {
       .post(`${this.state.server}create-repo`, { repo_name, description, accessToken, arrOfPckgs })
         .then((res) => {
           console.log(res.data);
+          this.setState({ gotURL: true, clone_url: res.data })
         })
         .catch((err) => {
           console.log(err);
@@ -200,6 +203,10 @@ class Cart extends Component {
     this.setState({
       modal: !this.state.modal
     });
+  }
+
+  toggleURLModal() {
+    this.setState({ gotURL: !this.state.gotURL })
   }
 
   toggleModal() {
@@ -634,6 +641,18 @@ class Cart extends Component {
             </p>
           </div>
         ) : null }
+          <div>
+            <Modal isOpen={this.state.gotURL} toggle={() => this.toggleURLModal()}>
+              <ModalHeader toggle={() => this.toggleURLModal()}>Repo Clone URL</ModalHeader>
+              <ModalBody>
+                { this.state.clone_url }
+              </ModalBody>
+              <ModalFooter>
+                {/* <Button color="primary" onClick={() => this.onCreateRepoClick()}>Submit</Button> */}
+                <Button color="secondary" onClick={() => this.toggleURLModal()}>Close</Button>
+              </ModalFooter>
+            </Modal>
+          </div>
       </div>
     );
   }

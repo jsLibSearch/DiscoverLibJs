@@ -1,5 +1,5 @@
 import axios from 'axios';
-export const dev = false;
+export const dev = true;
 const apiURL = !dev ? 'https://javascript-library-discovery2.herokuapp.com/' : 'http://localhost:8080/';
 const DB_URL = !dev ? 'https://javascript-library-discovery2.herokuapp.com/' : 'http://localhost:8080/';
 
