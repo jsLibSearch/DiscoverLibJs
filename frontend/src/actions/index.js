@@ -144,7 +144,6 @@ export const saveAccessToken = (code) => {
         axios
             .post(`${apiURL}code`, { code })
                 .then((response) => {
-                    console.log(response.data)
                     dispatch({
                         type: SAVE_ACCESS_TOKEN,
                         payload: response.data.accessToken,
@@ -325,7 +324,6 @@ export const getCatalog = () => {
        
         axios.get(`${apiURL}get-all-catalog`)
             .then((result) => {
-                console.log(result);
                 dispatch({
                     type: 'GET_CATALOG',
                     payload: result.data

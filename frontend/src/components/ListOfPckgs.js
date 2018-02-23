@@ -55,7 +55,6 @@ class ListOfPckgs extends Component {
             axios
             .get(`${this.state.server}get-readme/${id}`)
                 .then((res) => {
-                    console.log(res);
                     const temp = this.state.data;
                     temp[idx] = res.data;
                     this.setState({ data: temp });
