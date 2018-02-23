@@ -63,7 +63,7 @@ const searchPackage = (req, res) => {
 const searchWithRecs = (req, res) => {
     const { cart, term } = req.body;
     const children = {};
-    Edge.find({$or: [ { right: {$in: cart}}, {  left: {$in: cart}}]}).sort({weight:-1}).select( { name: 1, keywords: 1, freq: 1, homepage: 1, description: 1 } ).exec()
+    Edge.find({$or: [ { right: {$in: cart}}, {  left: {$in: cart}}]}).sort({weight:-1}).exec()
         .then((edges) => {
             console.log(edges.length, "edges");              
             edges.forEach((edge) => {
@@ -81,11 +81,11 @@ const searchWithRecs = (req, res) => {
                     return cart.indexOf(x) < 0;
                 }).slice(0, 5)
                 console.log(children[keysSliced[0]], children[keysSliced[keysSliced.length - 1]])
-                Package.find({_id: { $in: keysSliced}})
+                Package.find({_id: { $in: keysSliced}}).select( { name: 1, keywords: 1, freq: 1, homepage: 1, description: 1 } )
                 .then(pkgs => {
                     const sortedPkgs =  pkgs.sort(function(a,b){return children[b._id]-children[a._id]})
                     console.log(children[sortedPkgs[0]._id], children[sortedPkgs[sortedPkgs.length - 1]._id])
-                    Package.find({ $or: [{keywords: {$regex : `.*${term}.*`}}, { name: {$regex : `.*${term}.*`}} ]}).sort({freq: -1}).exec()
+                    Package.find({ $or: [{keywords: {$regex : `.*${term}.*`}}, { name: {$regex : `.*${term}.*`}} ]}).select( { name: 1, keywords: 1, freq: 1, homepage: 1, description: 1 } ).sort({freq: -1}).exec()
                     .then(packs => {
                         const final = [];
                         final.push(sortedPkgs);
