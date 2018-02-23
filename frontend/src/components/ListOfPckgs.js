@@ -29,7 +29,7 @@ class ListOfPckgs extends Component {
 
     componentWillReceiveProps(nextProps) {
         // TODO get all readmes an onse! 
-
+        console.log(nextProps)
         if (JSON.stringify(this.state.list) !== JSON.stringify(nextProps.data)) {
             const arr = new Array(nextProps.data.length).fill(false); 
             const markdowns = new Array(nextProps.data.length).fill('');
@@ -64,7 +64,7 @@ class ListOfPckgs extends Component {
                     console.log(err);
                 })
         }
-
+        // console.log(typeof this.state.data[idx])
         let arr = this.state.collapses.slice();
         arr[idx] = !arr[idx];
         this.setState({ collapses: arr });

@@ -55,19 +55,23 @@ const createRepo = (req, res) => {
                         if (err) throw err;
                         const content = nacl.util.encodeBase64(data);
 
+
                         
                         axios
                             .put(`https://api.github.com/repos/${owner}/${repo}/contents/${pkgPath}`, 
-                            { content: content, message: message },
-                            { headers: { Authorization: `token ${accessToken}` }}
-                        )
+                                { content: content, message: message },
+                                { headers: { Authorization: `token ${accessToken}` }}
+                            )
                                 .then((r) => {
                                     res.json(result.data.clone_url);
+                                    console.log(r);
                                 })
                                 .catch((e) => {
-                                    console.log(e)
+                                    console.log(e);
                                 })
+                        // res.json(result.data.clone_url);   // <--------- for localhost usage     
                     });
+                    
                 })
                 .catch((err) => {
                     console.log(err);
