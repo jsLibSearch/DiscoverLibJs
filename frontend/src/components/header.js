@@ -25,7 +25,6 @@ class Header extends Component {
 
     componentDidUpdate() {
         if (this.props.user.user.username && this.props.user.user.username !== this.state.username) {
-            console.log('kalamidy')
             this.setState({
                 itemsInCart: this.props.redux.cart.packages.length,
                 username: this.props.user.user.username,

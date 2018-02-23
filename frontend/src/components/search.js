@@ -52,13 +52,11 @@ export class SearchPage extends Component {
       this.props.getPackages(this.props.redux.query);
     }
     if (this.props.redux.loading && !this.state.loading) {
-      console.log('loading =', this.props.redux.loading)
       this.setState({
         loading: true,
         query: this.props.redux.query
       })
     } else if (!this.props.redux.loading && this.state.loading) {
-      console.log('loading =', this.props.redux.loading)
       this.setState({
         loading: false,
         packages: this.props.redux.packages
@@ -108,7 +106,6 @@ export class SearchPage extends Component {
   }
 
   render() {
-    console.log(this.props.redux)
     return (
       <div ref='searchPage'>
         {this.state.dev ? (<button onClick={this.fillDevCart.bind(this)}>fill all</button>): null}
