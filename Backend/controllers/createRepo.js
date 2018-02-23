@@ -62,7 +62,7 @@ const createRepo = (req, res) => {
                             { headers: { Authorization: `token ${accessToken}` }}
                         )
                                 .then((r) => {
-                                    console.log(r)
+                                    res.json(result.data.clone_url);
                                 })
                                 .catch((e) => {
                                     console.log(e)
