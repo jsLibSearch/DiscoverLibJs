@@ -56,19 +56,17 @@ const createRepo = (req, res) => {
                         const content = nacl.util.encodeBase64(data);
 
                         
-
-                        async function createPckg() {
-                            try {
-                                const result = await github.repos.createFile({ owner, repo, path: pkgPath, message, content })
-                                                        
-                                if (result) {
-                                    res.json(result.data.clone_url);
-                                }
-                            } catch(e) {
-                                console.log(e)
-                            }
-                        }
-                        createPckg();
+                        axios
+                            .put(`https://api.github.com/repos/${owner}/${repo}/contents/${pkgPath}`, 
+                            { content: content, message: message },
+                            { headers: { Authorization: `token ${accessToken}` }}
+                        )
+                                .then((r) => {
+                                    console.log(r)
+                                })
+                                .catch((e) => {
+                                    console.log(e)
+                                })
                     });
                 })
                 .catch((err) => {
