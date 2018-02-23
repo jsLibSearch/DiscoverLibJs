@@ -1,9 +1,10 @@
 {
-	"name": "AGGGGG",
+	"name": "here it is",
 	"version": "1.0.0",
 	"dependencies": {
-		"axios": "*",
-		"axios-mock-adapter": "*",
-		"vue-axios": "*"
+		"connect-mongo": "*",
+		"express-session": "*",
+		"mongoose": "*",
+		"morgan": "*"
 	}
 }

@@ -139,6 +139,48 @@ const getAllProjects = (req, res) => {
 
 }
 
+const requestSimilarProjects = (req, res) => {
+    
+        const bar = new _progress.Bar({}, _progress.Presets.shades_classic);
+        const { cart, getAll } = req.body;
+        let getAll2 = getAll
+        if (getAll === undefined) getAll2 = false;
+        
+    
+        let arr = cart.map(ele => new mongoose.Types.ObjectId(ele));
+        const cartObj = {}
+        cart.forEach((element) => {
+            cartObj[element] = 0
+        })
+    
+        const similarProj = {};
+        Project.find({ children: { $in: arr }}).sort({weight:-1})
+        .populate('children', 'name keywords freq homepage', Package ).exec()
+            .then((projects) => {
+                projects.forEach((project) => {
+                    similarProj[project.name] = { data: project, count: 0};
+                    project.children.forEach(child => {
+                        if (cartObj.hasOwnProperty(child.id)) similarProj[project.name].count += 1;
+                    })
+                    // similarProj[project.name].count /= project.children;
+                    similarProj[project.name].count += similarProj[project.name].count / project.children;
+                })
+            })
+            .then(()=> {
+                    const keysSorted =  Object.keys(similarProj).sort(function(a,b){return similarProj[b].count-similarProj[a].count})
+                    let keysSliced = keysSorted.filter((x) => {
+                        return cart.indexOf(x) < 0;
+                    })
+                    if (getAll2 === false) {
+                        keysSliced = keysSliced.slice(0, 10)
+                    }
+                    return res.json(keysSliced.map(key => similarProj[key].data))
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }
+
 const requestRecommendations = (req, res) => {
 
     const bar = new _progress.Bar({}, _progress.Presets.shades_classic);
@@ -374,6 +416,7 @@ module.exports = {
     getAllPackages,
     getAllProjects,
     requestRecommendations,
+    requestSimilarProjects,
     getUserCarts,
     getCartByID,
     editCart,
