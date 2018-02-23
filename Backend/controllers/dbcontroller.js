@@ -37,11 +37,11 @@ const searchPackage = (req, res) => {
     const matchedKeyTerm = didyoumean(term, Object.keys(keywords));
     const matchedPackageTerm = didyoumean(term, Object.keys(packagesFile));
     let arr = [];
-    Package.find({ $query: { name: {$regex : `.*${matchedPackageTerm}.*`}}, $sort: { freq : -1 }  }, (err, foundPackages) => {
+    Package.find({ $query: { name: {$regex : `.*${matchedPackageTerm}.*`}}, $sort: { freq : -1 }  }, { name: 1, keywords: 1, freq: 1, homepage: 1, description: 1 },  (err, foundPackages) => {
         if (err) {
             return res.status(STATUS_USER_ERROR).json(err);
         }
-            Package.find({ $query: { keywords: {$regex : `.*${matchedKeyTerm}.*`} }, $sort: { freq : -1 }  }, (err, foundKeys) => {
+            Package.find({ $query: { keywords: {$regex : `.*${matchedKeyTerm}.*`} }, $sort: { freq : -1 }}, { name: 1, keywords: 1, freq: 1, homepage: 1, description: 1 }, (err, foundKeys) => {
                 if (err) {
                     return res.status(STATUS_USER_ERROR).json(err);
                 }
@@ -63,7 +63,7 @@ const searchPackage = (req, res) => {
 const searchWithRecs = (req, res) => {
     const { cart, term } = req.body;
     const children = {};
-    Edge.find({$or: [ { right: {$in: cart}}, {  left: {$in: cart}}]}).sort({weight:-1})
+    Edge.find({$or: [ { right: {$in: cart}}, {  left: {$in: cart}}]}).sort({weight:-1}).select( { name: 1, keywords: 1, freq: 1, homepage: 1, description: 1 } ).exec()
         .then((edges) => {
             console.log(edges.length, "edges");              
             edges.forEach((edge) => {
