@@ -67,7 +67,7 @@ const getAccessToken = (req, res) => {
                                     jwt: token,
                                     github_id: id,
                                     _id: user._id,
-                                    carts: user.carts,
+                                    carts: [],
                                     github_name: user.github_name
                                 });
                             });
