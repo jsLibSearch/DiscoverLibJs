@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Dropdown, DropdownToggle, DropdownItem, DropdownMenu, 
+import { Dropdown, DropdownToggle, DropdownMenu, 
   Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, Popover,
   PopoverHeader, PopoverBody } from 'reactstrap';
-import { CSSTransition, TransitionGroup, Transition } from 'react-transition-group';
-import { deleteItem, newItem, addCartToUser, setCartName, dev, clearCart, setAsSavedCart } from '../actions';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import { deleteItem, newItem, addCartToUser, setCartName, dev, clearCart, setAsSavedCart, clearRecs } from '../actions';
 import '../App.css';
 import { customColors as c } from '../custom/colors.js';
 import { initGA, logPageView } from './ReactGA';
@@ -46,35 +46,37 @@ class Cart extends Component {
   }
 
   componentDidUpdate() {
-    if (this.props.cart.packages && this.props.cart.packages.length !== this.state.cart.length && this.refs.theCart) {
+    // -----------------------------SECTION MAY BE USELESS--CHECK FOR ERRORS WHEN USER AUTH IS UP
 
-      let currentCart = [];
-      if (this.props.cart.packages.length > 0) {
-        currentCart = this.props.cart.packages.slice();
-        const openArr = Array(currentCart.length).fill(false);
-        let names = '';
-        currentCart.forEach((item) => {
-          names += ' ' + item.name;
-        })
-        const npmStr = 'npm install --save' + names;
-        const yarnStr = 'yarn add' + names;
-        this.setState({
-          windowWidth: window.innerWidth,
-          cart: currentCart,
-          cartName: this.props.cart.name,
-          isOpen: openArr,
-          _id: this.props.cart._id,
-          npmString: npmStr,
-          yarnString: yarnStr,
-          empty: false
-        })
-      }
-    }
+    // if (this.props.cart.packages && this.props.cart.packages.length !== this.state.cart.length && this.refs.theCart) {
+    //   console.log('update')
+    //   let currentCart = [];
+    //   if (this.props.cart.packages.length > 0) {
+    //     currentCart = this.props.cart.packages.slice();
+    //     const openArr = Array(currentCart.length).fill(false);
+    //     let names = '';
+    //     currentCart.forEach((item) => {
+    //       names += ' ' + item.name;
+    //     })
+    //     const npmStr = 'npm install --save' + names;
+    //     const yarnStr = 'yarn add' + names;
+    //     this.setState({
+    //       windowWidth: window.innerWidth,
+    //       cart: currentCart,
+    //       cartName: this.props.cart.name,
+    //       isOpen: openArr,
+    //       _id: this.props.cart._id,
+    //       npmString: npmStr,
+    //       yarnString: yarnStr,
+    //       empty: false
+    //     })
+    //   }
+    // }
   }
 
   componentDidMount() {
     window.addEventListener('resize', this.handleResize.bind(this));
-    const small = this.state.windowWidth < 500 ? true : false;
+    const small = this.state.windowWidth < 700 ? true : false;
     let currentCart = [];
     let name = 'Untitled Project';
     if (this.props.cart.packages && this.props.cart.packages.length > 0) {
@@ -88,7 +90,7 @@ class Cart extends Component {
       const yarnStr = 'yarn add' + names;
       this.setState({
         windowWidth: window.innerWidth,
-        cart: currentCart,
+        // cart: currentCart,
         cartName: name,
         _id: this.props.cart._id,
         npmString: npmStr,
@@ -124,8 +126,22 @@ class Cart extends Component {
       const yarnStr = 'yarn add' + names;
       this.setState({
         _id: nextProps.cart._id,
-        cart: nextProps.cart.packages,
+        // cart: nextProps.cart.packages,
         cartName: nextProps.cart.name,
+        empty: nextProps.cart.packages.length === 0,
+        npmString: npmStr,
+        yarnString: yarnStr,
+      })
+    } else if (nextProps.cart.packages.length !== this.props.cart.packages.length) {
+      let names = '';
+      if (nextProps.cart.packages.length) {
+        nextProps.cart.packages.forEach((item) => {
+          names += ' ' + item.name;
+        })
+      }
+      const npmStr = 'npm install --save' + names;
+      const yarnStr = 'yarn add' + names;
+      this.setState({
         empty: nextProps.cart.packages.length === 0,
         npmString: npmStr,
         yarnString: yarnStr,
@@ -134,14 +150,15 @@ class Cart extends Component {
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this.handleResize.bind(this))
+    window.removeEventListener('resize', this.handleResize.bind(this));
+    this.props.clearRecs();
   }
 
   handleResize() {
     if (!this.refs.theCart) {
         return;
     }
-    const small = this.state.windowWidth < 500 ? true : false;
+    const small = this.state.windowWidth < 700 ? true : false;
     this.setState({
         windowWidth: window.innerWidth,
         small: small
@@ -149,19 +166,17 @@ class Cart extends Component {
   }
   
   removePackage(item, i) {
-    const newCart = this.state.cart.filter(pkg => pkg.name !== item.name)
     this.props.deleteItem(item);
     let names = '';
-    newCart.forEach((i) => {
+    this.props.cart.packages.forEach((i) => {
       names += ' ' + i.name;
     })
     const npmStr = 'npm install --save' + names;
     const yarnStr = 'yarn add' + names;
     this.setState({
-        cart: newCart,
         npmString: npmStr,
         yarnString: yarnStr,
-        empty: newCart.length === 0
+        empty: this.props.cart.packages.length === 0
     })
     this.toggleOpen(i);
   }
@@ -176,7 +191,7 @@ class Cart extends Component {
 
 
   onCreateRepoClick() {
-    if (this.state.cart.length === 0 || this.props.user.status === 'unauthorized') {
+    if (this.props.cart.packages.length === 0 || this.props.user.status === 'unauthorized') {
       this.toggleLoginModal();
       return;
     }
@@ -242,11 +257,11 @@ class Cart extends Component {
   }
 
   saveCart() {
-    if (this.state.cart.length === 0 || this.props.user.status === 'unauthorized') {
+    if (this.props.cart.packages.length === 0 || this.props.user.status === 'unauthorized') {
       this.toggleLoginModal();
       return;
     }
-    this.props.addCartToUser(this.state.cart, this.props.user.user, this.state.cartName);
+    this.props.addCartToUser(this.props.cart.packages, this.props.user.user, this.state.cartName);
     this.toggleOpenCartOptions()
   }
 
@@ -269,13 +284,13 @@ class Cart extends Component {
 
   toggleSelectAll() {
     const newSelected = [];
-    if (this.state.cart.length === this.state.selected.length || this.state.cart.length === 0) {
+    if (this.props.cart.packages.length === this.state.selected.length || this.props.cart.packages.length === 0) {
       this.setState({
         selected: newSelected
       })
       return;
     }
-    this.state.cart.forEach(pkg => {
+    this.props.cart.packages.forEach(pkg => {
       newSelected.push(pkg.name)
     });
     this.setState({
@@ -284,8 +299,8 @@ class Cart extends Component {
   }
 
   deleteSelected() {
-    const newCart = this.state.cart.filter(pkg => !this.state.selected.includes(pkg.name));
-    const itemsToDelete = this.state.cart.filter(pkg => this.state.selected.includes(pkg.name));
+    const newCart = this.props.cart.packages.filter(pkg => !this.state.selected.includes(pkg.name));
+    const itemsToDelete = this.props.cart.packages.filter(pkg => this.state.selected.includes(pkg.name));
     itemsToDelete.forEach(item => {
       this.props.deleteItem(item);
     })
@@ -296,7 +311,6 @@ class Cart extends Component {
     const npmStr = 'npm install --save' + names;
     const yarnStr = 'yarn add' + names;
     this.setState({
-        cart: newCart,
         selected: [],
         npmString: npmStr,
         yarnString: yarnStr,
@@ -347,12 +361,12 @@ class Cart extends Component {
   }
 
   overwriteCart() {
-    const cart = this.state.cart.map((pkg) => pkg._id);
+    const cart = this.props.cart.packages.map((pkg) => pkg._id);
     const cartid = this.state._id;
     const name = this.state.cartName;
     const config = { headers: { authorization: `Bearer ${this.props.user.user.jwt}`, github_id: this.props.user.user.github_id }}
     axios.put(`${this.state.server}edit-cart`, { cartid, cart, name }, config).then(() => {
-      this.props.setAsSavedCart(this.state.cartName, this.state._id, this.state.cart);
+      this.props.setAsSavedCart(this.state.cartName, this.state._id, this.props.cart.packages);
       this.toggleOpenCartOptions();
       return;
     })
@@ -361,7 +375,6 @@ class Cart extends Component {
   clearCart() {
     this.props.clearCart();
     this.setState({
-      cart: [],
       cartName: 'Untitled Project',
       _id: null
     })
@@ -391,13 +404,13 @@ class Cart extends Component {
             {this.state.cartName}
           </h1>
           <h1 className='PackDesc' style={this.state.small ? { textAlign: 'right', marginBottom: '1em' } : { position: 'absolute', bottom: 0, right:0, margin: '0.5rem' }}>
-            You have {this.state.cart.length} {this.state.cart.length === 1 ? 'package' : 'packages'} in your project
+            You have {this.props.cart.packages.length} {this.props.cart.packages.length === 1 ? 'package' : 'packages'} in your project
           </h1>
         </div>
         <div className='PackCart' style={{ padding: 0.2 }}>
         <div>
           <Button
-            outline={!(this.state.cart.length > 0 && this.state.selected.length === this.state.cart.length)}
+            outline={!(this.props.cart.packages.length > 0 && this.state.selected.length === this.props.cart.packages.length)}
             color='success'
             size='sm'
             onClick={this.toggleSelectAll.bind(this)}
@@ -413,7 +426,7 @@ class Cart extends Component {
               border: 'none',
               margin: 0
             }}>
-            {(this.state.cart.length > 0 && this.state.selected.length === this.state.cart.length) ? 'Unselect All' : 'Select all'}
+            {(this.props.cart.packages.length > 0 && this.state.selected.length === this.props.cart.packages.length) ? 'Unselect All' : 'Select all'}
             </Button>
           <Button outline color='danger'
             size='sm'
@@ -510,8 +523,8 @@ class Cart extends Component {
         </div>
         <div className='CartDiv'>
         <TransitionGroup>
-            {this.state.cart ?
-            this.state.cart.map((item, i) => {
+            {this.props.cart.packages ?
+            this.props.cart.packages.map((item, i) => {
             return (
               <CSSTransition
                 classNames="background"
@@ -665,4 +678,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { deleteItem, newItem, addCartToUser, setCartName, clearCart, setAsSavedCart })(Cart);
+export default connect(mapStateToProps, { deleteItem, newItem, addCartToUser, setCartName, clearCart, setAsSavedCart, clearRecs })(Cart);

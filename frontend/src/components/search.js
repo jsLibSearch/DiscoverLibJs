@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { getPackages, newItem, searchRec } from '../actions';
+import { getPackages, newItem, searchRec, clearSearch } from '../actions';
 import '../App.css';
 // import { customColors as c } from '../custom/colors.js';
 import Package from './package.js';
@@ -44,27 +44,14 @@ export class SearchPage extends Component {
       const numberOfResults = this.props.redux.packages.length + (Object.keys(this.props.redux.packages[this.props.redux.packages.length - 1]).length - 2)
       this.setState({
         loading: false,
-        packages: this.props.redux.packages,
         results: numberOfResults
       })
     }
-    // if (this.props.recState.loading && !this.state.loadingRecs) {
-    //   this.setState({
-    //     loadingRecs: true,
-    //     loadRecsStarted: true
-    //   })
-    // } else if (!this.props.recState.loading && this.state.loadingRecs) {
-    //   console.log('setting recs')
-    //   this.setState({
-    //     loadingRecs: false,
-    //     recs: this.props.recState.recs,
-    //   })
-    // }
   }
 
   componentDidMount() {
     window.addEventListener('resize', this.handleResize.bind(this));
-    const small = this.state.windowWidth < 500 ? true : false;
+    const small = this.state.windowWidth < 700 ? true : false;
     if (this.props.redux.query.length > 0){
       this.props.cart.packages.length > 0 ? this.props.searchRec(this.props.cart.packages, this.props.redux.query) : this.props.getPackages(this.props.redux.query);
     }
@@ -76,21 +63,8 @@ export class SearchPage extends Component {
     } else if (!this.props.redux.loading && this.state.loading) {
       this.setState({
         loading: false,
-        packages: this.props.redux.packages
       })
     }
-    // if (this.props.recState.loading && !this.state.loadingRecs) {
-    //   this.setState({
-    //     loadingRecs: true,
-    //     loadRecsStarted: true
-    //   })
-    // } else if (!this.props.recState.loading && this.state.loadingRecs) {
-    //   console.log('setting recs')
-    //   this.setState({
-    //     loadingRecs: false,
-    //     recs: this.props.recState.recs,
-    //   })
-    // }
     if (!this.refs.searchPage) {
       return;
     }
@@ -118,14 +92,15 @@ export class SearchPage extends Component {
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this.handleResize.bind(this))
+    window.removeEventListener('resize', this.handleResize.bind(this));
+    this.props.clearSearch();
   }
 
   handleResize() {
     if (!this.refs.searchPage) {
       return;
     }
-    const small = this.state.windowWidth < 500 ? true : false;
+    const small = this.state.windowWidth < 700 ? true : false;
     this.setState({
         windowWidth: window.innerWidth,
         small: small
@@ -165,9 +140,9 @@ export class SearchPage extends Component {
           </p>
         </div>
       ): null}
-        {this.state.recs.length > 0 ?
-        this.state.recs.map((rec, i) => {
-          if (this.state.recs.length === i + 1) {
+        {this.props.recState.recs.length > 0 ?
+        this.props.recState.recs.map((rec, i) => {
+          if (this.props.recState.recs.length === i + 1) {
             return (
               <div key={'scoper'}>
               </div>
@@ -269,4 +244,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default withRouter(connect(mapStateToProps, { getPackages, newItem, searchRec })(SearchPage));
+export default withRouter(connect(mapStateToProps, { getPackages, newItem, searchRec, clearSearch })(SearchPage));

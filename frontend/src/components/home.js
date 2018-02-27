@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
 import '../App.css';
-import { Link } from 'react-router-dom';
-import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink,
-  ListGroup, ListGroupItem } from 'reactstrap';
-
+// import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink,
+//   ListGroup, ListGroupItem } from 'reactstrap';
+import { Collapse, Navbar, NavbarBrand, Nav, NavItem, NavLink} from 'reactstrap';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { getCatalog, getRecs, dev } from '../actions';
 import ListOfPckgs from './ListOfPckgs';
 import { initGA, logPageView } from './ReactGA';
-const axios = require('axios');
+// const axios = require('axios');
 
 class Home extends Component {
   constructor(props) {
@@ -243,7 +242,7 @@ class Home extends Component {
     if (this.state.ready) {
       return ( 
         <div ref="homePage">
-          <h4 className='Catalog1'></h4>
+          <div className='Catalog1'></div>
           <div className="Catalog">
             <div className="NavBar">
               <Navbar >

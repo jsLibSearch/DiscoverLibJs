@@ -20,7 +20,8 @@ export const SET_USER_CARTS_LOADING = 'SET_USER_CARTS_LOADING';
 export const ADD_CART = 'ADD_CART';
 
 export const GET_SEARCH = 'GET_SEARCH'; // useless?
-export const NEW_SEARCH = 'NEW_SEARCH'; // useless?
+export const NEW_SEARCH = 'NEW_SEARCH';
+export const CLEAR_SEARCH = 'CLEAR_SEARCH'
 
 export const GET_CART = 'GET_CART';
 export const NEW_ITEM = 'NEW_ITEM';
@@ -32,6 +33,7 @@ export const CLEAR_CART = 'CLEAR_CART';
 export const SEARCH_REC = 'SEARCH_REC';
 export const LOADING_RECS = 'LOADING_RECS';
 export const GET_RECS = 'GET_RECS';
+export const CLEAR_RECS = 'CLEAR_RECS';
 
 export const GET_CATALOG = 'GET_CATALOG';
 
@@ -127,6 +129,14 @@ export const getMorePackages = (query, page) => {
             });
     }
 };
+
+export const clearSearch = () => {
+    return (dispatch) => {
+        dispatch({
+            type: CLEAR_SEARCH
+        })
+    }
+}
 
 export const getPackage = (i) => {
     const promise = axios.get(`${apiURL}/package/${i}`);
@@ -291,6 +301,14 @@ export const searchRec = (cart, query) => {
             });
     }
 };
+
+export const clearRecs = () => {
+    return (dispatch) => {
+        dispatch({
+            type: CLEAR_RECS
+        })
+    }
+}
 
 export const addCartToUser = (cart, user, name) => {
     const ids = cart.map(pkg => pkg._id);

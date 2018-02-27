@@ -92,11 +92,14 @@
 }
 
 .SignSmall {
-  padding: 1em .5em 1em .5em;;
+  padding: 1em 0em 1em 0em;
+  min-width: 3em;
+  margin: 0em 1em;
   font-size: .7em;
   text-decoration: none;
   color: #E1E1E2;
   cursor: pointer;
+  overflow: visible;
 }
 
 .SignSmall:hover {
@@ -270,6 +273,9 @@ pink_red:      #C75058
   font-size: 1.1em;
   margin: 0em;
   font-weight: 100;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
 }
 
 .PackButtons {
