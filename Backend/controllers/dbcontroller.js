@@ -90,10 +90,25 @@ const searchWithRecs = (req, res) => {
                     console.log(children[sortedPkgs[0]._id], children[sortedPkgs[sortedPkgs.length - 1]._id])
                     Package.find({ $or: [{keywords: {$regex : `.*${term}.*`}}, { name: {$regex : `.*${term}.*`}} ], name: { $nin: keysSliced }}).select( { name: 1, keywords: 1, freq: 1, homepage: 1, description: 1 } ).sort({freq: -1}).exec()
                     .then(packs => {
-                        const final = [];
-                        final.push(sortedPkgs);
-                        final.push(packs);
-                        return res.json(final);
+                        const removeDuplicates = (a, b) => {
+                            const seen = {};
+                            const result = [];
+                            a.slice(Math.floor(a.length/2, a.length)).forEach((item) => {
+                                seen.hasOwnProperty(item.name) ? null : (seen[item.name] = true)
+                            });
+                            const filteredB = b.filter((item, i) => {
+                                if (i < a.length / 2) return seen.hasOwnProperty(item.name) ? false : (seen[item.name] = true)
+                                else return true;
+                            });
+                            const filteredA = a.filter((item) => {
+                                if (i >= a.length / 2) return seen.hasOwnProperty(item.name) ? false : (seen[item.name] = true)
+                                else return true;
+                            });
+                            result.push(filteredA)
+                            result.push(filteredB)
+                            return result
+                        }
+                        return res.json(removeDuplicates(sortedPkgs, packs));
                     })
                     .catch((err) => {
                         console.log(err)
