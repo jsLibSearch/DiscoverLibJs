@@ -160,9 +160,9 @@ class Header extends Component {
         return (
             <div className="App-header" style={this.state.small ? { justifyContent: 'space-between' } : {}}>
 
-                <div style={this.state.small ? {display: 'inline-flex', justifyContent: 'space-between',  width: '75%'} : {display: 'inline-flex', paddingLeft: '1em', paddingRight: '1em'}}>
-                    <Link to='/' className='Logo' style={ this.state.small ? { fontSize: '.8em', margin: '.5em .3em', lineHeight:'1.1em', maxWidth: '6em', fontFamily: 'Barricada-Pro', overflow: 'visible' }: this.state.windowWidth < 1200 ? {fontSize: '1.5em', marginTop: '0.2em', fontFamily: 'Barricada-Pro'} : { fontFamily: 'Barricada-Pro' }}>JS Lib Discovery</Link>
-                    <div className="btn-group"  style={!this.state.small ? {marginTop: '.25em', display: 'flex', justifyContent: 'center', marginBottom: 3, height: '2em', borderColor: c.off_green} : {marginTop: '.35em', display: 'flex', justifyContent: 'center', margin: '.2em', height: '2em', borderColor: c.off_green, width: '70%'}}>
+                <div style={this.state.small ? {display: 'inline-flex', justifyContent: 'space-between',  width: '75%', alignItems: 'center'} : {display: 'inline-flex', paddingLeft: '1em', paddingRight: '1em'}}>
+                    <Link to='/' className='Logo' style={ this.state.small ? { fontSize: '1em', lineHeight:'1em', maxWidth: '6em', fontFamily: 'Barricada-Pro', overflow: 'visible' }: this.state.windowWidth < 1200 ? {fontSize: '1.5em', marginTop: '0.2em', fontFamily: 'Barricada-Pro'} : { fontFamily: 'Barricada-Pro', fontSize: '1.8em' }}>JS Lib Discovery</Link>
+                    <div className="btn-group"  style={!this.state.small ? {marginTop: '.25em', display: 'flex', justifyContent: 'center', marginBottom: 3, height: '2em', borderColor: c.off_green} : {display: 'flex', justifyContent: 'center', height: '2.15em', borderColor: c.off_green, width: '70%'}}>
                         <input placeholder={this.state.small ? 'Search' : 'Search for Libraries'} style={ !this.state.small ? {color: c.header, fontSize: '1em', backgroundColor: c.body_bg, width: `${this.state.windowWidth < 1200 ? 15 + (((this.state.windowWidth / 1200)) * 5) : 30}em` } : {color: c.header, fontSize: '1em',width: '100%', backgroundColor: c.body_bg, borderRadius: '0.25rem', height: '2.15em' }} className="btn btn-outline-secondary" onKeyPress={this.handleEnter.bind(this)} onChange={this.handleQuery.bind(this)} value={ this.state.searchedQuery } />
                         <button style={ !this.state.small ? { color: c.off_green, fontSize: '.75em', backgroundColor: c.body_bg } : { color: c.off_green, fontSize: '.45em', backgroundColor: c.body_bg, maxWidth: '8em', padding: '0.2em', display: 'none'  }} className="btn btn-outline-secondary" onClick={this.handleSearch.bind(this)}>Search</button>
                     </div>
@@ -196,11 +196,7 @@ class Header extends Component {
                         </DropdownMenu>
                     </Dropdown>) : null}
                     <div onClick={this.handleCart.bind(this)} className='Cart-Box'>
-                        <div className={'Inner-Cart-Box'}>
-                            <h2 className='Brackets'>[</h2>
-                            <h2 className='Quantity'>{this.state.itemsInCart}</h2>
-                            <h2 className='Brackets'>]</h2>
-                        </div>
+                        <h2 className='Brackets'>[{this.state.itemsInCart}]</h2>
                     </div>
                 </div>
             </div>
