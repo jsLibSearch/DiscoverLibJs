@@ -398,8 +398,8 @@ class Cart extends Component {
   render() {
     return (
       <div className='WrapCart'>
-      <div ref='theCart' className='Package PackDiv' style={this.state.small ? {width: 'auto', margin: '.3em .3em'}: {}}>
-        <div className='PackCart' style={!this.state.small ? { position: 'relative', padding: 0.2, marginBottom: 6 } : { padding: 0.2, marginBottom: 6, height: 'auto', display: 'block', maxHeight: 'none'}}>
+      <div ref='theCart' className='Cart' style={this.state.small ? {width: 'auto', margin: '.3em .3em'}: {}}>
+        <div className='PackCartHead' style={!this.state.small ? { position: 'relative', padding: 0.2 } : { padding: 0.2, height: 'auto', display: 'block', maxHeight: 'none'}}>
           <h1 className='PackTitle'>
             {this.state.cartName}
           </h1>
@@ -407,21 +407,21 @@ class Cart extends Component {
             You have {this.props.cart.packages.length} {this.props.cart.packages.length === 1 ? 'package' : 'packages'} in your project
           </h1>
         </div>
-        <div className='PackCart' style={{ padding: 0.2 }}>
-        <div>
+        <div className='PackCart' style={{ padding: '0.2em', height: 'auto', maxHeight: 'none' }}>
+        <div style={{ display: 'inline-flex', alignItems: 'center' }}>
           <Button
             outline={!(this.props.cart.packages.length > 0 && this.state.selected.length === this.props.cart.packages.length)}
             color='success'
             size='sm'
             onClick={this.toggleSelectAll.bind(this)}
             style={this.state.small ? {
-              height: '2.2em',
               fontSize: '.8em',
               border: 'none',
-              margin: 0,
-              padding: '0em .1em'
+              padding: '0.2em 0.4em',
+              whiteSpace: 'normal',
+              wordBreak: 'break-word',
+              textAlign: 'left'
             } : {
-              height: '2.2em',
               fontSize: '.8em',
               border: 'none',
               margin: 0
@@ -431,10 +431,18 @@ class Cart extends Component {
           <Button outline color='danger'
             size='sm'
             disabled={this.state.selected.length === 0}
-            style={{
-              height: '2.2em',
+            style={ this.state.small ? {
               fontSize: '.8em',
-              border: 'none'
+              padding: '0.2em 0.4em',
+              border: 'none',
+              whiteSpace: 'normal',
+              wordBreak: 'break-word',
+              textAlign: 'left'
+            } : {
+              border: 'none',
+              whiteSpace: 'normal',
+              wordBreak: 'break-word',
+              textAlign: 'left'
             }}
             onClick={this.deleteSelected.bind(this)}
           >Delete Selected</Button>
@@ -447,12 +455,11 @@ class Cart extends Component {
           toggle={this.toggleOpenCartOptions.bind(this)}
           size="sm"
           style={{
-            height: '2.2em',
             fontSize: '.8em',
             border: 'none'
           }}>
           <DropdownToggle
-            style={this.state.small ? { border: 'none', margin: '0em', padding: '0em .3em' } : { border: 'none', margin: '0em' }}
+            style={this.state.small ? { border: 'none', margin: '0em', padding: '0.2em 0.4em' } : { border: 'none', margin: '0em' }}
             size="sm"
             outline
             caret>
@@ -465,10 +472,10 @@ class Cart extends Component {
               <p className={!this.state.small ? 'SignCart' : 'SignCartSmall'} style={{ padding: '0.3em 1em', width: '12em', marginBottom: '0em' }} onClick={this.saveCart.bind(this)}>Save Project</p>
             </div>
             <div>
-              <p className={!this.state.small ? 'Sign' : 'SignSmall'} style={{ padding: '0.3em 1em', width: '12em', marginBottom: '0em' }} id='rename'onClick={this.toggleRename.bind(this)}>Rename</p>
+              <p className={!this.state.small ? 'Sign' : 'SignSmall2'} style={{ padding: '0.3em 1em', width: '12em', marginBottom: '0em' }} id='rename'onClick={this.toggleRename.bind(this)}>Rename</p>
             </div>
             <div>
-              <p className={!this.state.small ? 'Sign' : 'SignSmall'} style={{ padding: '0.3em 1em', width: '12em', marginBottom: '0em' }} onClick={() => this.toggleModal() }> Create A Repo </p>
+              <p className={!this.state.small ? 'Sign' : 'SignSmall2'} style={{ padding: '0.3em 1em', width: '12em', marginBottom: '0em' }} onClick={() => this.toggleModal() }> Create A Repo </p>
             </div>
 
             <Popover style={ { backgroundColor: c.body_bg } }  placement='left' isOpen={this.state.renaming} target='options' toggle={this.toggleRename.bind(this)}>
@@ -491,16 +498,16 @@ class Cart extends Component {
           ):(
           <DropdownMenu style={{backgroundColor: c.header, borderRadius: '1em'}}>
             <div>
-              <p className={!this.state.small ? 'SignCart' : 'SignSmall'} style={{ padding: '0.3em 1em', width: '12em', marginBottom: '0em' }} onClick={this.saveCart.bind(this)}>Save As New Project</p>
+              <p className={!this.state.small ? 'SignCart' : 'SignCartSmall'} style={{ padding: '0.3em 1em', width: '12em', marginBottom: '0em' }} onClick={this.saveCart.bind(this)}>Save As New Project</p>
             </div>
             <div>
-              <p className={!this.state.small ? 'SignCart' : 'SignSmall'} style={{ padding: '0.3em 1em', width: '12em', marginBottom: '0em' }} onClick={this.overwriteCart.bind(this)}>Overwrite Project</p>
+              <p className={!this.state.small ? 'SignCart' : 'SignCartSmall'} style={{ padding: '0.3em 1em', width: '12em', marginBottom: '0em' }} onClick={this.overwriteCart.bind(this)}>Overwrite Project</p>
             </div>
             <div>
-              <p className={!this.state.small ? 'Sign' : 'SignSmall'} style={{ padding: '0.3em 1em', width: '12em', marginBottom: '0em' }} id='rename'onClick={this.toggleRename.bind(this)}>Rename</p>
+              <p className={!this.state.small ? 'Sign' : 'SignSmall2'} style={{ padding: '0.3em 1em', width: '12em', marginBottom: '0em' }} id='rename'onClick={this.toggleRename.bind(this)}>Rename</p>
             </div>
             <div>
-              <p className={!this.state.small ? 'Sign' : 'SignSmall'} style={{ padding: '0.3em 1em', width: '12em', marginBottom: '0em' }} color="secondary" onClick={() => this.toggleModal() }> Create A Repo </p>
+              <p className={!this.state.small ? 'Sign' : 'SignSmall2'} style={{ padding: '0.3em 1em', width: '12em', marginBottom: '0em' }} color="secondary" onClick={() => this.toggleModal() }> Create A Repo </p>
             </div>
             <Popover style={ { backgroundColor: c.body_bg } }  placement='left' isOpen={this.state.renaming} target='options' toggle={this.toggleRename.bind(this)}>
               <PopoverHeader style={ { backgroundColor: c.header, color: c.body_bg } }>Rename Project</PopoverHeader>
@@ -532,28 +539,38 @@ class Cart extends Component {
                 component='div'
                 key={`transition${item._id}`}>
                 <div className='PackCart' style={this.state.small ? { margin: '0am', maxHeight: 'none', height: 'auto'} : { margin: '0am'} } key={item.name}>
-                  <h1 key={item._id} className='PackDesc' style={
+                  <Button 
+                    key={item._id}
+                    outline={!this.state.selected.includes(item.name)}
+                    color='secondary'
+                    size='sm'
+                    key={`abcd${item.name}`}
+                    onClick={this.selectPackage.bind(this, item.name)}
+                    style={
                         this.state.small ? {
-                        margin: '0.3em 0em 0em',
-                        verticalAlign: 'middle',
                         display: 'inline-flex',
-                        maxWidth: '9em',
-                        fontSize: '.8em',
+                        border: 'none',
                       } : {
-                        margin: '0.3em 0em 0em',
-                        verticalAlign: 'middle',
                         display: 'inline-flex',
-                    }}>{item.name}</h1>
+                        border: 'none'
+                    }}>
+                      <span
+                        className={!this.state.selected.includes(item.name) ? 'PackDescButton' : 'PackDescSelected'}
+                        style={
+                        this.state.small ? {
+                          display: 'inline-flex',
+                          fontSize: '.8em',
+                          textAlign: 'left',
+                          border: 'none',
+                        } : {
+                            display: 'inline-flex',
+                            textAlign: 'left',
+                            border: 'none'
+                          }}>
+                        {item.name}
+                      </span>
+                  </Button>
                   <div key={`abc${item.name}`}>
-                    <Button
-                      outline={!this.state.selected.includes(item.name)}
-                      color='success'
-                      size='sm'
-                      style={{ border: 'none', margin: '0em' }}
-                      key={`abcd${item.name}`}
-                      onClick={this.selectPackage.bind(this, item.name)}>
-                      {this.state.selected.includes(item) ? 'Unselect' : 'Select'}
-                    </Button>
                     <Dropdown
                         group
                         title='Options'
