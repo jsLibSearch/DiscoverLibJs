@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
 import '../App.css';
-import { Link } from 'react-router-dom';
-import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink,
-  ListGroup, ListGroupItem } from 'reactstrap';
-
+// import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink,
+//   ListGroup, ListGroupItem } from 'reactstrap';
+import { Collapse, Navbar, NavbarBrand, Nav, NavItem, NavLink} from 'reactstrap';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { getCatalog, getRecs, dev } from '../actions';
 import ListOfPckgs from './ListOfPckgs';
 import { initGA, logPageView } from './ReactGA';
-const axios = require('axios');
+// const axios = require('axios');
 
 class Home extends Component {
   constructor(props) {
@@ -34,25 +33,22 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    window.addEventListener('resize', this.handleResize.bind(this))
+    window.addEventListener('resize', this.handleResize.bind(this));
     this.setState({
       windowHeight: window.innerHeight - 40
-    })
-    this.props.getCatalog();
+    });
+    // console.log((this.props.catalog))
+    if ( !Object.keys(this.props.catalog).length ) this.props.getCatalog();  
     initGA();
     logPageView();
-
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this.handleResize.bind(this))
+    window.removeEventListener('resize', this.handleResize.bind(this));
   }
 
-  componentWillReceiveProps(nextProps) {  
-    if (!this.state.ready && Object.keys(nextProps.catalog).length) {
-      this.setState({ ready: true });
-    }
-    //console.log(Object.keys(nextProps.catalog))
+  componentWillReceiveProps(nextProps) {
+
   }
 
   componentDidUpdate() {
@@ -79,7 +75,10 @@ class Home extends Component {
     }
     if (this.state.cart && this.state.cart.length > 0 && this.state.recs.length === 0 && !this.props.recState.loading && !this.state.loading) {
       this.sendRecRequest();
-    }     
+    }
+
+
+    if (this.props.catalog.ready && !this.state.ready) this.setState({ ready: true });
   }
 
   sendRecRequest() {
@@ -134,134 +133,103 @@ class Home extends Component {
 
  
   test(str) {
+    console.log(this.props.catalog)
     switch (str) {
       case 'appFrameWorks':
-        this.setState({ list: this.props.catalog.appFrameWorks })
-        // console.log(this.props.catalog.appFrameWorks)
+        this.setState({ list: this.props.catalog.data.appFrameWorks })
         return;
       case 'mobileFrameWorks':
-        this.setState({ list: this.props.catalog.mobileFrameWorks })
-        // console.log(this.props.catalog.mobileFrameWorks)
+        this.setState({ list: this.props.catalog.data.mobileFrameWorks })
         return;
       case 'realTimeFrameWorks':
-        this.setState({ list: this.props.catalog.realTimeFrameWorks })
-        // console.log(this.props.catalog.realTimeFrameWorks)
+        this.setState({ list: this.props.catalog.data.realTimeFrameWorks })
         return;
       case 'testingFrameWorks':
-        this.setState({ list: this.props.catalog.testingFrameWorks })
-        // console.log(this.props.catalog.testingFrameWorks)
+        this.setState({ list: this.props.catalog.data.testingFrameWorks })
         return;
       case 'uiFrameWorks':
-        this.setState({ list: this.props.catalog.uiFrameWorks })
-        // console.log(this.props.catalog.uiFrameWorks)
+        this.setState({ list: this.props.catalog.data.uiFrameWorks })
         return;
       case 'windowsModalsPopups':
-        this.setState({ list: this.props.catalog.windowsModalsPopups })
-        // console.log(this.props.catalog.windowsModalsPopups)
+        this.setState({ list: this.props.catalog.data.windowsModalsPopups })
         return;
       case'keyboardWrappers':
-        this.setState({ list: this.props.catalog.keyboardWrappers })
-        // console.log(this.props.catalog.keyboardWrappers)
+        this.setState({ list: this.props.catalog.data.keyboardWrappers })
         return;
       case'formWidgets':
-        this.setState({ list: this.props.catalog.formWidgets })
-        // console.log(this.props.catalog.formWidgets)
+        this.setState({ list: this.props.catalog.data.formWidgets })
         return;
       case'gameEngines':
-        this.setState({ list: this.props.catalog.gameEngines })
-        // console.log(this.props.catalog.gameEngines)
+        this.setState({ list: this.props.catalog.data.gameEngines })
         return;
       case'physicsLib':
-        this.setState({ list: this.props.catalog.physicsLib })
-        // console.log(this.props.catalog.physicsLib)
+        this.setState({ list: this.props.catalog.data.physicsLib })
         return;
       case'animationLib':
-        this.setState({ list: this.props.catalog.animationLib })
-        // console.log(this.props.catalog.animationLib)
+        this.setState({ list: this.props.catalog.data.animationLib })
         return;
       case'presentationLib':
-        this.setState({ list: this.props.catalog.presentationLib })
-        // console.log(this.props.catalog.animationLib)
+        this.setState({ list: this.props.catalog.data.presentationLib })
         return;
       case'canvasWrappers':
-        this.setState({ list: this.props.catalog.canvasWrappers })
-        // console.log(this.props.catalog.canvasWrappers)
+        this.setState({ list: this.props.catalog.data.canvasWrappers })
         return;
       case'WebGL':
-        this.setState({ list: this.props.catalog.WebGL })
-        // console.log(this.props.catalog.WebGL)
+        this.setState({ list: this.props.catalog.data.WebGL })
         return;
       case'ImageManipulation':
-        this.setState({ list: this.props.catalog.ImageManipulation })
-        // console.log(this.props.catalog.ImageManipulation)
+        this.setState({ list: this.props.catalog.data.ImageManipulation })
         return;
       case'visualizationLib':
-        this.setState({ list: this.props.catalog.visualizationLib })
-        // console.log(this.props.catalog.visualizationLib)
+        this.setState({ list: this.props.catalog.data.visualizationLib })
         return;
       case'dataStructures':
-        this.setState({ list: this.props.catalog.dataStructures })
-        // console.log(this.props.catalog.dataStructures)
+        this.setState({ list: this.props.catalog.data.dataStructures })
         return;
       case'dateLib':
-        this.setState({ list: this.props.catalog.dateLib })
-        // console.log(this.props.catalog.dateLib)
+        this.setState({ list: this.props.catalog.data.dateLib })
         return;
       case'storageLib':
-        this.setState({ list: this.props.catalog.storageLib })
-        // console.log(this.props.catalog.storageLib)
+        this.setState({ list: this.props.catalog.data.storageLib })
         return;
       case'validationLib':
-        this.setState({ list: this.props.catalog.validationLib })
-        // console.log(this.props.catalog.validationLib)
+        this.setState({ list: this.props.catalog.data.validationLib })
         return;
       case'packageManagers':
-        this.setState({ list: this.props.catalog.packageManagers })
-        // console.log(this.props.catalog.packageManagers)
+        this.setState({ list: this.props.catalog.data.packageManagers })
         return;
       case'timingLib':
-        this.setState({ list: this.props.catalog.timingLib })
-        // console.log(this.props.catalog.timingLib)
+        this.setState({ list: this.props.catalog.data.timingLib })
         return;
       case'toolkits':
-        this.setState({ list: this.props.catalog.toolkits })
-        // console.log(this.props.catalog.toolkits)
+        this.setState({ list: this.props.catalog.data.toolkits })
         return;
       case'codeProtectionLibs':
-        this.setState({ list: this.props.catalog.codeProtectionLibs })
-        // console.log(this.props.catalog.codeProtectionLibs)
+        this.setState({ list: this.props.catalog.data.codeProtectionLibs })
         return;
       case'DOM':
-        this.setState({ list: this.props.catalog.DOM })
-        // console.log(this.props.catalog.DOM)
+        this.setState({ list: this.props.catalog.data.DOM })
         return;
       case'ACFL':
-        this.setState({ list: this.props.catalog.ACFL })
-        // console.log(this.props.catalog.ACFL)
+        this.setState({ list: this.props.catalog.data.ACFL })
         return;
       case'functionalProgramming':
-        this.setState({ list: this.props.catalog.functionalProgramming })
-        // console.log(this.props.catalog.functionalProgramming)
+        this.setState({ list: this.props.catalog.data.functionalProgramming })
         return;
       case'mathLibs':
-        this.setState({ list: this.props.catalog.mathLibs })
-        // console.log(this.props.catalog.mathLibs)
+        this.setState({ list: this.props.catalog.data.mathLibs })
         return;
       case'html5Apps':
-        this.setState({ list: this.props.catalog.html5Apps })
-        // console.log(this.props.catalog.html5Apps)
+        this.setState({ list: this.props.catalog.data.html5Apps })
         return;
       case'siteGenerators':
-        this.setState({ list: this.props.catalog.siteGenerators })
-        // console.log(this.props.catalog.siteGenerators)
+        this.setState({ list: this.props.catalog.data.siteGenerators })
         return;
       case'codeEditors':
-        this.setState({ list: this.props.catalog.codeEditors })
-        // console.log(this.props.catalog.codeEditors)
+        this.setState({ list: this.props.catalog.data.codeEditors })
         return;
       case'designAndPrototyping':
-        this.setState({ list: this.props.catalog.designAndPrototyping })
-        // console.log(this.props.catalog.designAndPrototyping)
+        this.setState({ list: this.props.catalog.data.designAndPrototyping })
         return;
       default: 
         console.log('default');
@@ -274,7 +242,7 @@ class Home extends Component {
     if (this.state.ready) {
       return ( 
         <div ref="homePage">
-          <h4 className='Catalog1'></h4>
+          <div className='Catalog1'></div>
           <div className="Catalog">
             <div className="NavBar">
               <Navbar >

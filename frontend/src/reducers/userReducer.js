@@ -29,7 +29,6 @@ export default (state = INITIAL_STATE, action) => {
                 loadingCarts: true
             });
         case ADD_CART:
-            console.log(action.payload)
             const newUserState = Object.assign({}, state.user, {
                 carts: [ ...state.user.carts, action.payload]
             });

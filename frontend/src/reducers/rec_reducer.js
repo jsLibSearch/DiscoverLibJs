@@ -1,17 +1,22 @@
-import { GET_RECS, SEARCH_REC, LOADING_RECS } from '../actions';
+import { GET_RECS, SEARCH_REC, LOADING_RECS, CLEAR_RECS } from '../actions';
 // const dev = false;
 
-const recReducer = (state = { recs: [], loading: false, query: '' }, action) => {
+const defaultRecState = { recs: [], loading: false, query: '' }
+
+const recReducer = (state = defaultRecState, action) => {
     switch(action.type) {
         case GET_RECS:
             const processPackages = (a) => {
-                const seen = {};
-                let noDups = a.filter((item) => {
-                    return seen.hasOwnProperty(item.name) ? false : (seen[item.name] = true);
+                const returnArr = [];
+                const scopedPackages = [];
+                a.forEach((item) => {
+                    if (item.name[0] !== '@') {
+                        returnArr.push(item);
+                    } else {
+                        scopedPackages.push(item)
+                    }
                 });
-                const scopedPackages = noDups.filter(item => item.name[0] === '@');
-                noDups = noDups.filter(item => item.name[0] !== '@')
-                let scoped = { scoped: false };
+                const scoped = { scoped: false };
                 while (scopedPackages.length > 0) {
                     const nextScope = scopedPackages.shift();
                     let scope = nextScope.name
@@ -28,8 +33,8 @@ const recReducer = (state = { recs: [], loading: false, query: '' }, action) => 
                         continue;
                     }
                 }
-                noDups.push(scoped);
-                return noDups;
+                returnArr.push(scoped);
+                return returnArr;
             }
             return Object.assign({}, state, {
                 recs: processPackages(action.payload),
@@ -42,8 +47,11 @@ const recReducer = (state = { recs: [], loading: false, query: '' }, action) => 
             });
         case LOADING_RECS:
             return Object.assign({}, state, {
-                loading: true
+                loading: true,
+                recs: []
             })
+        case CLEAR_RECS:
+            return defaultRecState
         default:
             return state;
     }

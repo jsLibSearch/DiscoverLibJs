@@ -3,9 +3,8 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import Cart from './cart.js';
 import Package from './package.js';
-import { getRecs } from '../actions';
+import { getRecs, dev, clearRecs } from '../actions';
 import '../App.css';
-import { customColors as c } from '../custom/colors.js';
 
 class CartPage extends Component {
   constructor(props) {
@@ -16,47 +15,18 @@ class CartPage extends Component {
       cart: [],
       recs: [],
       loading: false,
-      dev: true
+      dev: dev,
+      loadRecsStarted: false,
     };
     this.sendRecRequest = this.sendRecRequest.bind(this);
   }
 
-  componentDidUpdate() {
-    if (this.props.cart.packages.length !== this.state.cart.length && this.refs.cartPage) {
-      let currentCart = [];
-      if (this.props.cart.packages.length > 0) {
-        currentCart = this.props.cart.packages
-        this.setState({
-          cart: currentCart,
-        })
-        this.sendRecRequest();
-      }
-
-    }
-    if (this.props.recState.loading && !this.state.loading) {
-      this.setState({
-        loading: true,
-      })
-    } else if (!this.props.recState.loading && this.state.loading) {
-      this.setState({
-        loading: false,
-        recs: this.props.recState.recs,
-      })
-    }
-    if (this.state.cart && this.state.cart.length > 0 && this.state.recs.length === 0 && !this.props.recState.loading && !this.state.loading) {
-      this.sendRecRequest();
-    }
-  }
-
-  
-
   componentDidMount() {
     window.addEventListener('resize', this.handleResize.bind(this));
-    const small = this.state.windowWidth < 500 ? true : false;
+    const small = this.state.windowWidth < 700 ? true : false;
     let currentCart = [];
     if (this.props.cart.packages.length > 0) {
-      currentCart = this.props.cart.packages
-      this.sendRecRequest();
+      this.sendRecRequest(this.props.cart.packages);
     }
 
     this.setState({
@@ -75,17 +45,37 @@ class CartPage extends Component {
       if (nextProps.cart.packages.length === 0) {
         this.setState({
           recs: [],
-          cart: []
+          cart: [],
+          loadRecsStarted: false,
         })
       }
-    }
-    if (nextProps.cart.packages.length !== this.props.cart.packages.length) {
+    } else if (nextProps.cart.packages.length !== this.props.cart.packages.length) {
       if (nextProps.cart.packages.length === 0) {
         this.setState({
           recs: [],
-          cart: []
+          cart: [],
+          loadRecsStarted: false,
         })
+        this.props.clearRecs();
       }
+    }
+    if (this.props.cart.packages.length !== nextProps.cart.packages.length && this.refs.cartPage) {
+      let currentCart = [];
+      if (nextProps.cart.packages.length > 0) {
+        this.sendRecRequest(nextProps.cart.packages);
+      }
+    }
+    if (nextProps.recState.loading && !this.props.recState.loading) {
+      this.setState({
+        loading: true,
+        loadRecsStarted: true,
+      })
+    }
+    if (!nextProps.recState.loading && this.state.loading) {
+      this.setState({
+        loading: false,
+        recs: nextProps.recState.recs,
+      })
     }
   }
 
@@ -93,16 +83,19 @@ class CartPage extends Component {
     if (!this.refs.cartPage) {
       return;
     }
-    const small = this.state.windowWidth < 500 ? true : false;
+    const small = this.state.windowWidth < 700 ? true : false;
     this.setState({
       windowWidth: window.innerWidth,
       small: small
     })
   }
 
-  sendRecRequest() {
-    if (this.state.cart && this.state.cart.length > 0) {
-      this.props.getRecs(this.props.cart.packages);
+  sendRecRequest(pkgs) {
+    if (pkgs && pkgs.length > 0) {
+      this.setState({
+        loadRecsStarted: false,
+      })
+      this.props.getRecs(pkgs);
     }
   }
 
@@ -111,7 +104,7 @@ class CartPage extends Component {
       <div ref='cartPage'>
         <Cart />
         <p className='RecText' style={this.state.small ? {textAlign: 'center', margin: '2em 0em 0em'} : {}}>
-          {this.state.loading ? 'Loading recommendations' : 'Recommendations'}
+          {this.state.loading ? 'Loading recommendations' : this.state.loadRecsStarted ? 'Recommendations' : ''}
         </p>
         {this.state.recs.length > 0 ?
         this.state.recs.map((rec, i) => {
@@ -149,4 +142,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default withRouter(connect(mapStateToProps, { getRecs })(CartPage));
+export default withRouter(connect(mapStateToProps, { getRecs, clearRecs })(CartPage));

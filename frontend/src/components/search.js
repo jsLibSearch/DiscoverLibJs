@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { getPackages, newItem } from '../actions';
+import { getPackages, newItem, searchRec, clearSearch } from '../actions';
 import '../App.css';
 // import { customColors as c } from '../custom/colors.js';
 import Package from './package.js';
 import ScopedPackages from './scoped_package.js';
 import { initGA, logPageView } from './ReactGA';
+import { Button } from 'reactstrap';
 
 export class SearchPage extends Component {
   constructor(props) {
@@ -19,13 +20,17 @@ export class SearchPage extends Component {
         dev: false,
         loading: false,
         results: 0,
-        smallLimit: 30
+        smallLimit: 30,
+        recs: [],
+        loadingRecs: false,
+        loadRecsStarted: false,
+        showMoreRecs: false
     };
   }
 
   componentDidUpdate() {
     if (this.props.redux.query !== this.state.query && this.refs.searchPage) {
-      this.props.getPackages(this.props.redux.query);
+      this.props.cart.packages.length > 0 ? this.props.searchRec(this.props.cart.packages, this.props.redux.query) : this.props.getPackages(this.props.redux.query);
       this.setState({
         query: this.props.redux.query
       })
@@ -39,7 +44,6 @@ export class SearchPage extends Component {
       const numberOfResults = this.props.redux.packages.length + (Object.keys(this.props.redux.packages[this.props.redux.packages.length - 1]).length - 2)
       this.setState({
         loading: false,
-        packages: this.props.redux.packages,
         results: numberOfResults
       })
     }
@@ -47,21 +51,18 @@ export class SearchPage extends Component {
 
   componentDidMount() {
     window.addEventListener('resize', this.handleResize.bind(this));
-    const small = this.state.windowWidth < 500 ? true : false;
+    const small = this.state.windowWidth < 700 ? true : false;
     if (this.props.redux.query.length > 0){
-      this.props.getPackages(this.props.redux.query);
+      this.props.cart.packages.length > 0 ? this.props.searchRec(this.props.cart.packages, this.props.redux.query) : this.props.getPackages(this.props.redux.query);
     }
     if (this.props.redux.loading && !this.state.loading) {
-      console.log('loading =', this.props.redux.loading)
       this.setState({
         loading: true,
         query: this.props.redux.query
       })
     } else if (!this.props.redux.loading && this.state.loading) {
-      console.log('loading =', this.props.redux.loading)
       this.setState({
         loading: false,
-        packages: this.props.redux.packages
       })
     }
     if (!this.refs.searchPage) {
@@ -76,15 +77,30 @@ export class SearchPage extends Component {
     logPageView();
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.recState.loading && !this.props.recState.loading) {
+      this.setState({
+        loadingRecs: true,
+        loadRecsStarted: true
+      })
+    } else if (!nextProps.recState.loading && this.props.recState.loading) {
+      this.setState({
+        loadingRecs: false,
+        recs: nextProps.recState.recs,
+      })
+    }
+  }
+
   componentWillUnmount() {
-    window.removeEventListener('resize', this.handleResize.bind(this))
+    window.removeEventListener('resize', this.handleResize.bind(this));
+    this.props.clearSearch();
   }
 
   handleResize() {
     if (!this.refs.searchPage) {
       return;
     }
-    const small = this.state.windowWidth < 500 ? true : false;
+    const small = this.state.windowWidth < 700 ? true : false;
     this.setState({
         windowWidth: window.innerWidth,
         small: small
@@ -107,11 +123,61 @@ export class SearchPage extends Component {
     })
   }
 
+  toggleShowMoreRecs() {
+    this.setState({
+      showMoreRecs: !this.state.showMoreRecs
+    })
+  }
+
   render() {
-    console.log(this.props.redux)
     return (
       <div ref='searchPage'>
         {this.state.dev ? (<button onClick={this.fillDevCart.bind(this)}>fill all</button>): null}
+        {this.props.cart.packages.length > 0 && this.state.loadRecsStarted ? (
+        <div style={{ borderBottom: '1px solid rgb(103, 122, 87)', marginTop: '.2em' }}>
+          <p className='SearchHeader' style={this.state.small ? {textAlign: 'center', margin: '2em 0em 0em'} : {}}>
+            {this.state.loadingRecs ? 'Loading recommendations' : 'Recommendations'}
+          </p>
+        </div>
+      ): null}
+        {this.props.recState.recs.length > 0 ?
+        this.props.recState.recs.map((rec, i) => {
+          if (this.props.recState.recs.length === i + 1) {
+            return (
+              <div key={'scoper'}>
+              </div>
+            )
+          }
+          if (!this.state.showMoreRecs && i >= 5) {
+            if (i === 5) {
+              return (
+                <div key={'recbutton'}>
+                  <Button size='sm' style={{
+                    height: '2.2em',
+                    fontSize: '.8em',
+                    border: 'none'
+              }} onClick={this.toggleShowMoreRecs.bind(this)}>Show more</Button>
+                </div>
+              )
+            }
+            return (null)
+          }
+          return (
+            <div key={rec._id + 'id'} style={this.state.small ? {margin: '0.3em'} : {}}>
+              <Package
+                style={this.state.small ? { margin: '1em 0em' }:{}}
+                key={i}
+                name={rec.name}
+                about={rec.description}
+                freq={rec.freq}
+                keywords={rec.keywords}
+                parents={rec.parents}
+                _id={rec._id}
+                homepage={rec.homepage}/>
+            </div>
+          )
+        })
+        : null}
         <div style={{ borderBottom: '1px solid rgb(103, 122, 87)', marginTop: '.2em' }}>
           {this.state.loading ?
             (<h3 className='SearchHeader'>Loading search results for "{this.state.query}"</h3>)
@@ -172,8 +238,10 @@ export class SearchPage extends Component {
 
 const mapStateToProps = (state) => {
   return {
-      redux: state.packages
+      redux: state.packages,
+      cart: state.cart,
+      recState: state.recState
   };
 };
 
-export default withRouter(connect(mapStateToProps, { getPackages, newItem })(SearchPage));
+export default withRouter(connect(mapStateToProps, { getPackages, newItem, searchRec, clearSearch })(SearchPage));

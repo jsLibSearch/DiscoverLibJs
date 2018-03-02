@@ -1,10 +1,9 @@
 {
-	"name": "here it is",
+	"name": "123456",
 	"version": "1.0.0",
 	"dependencies": {
-		"connect-mongo": "*",
-		"express-session": "*",
+		"mongodb": "*",
 		"mongoose": "*",
-		"morgan": "*"
+		"shortid": "*"
 	}
 }
