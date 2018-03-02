@@ -1,5 +1,4 @@
 import { GET_CART, NEW_ITEM, DELETE_ITEM, SET_CART_NAME, CLEAR_CART, SET_AS_SAVED_CART } from '../actions';
-// import axios from 'axios';
 
 const cartReducer = (state = { packages: [], name: 'Untitled Project', _id: null}, action) => {
     switch(action.type) {
