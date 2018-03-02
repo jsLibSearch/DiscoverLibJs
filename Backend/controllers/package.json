@@ -1,9 +1,11 @@
 {
-	"name": "123456",
+	"name": "react application",
 	"version": "1.0.0",
 	"dependencies": {
-		"mongodb": "*",
-		"mongoose": "*",
-		"shortid": "*"
+		"axios": "*",
+		"babel-preset-react": "*",
+		"eslint-plugin-react": "*",
+		"react": "*",
+		"react-dom": "*"
 	}
 }

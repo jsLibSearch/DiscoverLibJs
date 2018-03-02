@@ -60,7 +60,6 @@ class CartPage extends Component {
       }
     }
     if (this.props.cart.packages.length !== nextProps.cart.packages.length && this.refs.cartPage) {
-      let currentCart = [];
       if (nextProps.cart.packages.length > 0) {
         this.sendRecRequest(nextProps.cart.packages);
       }
@@ -103,7 +102,7 @@ class CartPage extends Component {
     return (
       <div ref='cartPage'>
         <Cart />
-        <p className='RecText' style={this.state.small ? {textAlign: 'center', margin: '2em 0em 0em'} : {}}>
+        <p className='RecText' style={this.state.small ? {textAlign: 'center', margin: '50px 0px 0px'} : {}}>
           {this.state.loading ? 'Loading recommendations' : this.state.loadRecsStarted ? 'Recommendations' : ''}
         </p>
         {this.state.recs.length > 0 ?

@@ -1,6 +1,16 @@
+html {
+  font-size: 62.5%;
+}
+
+body {
+  background-color: white;
+  font-size: 1.4rem;
+}
+
+
 .App {
   text-align: center;
-  font-family: ABeeZee, sans-serif
+  font-family: "usual", ABeeZee, sans-serif
 }
 
 .Main {
@@ -10,7 +20,7 @@
 
 .Center {
   background-color: #20222000;
-  width: 65em;
+  width: 1100px;
 }
 
 .App-logo {
@@ -18,19 +28,9 @@
   height: 80px;
 }
 
-.App-header {
-  display: flex;
-  justify-content: space-between;
-  background-color: #313531;
-  height: 2.5em;
-  padding: 0em;
-  color: #E1E1E2;
-}
-
 .HeaderLeft {
   display: inline-flex;
   justify-content: flex-start;
-  width: 15em;
 }
 
 .HeaderRight {
@@ -40,9 +40,9 @@
 
 .Sign {
   padding: 0.5em;
-  font-size: 1em;
+  font-size: 15rem;
   text-decoration: none;
-  color: #E1E1E2;
+  color: white;
   cursor: pointer;
 }
 
@@ -52,12 +52,10 @@
 }
 
 .SignSmall {
-  padding: 1em 0em 1em 0em;
-  min-width: 3em;
-  margin: 0em 1em;
-  font-size: .8em;
+  font-size: 2.8rem;
+  padding-right: 20px;
   text-decoration: none;
-  color: #E1E1E2;
+  color: white;
   cursor: pointer;
   overflow: visible;
 }
@@ -67,7 +65,7 @@
   min-width: 3em;
   font-size: .9em;
   text-decoration: none;
-  color: #E1E1E2;
+  color: white;
   cursor: pointer;
   overflow: visible;
 }
@@ -82,11 +80,26 @@
   text-decoration: none;
 }
 
-.SignCart {
-  padding: 0.5em;
-  font-size: 1em;
+.SignDD {
+  padding: 0px;
+  font-size: 1.8rem;
   text-decoration: none;
-  color: #E1E1E2;
+  color: white;
+  margin: 10px 10px;
+  cursor: pointer;
+}
+
+.SignDD:hover {
+  color: #4470ff;
+  text-decoration: none;
+}
+
+.SignCart {
+  padding: 0px;
+  font-size: 1.8rem;
+  text-decoration: none;
+  color: white;
+  margin: 10px 10px;
   cursor: pointer;
 }
 
@@ -97,9 +110,9 @@
 
 .SignCartSmall {
   padding: 1em .5em 1em .5em;
-  font-size: .9em;
+  font-size: 1.8rem;
   text-decoration: none;
-  color: #E1E1E2;
+  color: white;
   cursor: pointer;
 }
 
@@ -109,10 +122,11 @@
 }
 
 .SignDel {
-  padding: 0.5em;
-  font-size: 1em;
+  padding: 0px;
+  font-size: 1.8rem;
   text-decoration: none;
   color: #fd4a4a;
+  margin: 10px 10px;
   cursor: pointer;
 }
 
@@ -138,7 +152,7 @@
   padding: 0.95em;
   font-size: .8em;
   text-decoration: none;
-  color: #E1E1E2;
+  color: white;
 }
 
 .HeadLink:hover {
@@ -146,22 +160,16 @@
   text-decoration: none;
 }
 
-.Username {
-  padding: 0.5em;
-  color: #91ac7c;
-  font-size: 1em;
-  text-decoration: none;
-}
-.Username:hover {
-  color: #4459ff;
-  text-decoration: none;
-}
-
 .UsernameSmall {
-  padding: 1em .5em 1em .5em;
   color: #91ac7c;
-  font-size: .7em;
+  font-size: 2.5rem !important;
   text-decoration: none;
+  padding-right: 10px !important;
+  max-width: 120px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
 }
 .UsernameSmall:hover {
   color: #4459ff;
@@ -189,12 +197,9 @@
   to { transform: rotate(360deg); }
 }
 
-body {
-  background-color: #e1e1e2;
-}
 
 /* 
-body_bg:       #E1E1E2
+body_bg:       white
 darker_orange: #C15C16
 header:        #313531
 light_orange:  #D86E09
@@ -203,23 +208,21 @@ pink_red:      #C75058
  */
 
 .Package {
-  background-color: #8080802e;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
   margin: 1em 3em;
   padding: 1em;
-  justify-content: center;
-  text-align: center;
-  align-content: center;
-  border-radius: 1em
+  border-radius: .4rem
 }
 
 .Cart {
-  background-color: #8080802e;
-  margin: 1em 3em;
+  margin: 20px 50px;
   padding: 1em;
   justify-content: center;
   text-align: center;
   align-content: center;
-  border-radius: 1em
+  border-radius: .4rem
 }
 
 .WrapCart {
@@ -227,11 +230,17 @@ pink_red:      #C75058
   justify-content: center;
   text-align: center;
   align-content: center;
-  border-radius: 1em
+  border-radius: .4rem
 }
 
 .PackDiv {
   text-align: left;
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  align-items: baseline;
+  
+  
 }
 
 .CartDiv {
@@ -239,17 +248,16 @@ pink_red:      #C75058
 }
 
 .PackTitle {
-  color: #07169c;
+  color: #4d61ff;
   display: flex;
-  font-size: 2em;
-  font-style: italic;
-  font-weight: 500;
+  font-size: 3.2rem;
+  font-weight: 600;
+  padding-right: 50px
 }
 .PackDesc {
   color: #313531;
   display: flex;
-  font-size: 1.1em;
-  margin: 0em;
+  font-size: 1.8rem;
   font-weight: 100;
   overflow-wrap: break-word;
   word-wrap: break-word;
@@ -259,7 +267,7 @@ pink_red:      #C75058
 .PackDescButton {
   color: #313531;
   display: block;
-  font-size: 1.1em;
+  font-size: 1.5em;
   margin: 0em;
   font-weight: 100;
   word-break: break-all;
@@ -269,32 +277,20 @@ pink_red:      #C75058
 }
 
 .PackDescButton:hover {
-  color: #E1E1E2;
+  color: white;
 }
 
 
 .PackDescSelected {
-  color: #E1E1E2;
+  color: white;
   display: block;
-  font-size: 1.1em;
+  font-size: 1.5em;
   margin: 0em;
-  font-weight: 100;
+  font-weight: 300;
   word-break: break-all;
   white-space: normal;
   display: block;
   text-overflow: ellipsis;
-}
-
-
-.PackDescSelected {
-  color: #E1E1E2;
-  display: flex;
-  font-size: 1.1em;
-  margin: 0em;
-  font-weight: 100;
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-  hyphens: auto;
 }
 
 .PackButtons {
@@ -302,7 +298,6 @@ pink_red:      #C75058
   margin: 0em;
   width: 100%;
   display: inline-flex;
-  justify-content: space-between
 }
 
 .PackCart {
@@ -332,28 +327,27 @@ pink_red:      #C75058
 .TerminalCopy {
   display: flex;
   flex-wrap: wrap;
-  font-size: 1em;
+  font-size: 1.8rem;
   margin: .1em;
-  color: #4459ff;
+  color: #5d88ff;
   background-color: #313531;
-  border-radius: .5em;
+  border-radius: .4rem;
   padding: .5em 1em;
   text-align: left;
   overflow: hidden;
 }
 
 .TerminalCopy:hover {
-  color: #E1E1E2;
+  color: white;
 }
 
 .TermBox {
   display: flex;
   flex: content;
-  background-color: #E1E1E2;
-  border-radius: 1em;
-  padding: 0em 3em;
-  margin: .5em 0em 0em;
-  max-width: 65em;
+  background-color: white;
+  border-radius: .4rem;
+  padding: 0px 5px;
+  margin: 5px 0em 0em;
   position: relative;
 }
 
@@ -367,24 +361,20 @@ pink_red:      #C75058
 }
 
 .RecText {
-  margin-top: 2.5em;
-  font-style: italic;
-  color: rgb(103, 122, 87);
+  color: #313531;
   text-align: left;
-  margin-left: 2.2em;
-  font-size: 1.8em;
+  font-size: 3.2rem;
   font-weight: 100;
+  line-height: 1.2;
+  margin: 50px 0px 0px 55px;
 }
 
 .ExpandBox {
-  padding: .3em 0em;
-  margin: 0em;
-  border: 1px solid rgb(103, 122, 87);
   border-radius: .5em;
-  color: rgb(103, 122, 87);
   text-align: left;
-  font-size: 0.8em;
+  font-size: 1.8rem;
   font-weight: 100;
+  margin-bottom: 15px;
 }
 
 .SearchHeader {
@@ -393,7 +383,7 @@ pink_red:      #C75058
   padding: .5em 3.2em;
   margin: .2em 0em 0em 0em;
   font-size: 1.2em;
-  font-style: italic;
+  font-weight: 100;
 }
 
 .SearchHeaderSmall {
@@ -402,7 +392,6 @@ pink_red:      #C75058
   padding: .25em 1.1em;
   margin: .2em 0em 0em 0em;
   font-size: 1.2em;
-  font-style: italic;
 }
 
 .SearchResults {
