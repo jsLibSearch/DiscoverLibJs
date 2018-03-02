@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Button } from 'reactstrap'
 import { newItem } from '../actions';
 import '../App.css';
-import { customColors as c } from '../custom/colors.js';
 
 class Package extends Component {
   constructor(props) {
@@ -108,32 +108,31 @@ class Package extends Component {
         <div className='Package' style={this.props.style}>
             <div className='PackDiv'>
                 <h2 className='PackTitle'>{this.props.name}</h2>
-                <p className='PackDesc' style={this.props.small ? { fontSize: '4vw' } : {}}>{this.props.about ? this.props.about : null}</p>
+                <p className='PackDesc' style={this.props.small ? { fontSize: '1.8rem' } : {}}>{this.props.about ? this.props.about : null}</p>
             </div>
                 <div className='ExpandBox' style={ this.state.expanded ? {} : {display: 'none'} }>
-                    <ul style={{margin: '0em'}}>
-                        <li>Found in {this.props.freq} {this.props.freq > 1 ? 'packages' : 'package' }</li>
-                        <li>Homepage: <a rel="noopener noreferrer" target="_blank" href={this.props.homepage}>{this.props.homepage}</a></li>
-                        <li>Keywords: {this.props.keywords ? this.props.keywords.map((keyword, i) => keyword + ' '): null}</li>
+                    <ul style={{margin: '0em', listStyleType: 'none', paddingLeft: '30px', maxWidth: window.innerWidth - 50}}>
+                        <li style={{ wordWrap: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden', textOverflow: 'ellipsis' }}>
+                            Found in {this.props.freq} {this.props.freq > 1 ? 'packages' : 'package' }
+                        </li>
+                        <li style={{ wordWrap: 'break-word', overflowWrap: 'break-word', overflowX: 'break-all', textOverflow: 'ellipsis' }}>Homepage: <a rel="noopener noreferrer" target="_blank" href={this.props.homepage}>{this.props.homepage}</a></li>
+                        <li style={{ wordWrap: 'break-word', overflowWrap: 'break-word', overflowX: 'break-all', textOverflow: 'ellipsis' }}>Keywords: {this.props.keywords ? this.props.keywords.map((keyword, i) => keyword + ' '): null}</li>
                     </ul>
                 </div>
             <div className='PackButtons'>
-                <button
+                <Button
+                    color='primary'
+                    style={{ backgroundColor: '#4470ff', borderColor: '#4470ff', marginRight: '5px', fontSize: '1.5rem', color: 'white' }}
                     onClick={this.handleCart.bind(this)}
-                    disabled={this.state.added}
-                    className='btn btn-success'
-                    style={ {
-                            margin: 0,
-                            padding: '0em 0.8em',
-                            fontStyle: 'italic',
-                            fontSize: '.7em',
-                            color: c.body_bg,
-                            borderColor: c.off_green,
-                            backgroundColor: c.off_green,
-                        } }>
+                    disabled={this.state.added}>
                     {this.state.added ? 'Added to Project' : 'Add to Project'}
-                </button>
-                <button onClick={this.handleExpand.bind(this)} className='btn btn-outline-success' style={ { width: '1.6em', height: '1.6em', margin: 0, padding: '0em', fontSize: '.7em' } }>{!this.state.expanded ? '▼' : '▲'}</button>
+                </Button>
+                <Button
+                    outline
+                    style={{ fontSize: '1.5rem' }}
+                    onClick={this.handleExpand.bind(this)}>
+                    {!this.state.expanded ? 'More' : 'Less'}
+                </Button>
             </div>
         </div>
     );

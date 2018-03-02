@@ -132,10 +132,9 @@ export class SearchPage extends Component {
   render() {
     return (
       <div ref='searchPage'>
-        {this.state.dev ? (<button onClick={this.fillDevCart.bind(this)}>fill all</button>): null}
-        {this.props.cart.packages.length > 0 && this.state.loadRecsStarted ? (
+        {this.state.loadRecsStarted ? (
         <div style={{ borderBottom: '1px solid rgb(103, 122, 87)', marginTop: '.2em' }}>
-          <p className='SearchHeader' style={this.state.small ? {textAlign: 'center', margin: '2em 0em 0em'} : {}}>
+          <p className={this.state.small ? 'SearchHeaderSmall':'SearchHeader'}>
             {this.state.loadingRecs ? 'Loading recommendations' : 'Recommendations'}
           </p>
         </div>
@@ -151,12 +150,13 @@ export class SearchPage extends Component {
           if (!this.state.showMoreRecs && i >= 5) {
             if (i === 5) {
               return (
-                <div key={'recbutton'}>
-                  <Button size='sm' style={{
-                    height: '2.2em',
-                    fontSize: '.8em',
+                <div key={'recbutton'} style={{ display: 'flex',
+                  marginLeft: '55px',
+                  marginBottom: '20px' }}>
+                  <Button outline style={{
+                    fontSize: '1.8rem',
                     border: 'none'
-              }} onClick={this.toggleShowMoreRecs.bind(this)}>Show more</Button>
+              }} onClick={this.toggleShowMoreRecs.bind(this)}>More recommendations...</Button>
                 </div>
               )
             }
@@ -180,10 +180,10 @@ export class SearchPage extends Component {
         : null}
         <div style={{ borderBottom: '1px solid rgb(103, 122, 87)', marginTop: '.2em' }}>
           {this.state.loading ?
-            (<h3 className='SearchHeader'>Loading search results for "{this.state.query}"</h3>)
+            (<h3 className={this.state.small ? 'SearchHeaderSmall':'SearchHeader'}>Loading search results for "{this.state.query}"</h3>)
             :!this.props.redux.query ? 
-            (<h3 className='SearchHeader'>Please enter a search term above!</h3>)
-              :(<h3 className='SearchHeader'>{this.props.redux.packages['error'] !== "no packages found" ? this.state.results : 0} Search Results for "{this.state.query}"</h3>)}
+            (<h3 className={this.state.small ? 'SearchHeaderSmall':'SearchHeader'}>Please enter a search term above!</h3>)
+              :(<h3 className={this.state.small ? 'SearchHeaderSmall':'SearchHeader'}>{this.props.redux.packages['error'] !== "no packages found" ? this.state.results : 0} Search Results for "{this.state.query}"</h3>)}
         </div>
         <div className='SearchResults'>
           {this.props.redux.packages['error'] !== "no packages found" ? Object.keys(this.props.redux.packages).map((pkg, i) => {

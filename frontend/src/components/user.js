@@ -13,7 +13,8 @@ export class UserPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        windowHeight: window.innerHeight - 40,
+        windowWidth: window.innerWidth - 40,
+        small: window.innerWidth <= 700,
         userCarts: [],
         expanded: null,
         current: null,
@@ -41,7 +42,8 @@ export class UserPage extends Component {
     }
     window.addEventListener('resize', this.handleResize.bind(this))
     this.setState({
-      windowHeight: window.innerHeight - 40,
+      windowWidth: window.innerWidth - 40,
+      small: window.innerWidth <= 700,
     })
   }
 
@@ -80,7 +82,8 @@ export class UserPage extends Component {
 
   handleResize() {
     this.setState({
-        windowHeight: window.innerHeight - 40
+        windowWidth: window.innerWidth - 40,
+        small: window.innerWidth <= 700
     })
   }
 
@@ -244,20 +247,18 @@ export class UserPage extends Component {
         </div>
         {!this.state.loadingCarts ? (this.state.userCarts.length > 0 ? this.state.userCarts.map((cart, i) => {
           return (
-          <div className='Package' style={{ paddingBottom: '0.5em' }} key={cart._id}>
-          <div className='PackButtons' style={this.state.expanded === i ? { marginBottom: '.5em' } : { marginBottom: '.3em' }}>
-              <h2 className='PackTitle' style={{ marginBottom: 0 }}>{cart.name}</h2>
+          <div className='Package' style={this.state.small ? {margin: '5px 0px', paddingBottom: '10px'}:{ paddingBottom: '0.5em' }} key={cart._id}>
+          <div className='PackButtons' style={this.state.expanded === i ? { marginBottom: '10px' } : { marginBottom: '5px' }}>
+              <h2 className='PackTitle' style={this.state.small ? { textAlign: 'left', marginBottom: 0 }:{ marginBottom: 0 }}>{cart.name}</h2>
           </div>
               <div className='ExpandBox' style={ this.state.expanded === i ? {} : {display: 'none'} }>
                   <ul style={{margin: '0em', padding: '0em 3em'}}>
                       {cart.cart ? cart.cart.map((item) => (<li key={item.name}>{item.name}</li>)): null}
                   </ul>
               </div>
-          <div className='PackButtons' style={this.state.expanded === i ? { marginTop: '.5em' } : { marginTop: '.3em' }}>
+          <div className='PackButtons' style={this.state.expanded === i ? { marginTop: '0px' } : { marginTop: '10px' }}>
           <Button onClick={this.handleExpand.bind(this, i)} size='sm' color='secondary' style={{
-                      margin: '0em',
-                      fontSize: '.7em',
-                      padding: '0em 0.8em'}}>{!(this.state.expanded === i) ? 'Show Packages' : 'Hide Packages'}</Button>
+                      fontSize: '1.8rem', marginRight: '5px'}}>{!(this.state.expanded === i) ? 'Show Packages' : 'Hide Packages'}</Button>
               {/* dropdown */}
                 <Dropdown
                   group
@@ -267,48 +268,44 @@ export class UserPage extends Component {
                   toggle={this.toggleCartOptions.bind(this, i)}
                   size="sm"
                   style={{
-                    padding: '0em',
                     border: 'none'
                   }}>
                   <DropdownToggle
                     style={{
-                      margin: '0em',
-                      fontSize: '.7em',
-                      padding: '0em 0.8em',
-                      border: 'none' }}
-                    size="sm"
+                      border: 'none',
+                      fontSize: '1.8rem' }}
                     outline
                     caret>
                     Options
                   </DropdownToggle>
-                  <DropdownMenu style={{backgroundColor: c.header, borderRadius: '1em'}}>
-                    <div>
-                      <p className={!this.state.small ? 'SignCart' : 'SignCartSmall'} style={ this.state.current !== i ? { padding: '0.3em 1em', width: '10em', marginBottom: '0em' } : { padding: '0.3em 1em', width: '10em', marginBottom: '0em' } } onClick={this.handleCart.bind(this, i)}>{this.state.current === i ? `Don't use project` : 'Use project'}</p>
+                  <DropdownMenu style={{backgroundColor: c.header, borderRadius: '.4rem'}}>
+                    <div className="username-dropdown">
+                      <p className={!this.state.small ? 'SignCart' : 'SignCart'} style={ { padding: '0em .5em', margin: '0px auto' } } onClick={this.handleCart.bind(this, i)}>{this.state.current === i ? `Don't use project` : 'Use project'}</p>
                     </div>
-                    <div>
-                      <p className={!this.state.small ? 'Sign' : 'SignSmall'} style={{ padding: '0.3em 1em', width: '10em', marginBottom: '0em' }} id='rename' onClick={this.toggleRename.bind(this, i)}>Rename</p>
+                    <div className="username-dropdown">
+                      <p className={!this.state.small ? 'SignDD' : 'SignDD'} style={{ padding: '0em .5em', margin: '0px auto' }} id='rename' onClick={this.toggleRename.bind(this, i)}>Rename</p>
                     </div>
-                    <div>
-                      <p className={!this.state.small ? 'Sign' : 'SignSmall'} style={{ padding: '0.3em 1em', width: '10em', marginBottom: '0em' }} color="secondary" onClick={this.toggleModal.bind(this, i)}> Create A Repo </p>
+                    <div className="username-dropdown">
+                      <p className={!this.state.small ? 'SignDD' : 'SignDD'} style={{ padding: '0em .5em', margin: '0px auto' }} color="secondary" onClick={this.toggleModal.bind(this, i)}> Create A Repo </p>
                     </div>
-                    <div>
-                      <p className={!this.state.small ? 'SignDel' : 'SignDelSmall'} style={{ padding: '0.3em 1em', width: '10em', marginBottom: '0em' }} onClick={this.deleteCart.bind(this, this.state.userCarts[i]._id, i)}>Delete Project</p>
+                    <div className="username-dropdown">
+                      <p className={!this.state.small ? 'SignDel' : 'SignDel'} style={{ padding: '0em .5em', margin: '0px auto' }} onClick={this.deleteCart.bind(this, this.state.userCarts[i]._id, i)}>Delete Project</p>
                     </div>
                   </DropdownMenu>
                 </Dropdown>
           </div>
       </div>
         )}): <p>You do not have any saved projects!</p>) : <h3>Loading Projects</h3>}
-        {this.state.renaming ? (<Popover style={{ backgroundColor: c.body_bg }} placement='left' isOpen={this.state.renaming} target={`options${this.state.userCarts[this.state.cartToRename]._id}`} toggle={this.toggleRename.bind(this)}>
-          <PopoverHeader style={{ backgroundColor: c.header, color: c.body_bg }}>Rename Project</PopoverHeader>
+        {this.state.renaming ? (<Popover style={{ backgroundColor: 'white', fontSize: '1.8rem' }} placement='right' isOpen={this.state.renaming} target={`options${this.state.userCarts[this.state.cartToRename]._id}`} toggle={this.toggleRename.bind(this)}>
+          <PopoverHeader style={{ backgroundColor: c.header, color: 'white', fontSize: '1.8rem' }}>Rename Project</PopoverHeader>
           <PopoverBody>
             <Form onSubmit={this.renameCart.bind(this)}>
               <FormGroup>
                 <Label for={`rename`} hidden>Rename Project</Label>
-                <Input id={`rename`} bsSize='sm' onChange={this.handleRenameText.bind(this)} placeholder={this.state.userCarts[this.state.cartToRename].name} />
+                <Input style={{ fontSize: '1.8rem', border: '1px solid #313131' }} onChange={this.handleRenameText.bind(this)} placeholder={this.state.userCarts[this.state.cartToRename].name} />
               </FormGroup>
               {' '}
-              <Button size='sm' color='success' type='submit'>Submit</Button>
+              <Button outline style={{ border: 'none', fontSize: '1.8rem' }} color='primary' type='submit'>Submit</Button>
             </Form>
           </PopoverBody>
         </Popover>) : null}
