@@ -135,7 +135,7 @@ export class SearchPage extends Component {
         {this.state.loadRecsStarted ? (
         <div style={{ borderBottom: '1px solid rgb(103, 122, 87)', marginTop: '.2em' }}>
           <p className={this.state.small ? 'SearchHeaderSmall':'SearchHeader'}>
-            {this.state.loadingRecs ? 'Loading recommendations' : 'Recommendations'}
+            {this.state.loadingRecs ? 'Loading recommendations' : 'Recommendations based off of your current project'}
           </p>
         </div>
       ): null}
@@ -151,11 +151,12 @@ export class SearchPage extends Component {
             if (i === 5) {
               return (
                 <div key={'recbutton'} style={{ display: 'flex',
-                  marginLeft: '55px',
+                  marginLeft: '50px',
                   marginBottom: '20px' }}>
                   <Button outline style={{
                     fontSize: '1.8rem',
-                    border: 'none'
+                    border: 'none',
+                    fontWeight: '100'
               }} onClick={this.toggleShowMoreRecs.bind(this)}>More recommendations...</Button>
                 </div>
               )

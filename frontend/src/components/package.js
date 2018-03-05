@@ -122,14 +122,14 @@ class Package extends Component {
             <div className='PackButtons'>
                 <Button
                     color='primary'
-                    style={{ backgroundColor: '#4470ff', borderColor: '#4470ff', marginRight: '5px', fontSize: '1.5rem', color: 'white' }}
+                    style={{ backgroundColor: '#115d63', borderColor: '#115d63', marginRight: '5px', fontSize: '1.8rem', color: 'white', fontWeight: '100' }}
                     onClick={this.handleCart.bind(this)}
                     disabled={this.state.added}>
                     {this.state.added ? 'Added to Project' : 'Add to Project'}
                 </Button>
                 <Button
                     outline
-                    style={{ fontSize: '1.5rem' }}
+                    style={{ fontSize: '1.8rem', fontWeight: '100' }}
                     onClick={this.handleExpand.bind(this)}>
                     {!this.state.expanded ? 'More' : 'Less'}
                 </Button>

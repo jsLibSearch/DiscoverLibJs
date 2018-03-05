@@ -161,7 +161,7 @@ class Header extends Component {
         <div style={{ paddingBottom: '.25em' }}>
             <div className="App-header" style={this.state.small ? { justifyContent: 'center' } : { justifyContent: 'center' }}>
                 <div className="App-header-Center" style={this.state.small ? { justifyContent: 'space-between' } : {}}>
-                    <Link to='/' className='Logo' style={ this.state.small ? { fontSize: '2.5rem', fontFamily: 'Barricada-Pro', overflow: 'visible', marginLeft: '0px', maxWidth: '150px', lineHeight: 1, padding: '20px 0px' }:{ fontFamily: 'Barricada-Pro' }}>JS Lib Discovery</Link>
+                    <Link to='/' className='Logo' style={ this.state.small ? { fontSize: '3rem', overflow: 'visible', marginLeft: '0px', maxWidth: '150px', lineHeight: 1, padding: '14px 0px 11px' }:{  }}>JS LIB DISCOVERY</Link>
                     <div className='HeaderRight'>
                         {/* <Link to="/signup" className={!this.state.small ? 'Sign' : 'SignSmall'} style={this.state.loggedIn ? {display: 'none'} : null}>Sign Up</Link> */}
                         <Link to="/login" className={!this.state.small ? 'Sign' : 'SignSmall'} style={this.state.loggedIn ? {display: 'none'} : null} onClick={() => { this.handleLogInClick() }} >Log In</Link>
@@ -198,9 +198,9 @@ class Header extends Component {
             </div>
         <div style={{ display: 'flex', justifyContent: 'center', margin: '15px 5px', height: '40px' }}>
             <InputGroup  style={{ maxWidth: '1000px', border: '5px #e1e1e2' }}>
-                <Input color='secondary' placeholder={'Search for Libraries'} style={{color: c.header, backgroundColor: 'white', border: '1px solid #313132', fontSize: '1.8rem', textAlign: 'center' }} onKeyPress={this.handleEnter.bind(this)} onChange={this.handleQuery.bind(this)} value={ this.state.searchedQuery } />
+                <Input color='secondary' placeholder={'Search for Libraries'} style={{color: c.header, backgroundColor: 'white', border: '1px solid #313532', fontSize: '1.8rem', textAlign: 'center', fontWeight: '100' }} onKeyPress={this.handleEnter.bind(this)} onChange={this.handleQuery.bind(this)} value={ this.state.searchedQuery } />
                 <InputGroupAddon addonType="append">
-                    <Button color='info' style={{ color: 'white', width: '95px', fontSize: '1.8rem'}} onClick={this.handleSearch.bind(this)}>Search</Button>
+                    <Button color='info' style={{ color: 'white', width: '95px', fontSize: '1.8rem', backgroundColor: '#115d63', border: '1px solid #115d63', fontWeight: '100'}} onClick={this.handleSearch.bind(this)}>Search</Button>
                 </InputGroupAddon>
             </InputGroup>
         </div>

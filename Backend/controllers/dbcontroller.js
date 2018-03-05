@@ -222,7 +222,8 @@ const requestRecommendations = (req, res) => {
         })
         .then(()=> {
                 const keysSorted =  Object.keys(children).sort(function(a,b){return children[b]-children[a]})
-                let keysSliced = keysSorted.filter((x) => {
+                console.log(keysSorted.length)
+                let keysSliced = keysSorted.filter((x) => { // filter first, then sort
                     return cart.indexOf(x) < 0;
                 })
                 if (getAll2 === false) {
@@ -230,7 +231,7 @@ const requestRecommendations = (req, res) => {
                 }
                 Package.find({_id: { $in: keysSliced}})
                 .then(pkgs => {
-                    const sortedPkgs =  pkgs.sort(function(a,b){return children[b._id]-children[a._id]})
+                    const sortedPkgs =  pkgs.sort(function(a,b){return children[b._id]-children[a._id]}) // unneccessary?
                     return res.json(sortedPkgs);
                 })
                 .catch((err) => {
