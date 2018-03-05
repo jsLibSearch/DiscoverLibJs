@@ -89,6 +89,14 @@ body {
   cursor: pointer;
 }
 
+.fa {
+  font-size:1.8rem
+}
+
+.navbar-brand{
+  font-size:3.2rem;
+  font-weight: 100;
+}
 .SignDD:hover {
   color: #4470ff;
   text-decoration: none;
@@ -455,7 +463,19 @@ pink_red:      #C75058
   display: flex;
   /* padding-top: 1em; */
   justify-content: space-between;
+  max-width: 1000px;
+  margin:auto;
+  font-weight: 100;
 }
+
+
+
+body {
+  background-color: white;
+  font-size: 1.4rem;
+  font-weight: 100 !important;
+}
+
 
 
 .NavBar {
@@ -463,24 +483,33 @@ pink_red:      #C75058
   position: absolute;
   display: block;
   width: 20%;
-  font-size: 16px;
-  color: #d61e2a;
+  font-size: 1.8rem;
+  color: #313531;
 }
 /* #e7e7aa <------------ body*/
 .Items {
   line-height: 1.6;
-  font-size: 14px;
+  font-size: 1.8rem;
   text-align: left;
   /* float: right; */
-  width: 60%;
+  width: 70%;
   margin: 0 auto;
   margin-right: 0;
   padding: 0;
+  font-weight: 100;
 }
 
 .Catalog1 {
   padding: 2%;
   text-align: left;
+  max-width: 1000px;
+}
+
+.introduction {
+  margin: auto;
+  margin-top:20px;
+  font-size: 1.8rem;
+  font-weight: 100;
 }
 
 .Box {
@@ -491,40 +520,44 @@ pink_red:      #C75058
 }
 
 .navbar-brand {
-  color: #c75058;
+  color: #313531;
 }
 
 .navbar-brand:hover {
-  color: #552428;
+  color: #313531;
 }
 
 
 .navbar-light .navbar-brand {
-  color: rgb(199, 80, 79);
+  color: #313531;
 }
 
 .navbar-light .navbar-nav .nav-link {
-  color: rgb(247, 223, 30);
+  color: #313531;
 }
 
 .navbar-nav .nav-link {
-  color: #4459ff;
+  color: #313531;
 }
 
 .navbar-nav .nav-link:hover {
-  color: rgb(0, 0, 0);
+  color: #313531;
 }
 
 .list-group-item {
-  color: black;
+  color: #ffffff;
+  background-color: #115d63;
+  font-weight:100;
+  font-size:1.8rem;
 }
 
 .list-group-item:hover {
-  color: rgb(4, 0, 255);
+  background-color: #ffffff;
+  border: none;
 }
 
 .navbar {
-  margin-right: 5em; 
+  margin-right: 20px; 
 }
 
 .card-body {
@@ -532,7 +565,6 @@ pink_red:      #C75058
 }
 
 .list-group-item:first-child {
-  background: #8080802e;
 }
 
 

@@ -242,11 +242,11 @@ class Home extends Component {
     if (this.state.ready) {
       return ( 
         <div ref="homePage">
-          <div className='Catalog1'></div>
           <div className="Catalog">
             <div className="NavBar">
               <Navbar >
-                <ul className="Title">Directories
+                <ul
+                style={{margin: '0em', listStyleType: 'none', paddingLeft: '10px',}} className="Title">Directories
                 <li className="fa fa-gift fa-lg"><NavbarBrand className="Essentials" onClick={ () => this.essentials() } href="#">Essentials</NavbarBrand></li>
                 <Collapse isOpen={this.state.essentials} navbar>
                   <Nav navbar>
@@ -387,9 +387,10 @@ class Home extends Component {
               </Navbar>
               </div>
             <div className="Items">
+              {this.state.list.length < 1 && <p className="introduction"> <p className="PackTitle">Welcome to Javascript Library Discovery.</p>Search for a library above or explore the directories of common libraries to the left. You may add libraries to your project which you can view by clicking on the icon on the top right corner of the page. Once you have libraries in your project, personalized library recommendations will be available! </p>}
               <ListOfPckgs data={this.state.list}/>
             </div>
-            <div className="Box">
+            {/* <div className="Box">
               <p>Recommendations</p>
               { this.state.recs.map((item, i) => {
                   if (this.state.recs.length === i + 1) {
@@ -402,7 +403,7 @@ class Home extends Component {
                   <p key={item._id}>{ item.name }</p>
                 )
               }) }
-            </div>
+            </div> */}
           </div>
         </div>
       );
