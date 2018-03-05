@@ -18,6 +18,13 @@ export default ComposedComponent => {
             if (this.props.user.status === 'authenticated') {
                 return;
             }
+            if (this.props.user.status === 'unauthorized') {
+                const jwtToken  = sessionStorage.getItem('jwtToken');
+                const username  = sessionStorage.getItem('username');
+                const github_id = sessionStorage.getItem('github_id');
+                const loggedIn  = sessionStorage.getItem('loggedIn');
+                // console.log(jwtToken, username, github_id, loggedIn);
+            }
             if (this.props.location.search.match(/\?code=/g)) {
                 code = this.props.location.search.replace(/\?code=/g, '');
                 if (this.props.user.status === 'unauthorized') {
@@ -45,9 +52,9 @@ export default ComposedComponent => {
                 case 'authenticated':
                     return (<Route path="/user" component={ComposedComponent} />);
                 case 'loading':
-                    return (<h3>loading</h3>);
+                    return (<h3 className='PackTitle'>Loading</h3>);
                 case 'unauthorized':
-                    return (<h3 style={{ color: 'red' }}>{this.props.user.error}</h3>);
+                    return (<h3 className='PackTitle' style={{ color: 'red' }}>{this.props.user.error}</h3>);
                 default:
                     return (<h1>something is wrong with the middleware</h1>)
             }

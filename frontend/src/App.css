@@ -560,11 +560,14 @@ body {
   background-color: #115d63;
   font-weight:100;
   font-size:1.8rem;
+  border-radius: 0px;
 }
 
 .list-group-item:hover {
   background-color: #ffffff;
-  border: none;
+  color: #115d63;
+  border: 1px solid #44444400;
+  border-radius: 0px;
 }
 
 .navbar {
@@ -573,9 +576,6 @@ body {
 
 .card-body {
   background: #ffffff55;
-}
-
-.list-group-item:first-child {
 }
 
 
