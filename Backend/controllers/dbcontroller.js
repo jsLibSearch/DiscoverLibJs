@@ -86,10 +86,25 @@ const searchWithRecs = (req, res) => {
                     const sortedPkgs =  pkgs.sort(function(a,b){return children[b._id]-children[a._id]})
                     Package.find({ $or: [{keywords: {$regex : `.*${term}.*`}}, { name: {$regex : `.*${term}.*`}} ]}).select( { name: 1, keywords: 1, freq: 1, homepage: 1, description: 1 } ).sort({freq: -1}).exec()
                     .then(packs => {
-                        const final = [];
-                        final.push(sortedPkgs.slice(0, 10));
-                        final.push(packs);
-                        return res.json(final);
+                        const removeDuplicates = (a, b) => {
+                            const seen = {};
+                            const result = [];
+                            a.slice(Math.floor(a.length/2, a.length)).forEach((item) => {
+                                seen.hasOwnProperty(item.name) ? null : (seen[item.name] = true)
+                            });
+                            const filteredB = b.filter((item, i) => {
+                                if (i < a.length / 2) return seen.hasOwnProperty(item.name) ? false : (seen[item.name] = true)
+                                else return true;
+                            });
+                            const filteredA = a.filter((item) => {
+                                if (i >= a.length / 2) return seen.hasOwnProperty(item.name) ? false : (seen[item.name] = true)
+                                else return true;
+                            });
+                            result.push(filteredA)
+                            result.push(filteredB)
+                            return result
+                        }
+                        return res.json(removeDuplicates(sortedPkgs, packs));
                     })
                     .catch((err) => {
                         console.log(err)

@@ -87,15 +87,7 @@ class ListOfPckgs extends Component {
                                     <Card>
                                         <CardBody style={{ overflow: 'hidden' }} >
                                             <button className="btn btn-success" disabled={this.state.tracker[idx]} onClick={this.onAddtoProject.bind(this, pckg, idx)}
-                                                style={ {
-                                                    margin: 0,
-                                                    padding: '0em 0.8em',
-                                                    fontStyle: 'italic',
-                                                    fontSize: '.7em',
-                                                    color: c.body_bg,
-                                                    borderColor: c.off_green,
-                                                    backgroundColor: c.off_green,
-                                                } }>{this.state.tracker[idx] ? 'Added to Project' : 'Add to Project'}</button>
+                                                style={{ backgroundColor: '#115d63', borderColor: '#115d63', marginRight: '5px', fontSize: '1.8rem', color: 'white', fontWeight: '100' }}>{this.state.tracker[idx] ? 'Added to Project' : 'Add to Project'}</button>
                                             <hr/>
                                             {/* <div dangerouslySetInnerHTML={{__html: this.state.data}} /> */}
                                             <ReactMarkdown source={this.state.data[idx]} skipHtml={true}/>
