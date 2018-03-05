@@ -96,7 +96,7 @@ const searchWithRecs = (req, res) => {
                                 if (i < a.length / 2) return seen.hasOwnProperty(item.name) ? false : (seen[item.name] = true)
                                 else return true;
                             });
-                            const filteredA = a.filter((item) => {
+                            const filteredA = a.filter((item, i) => {
                                 if (i >= a.length / 2) return seen.hasOwnProperty(item.name) ? false : (seen[item.name] = true)
                                 else return true;
                             });

@@ -78,11 +78,11 @@ class ListOfPckgs extends Component {
 
     render() {
         return (
-            <ListGroup>
+            <ListGroup style={{ borderRadius: '3px', overflow: 'hidden' }}>
                 { this.state.list ? this.state.list.map( (pckg, idx) => {
                     return (
                             <div key={pckg.name}>
-                                <ListGroupItem className="PackTitle" tag="a" href="#" onClick={() => this.toggle(pckg._id, idx)}>{ pckg.name }</ListGroupItem>
+                                <ListGroupItem style={{ borderRadius: '0px' }} className="PackTitle" tag="a" href="#" onClick={() => this.toggle(pckg._id, idx)}>{ pckg.name }</ListGroupItem>
                                 <Collapse isOpen={this.state.collapses[idx]}>
                                     <Card>
                                         <CardBody style={{ overflow: 'hidden' }} >
