@@ -18,13 +18,6 @@ export default ComposedComponent => {
             if (this.props.user.status === 'authenticated') {
                 return;
             }
-            if (this.props.user.status === 'unauthorized') {
-                const jwtToken  = sessionStorage.getItem('jwtToken');
-                const username  = sessionStorage.getItem('username');
-                const github_id = sessionStorage.getItem('github_id');
-                const loggedIn  = sessionStorage.getItem('loggedIn');
-                // console.log(jwtToken, username, github_id, loggedIn);
-            }
             if (this.props.location.search.match(/\?code=/g)) {
                 code = this.props.location.search.replace(/\?code=/g, '');
                 if (this.props.user.status === 'unauthorized') {
@@ -36,15 +29,9 @@ export default ComposedComponent => {
 
         componentWillReceiveProps(nextProps) {
             if (nextProps.user.user.jwt && nextProps.user.user.jwt !== this.props.user.user.jwt) {
-                sessionStorage.setItem('jwtToken', nextProps.user.user.jwt);
-                sessionStorage.setItem('username', nextProps.user.user.username);
-                sessionStorage.setItem('github_id', nextProps.user.user.github_id);
-                sessionStorage.setItem('loggedIn', true);
-                
-            } // TODO: check following usefulness
-            // if (nextProps.accessToken) {
-            //     console.log('nextProps.accessToken')
-            // }
+                sessionStorage.setItem('JSLDUser', JSON.stringify(nextProps.user.user));
+                sessionStorage.setItem('JSLDToken', nextProps.accessToken);
+            } 
         }
 
         render() {

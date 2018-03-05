@@ -44,35 +44,6 @@ class Cart extends Component {
     this.toggleLoginModal = this.toggleLoginModal.bind(this);
   }
 
-  componentDidUpdate() {
-    // -----------------------------SECTION MAY BE USELESS--CHECK FOR ERRORS WHEN USER AUTH IS UP
-
-    // if (this.props.cart.packages && this.props.cart.packages.length !== this.state.cart.length && this.refs.theCart) {
-    //   console.log('update')
-    //   let currentCart = [];
-    //   if (this.props.cart.packages.length > 0) {
-    //     currentCart = this.props.cart.packages.slice();
-    //     const openArr = Array(currentCart.length).fill(false);
-    //     let names = '';
-    //     currentCart.forEach((item) => {
-    //       names += ' ' + item.name;
-    //     })
-    //     const npmStr = 'npm install --save' + names;
-    //     const yarnStr = 'yarn add' + names;
-    //     this.setState({
-    //       windowWidth: window.innerWidth,
-    //       cart: currentCart,
-    //       cartName: this.props.cart.name,
-    //       isOpen: openArr,
-    //       _id: this.props.cart._id,
-    //       npmString: npmStr,
-    //       yarnString: yarnStr,
-    //       empty: false
-    //     })
-    //   }
-    // }
-  }
-
   componentDidMount() {
     window.addEventListener('resize', this.handleResize.bind(this));
     const small = this.state.windowWidth < 700 ? true : false;

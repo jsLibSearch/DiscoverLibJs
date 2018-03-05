@@ -1,9 +1,9 @@
 {
-	"name": "coleysmart",
+	"name": "auto login repo",
 	"version": "1.0.0",
 	"dependencies": {
-		"babel-plugin-transform-class-properties": "*",
-		"babel-plugin-transform-decorators-legacy": "*",
-		"webpack": "*"
+		"connect-mongo": "*",
+		"express-session": "*",
+		"mongoose": "*"
 	}
 }

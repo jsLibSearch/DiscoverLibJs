@@ -118,10 +118,11 @@ body {
 
 .Username {
   padding-right: 20px !important;
-  color: #91ac7c;
+  color: #ffffff;
   font-size: 2.8rem !important;
   text-decoration: none;
   box-shadow: none;
+  font-weight: 100;
 }
 
 .Username:hover {

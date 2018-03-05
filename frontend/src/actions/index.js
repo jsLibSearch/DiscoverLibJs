@@ -200,16 +200,18 @@ export const logOutUser = () => {
     }
 }
 
-export const makeServerCalls = (jwtToken, github_id) => {
-
+export const makeServerCalls = (jwtToken, github_id, token) => {
     return (dispatch) => {
         dispatch(setLoadingTo('SET_USER_STATUS'))
         axios
-            .post(`${apiURL}check-auth`, { jwtToken, github_id })
+            .post(`${apiURL}check-auth`, { jwtToken, github_id, accessToken: token })
                 .then((response) => {
-                    //console.log(response.data);
                     dispatch({
-                        type: CHECK_USER_AUTH,
+                        type: SAVE_ACCESS_TOKEN,
+                        payload: response.data.accessToken,
+                    });
+                    dispatch({
+                        type: USER_LOGGED_IN,
                         payload: response.data,
                     });
                 })
