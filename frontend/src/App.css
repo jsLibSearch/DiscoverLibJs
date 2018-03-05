@@ -5,6 +5,7 @@ html {
 body {
   background-color: white;
   font-size: 1.4rem;
+  font-weight: 100 !important;
 }
 
 
@@ -211,18 +212,20 @@ pink_red:      #C75058
   display: flex;
   flex-direction: column;
   background-color: white;
-  margin: 1em 3em;
+  margin: 0px 40px 20px;
   padding: 1em;
   border-radius: .4rem
 }
 
 .Cart {
-  margin: 20px 50px;
-  padding: 1em;
+  display: flex;
+  flex-direction: column;
   justify-content: center;
   text-align: center;
   align-content: center;
-  border-radius: .4rem
+  border-radius: .4rem;
+  max-width: 970px;
+  margin: auto;
 }
 
 .WrapCart {
@@ -244,16 +247,17 @@ pink_red:      #C75058
 }
 
 .CartDiv {
-  margin: 0em;
+  margin: 0px 0px 20px;
 }
 
 .PackTitle {
-  color: #4d61ff;
+  color: #313531;
   display: flex;
   font-size: 3.2rem;
-  font-weight: 600;
+  font-weight: 100;
   padding-right: 50px
 }
+
 .PackDesc {
   color: #313531;
   display: flex;
@@ -267,7 +271,7 @@ pink_red:      #C75058
 .PackDescButton {
   color: #313531;
   display: block;
-  font-size: 1.5em;
+  font-size: 1.8rem;
   margin: 0em;
   font-weight: 100;
   word-break: break-all;
@@ -284,7 +288,7 @@ pink_red:      #C75058
 .PackDescSelected {
   color: white;
   display: block;
-  font-size: 1.5em;
+  font-size: 1.8rem;
   margin: 0em;
   font-weight: 300;
   word-break: break-all;
@@ -301,20 +305,18 @@ pink_red:      #C75058
 }
 
 .PackCart {
-  padding: 0.2em;
+  padding: 0px;
   margin: 0em;
-  width: 98%;
+  width: 100%;
   display: inline-flex;
   justify-content: space-between;
   align-items: center;
   border-bottom: .05em solid #d6d6d6;
   border-radius: 0em;
-  height: 2.25em;
-  max-height: 2.25em;
 }
 
 .PackCartHead {
-  padding: 1em 0em;
+  padding: 5px 0px;
   height: auto;
   display: flex;
   max-height: none;
@@ -329,12 +331,13 @@ pink_red:      #C75058
   flex-wrap: wrap;
   font-size: 1.8rem;
   margin: .1em;
-  color: #5d88ff;
-  background-color: #313531;
+  color: #ffffff;
+  background-color: #115d63;
   border-radius: .4rem;
   padding: .5em 1em;
   text-align: left;
   overflow: hidden;
+  cursor: pointer;
 }
 
 .TerminalCopy:hover {
@@ -349,6 +352,7 @@ pink_red:      #C75058
   padding: 0px 5px;
   margin: 5px 0em 0em;
   position: relative;
+  font-weight: 100;
 }
 
 .PackButton {
@@ -366,7 +370,10 @@ pink_red:      #C75058
   font-size: 3.2rem;
   font-weight: 100;
   line-height: 1.2;
-  margin: 50px 0px 0px 55px;
+  margin: 80px 0px 0px 55px;
+  border-bottom: 1px solid #c0c0c0;
+  padding-bottom: 20px;
+  max-width: 1000px;
 }
 
 .ExpandBox {
@@ -378,20 +385,25 @@ pink_red:      #C75058
 }
 
 .SearchHeader {
-  color: rgb(103, 122, 87);
+  color: #313531;
   text-align: left;
-  padding: .5em 3.2em;
-  margin: .2em 0em 0em 0em;
-  font-size: 1.2em;
+  font-size: 3.2rem;
   font-weight: 100;
+  line-height: 1.2;
+  margin: 10px 0px 0px 55px;
+  padding-bottom: 20px;
+  max-width: 1000px;
 }
 
 .SearchHeaderSmall {
-  color: rgb(103, 122, 87);
+  color: #313531;
   text-align: left;
-  padding: .25em 1.1em;
-  margin: .2em 0em 0em 0em;
-  font-size: 1.2em;
+  font-size: 3.2rem;
+  font-weight: 100;
+  line-height: 1.2;
+  margin: 10px 0px 0px 55px;
+  padding-bottom: 20px;
+  max-width: 1000px;
 }
 
 .SearchResults {

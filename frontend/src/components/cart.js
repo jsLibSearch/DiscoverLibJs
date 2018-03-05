@@ -402,19 +402,19 @@ class Cart extends Component {
     return (
       <div className='WrapCart'>
       <div ref='theCart' className='Cart' style={this.state.small ? {width: 'auto', margin: '.3em .3em'}: {}}>
-        <div className='PackCartHead' style={!this.state.small ? { position: 'relative', padding: 0.2 } : { padding: 0.2, height: 'auto', display: 'block', maxHeight: 'none'}}>
+        <div className='PackCartHead'>
           <h1 id='titleOfCart' className='PackTitle'>
             {this.state.cartName}
           </h1>
-          <h1 className='PackDesc' style={this.state.small ? { textAlign: 'right', marginBottom: '1em' } : { position: 'absolute', bottom: 0, right:0, margin: '0.5rem' }}>
+          <h1 className='PackDesc'>
             You have {this.props.cart.packages.length} {this.props.cart.packages.length === 1 ? 'package' : 'packages'} in your project
           </h1>
         </div>
-        <div className='PackCart' style={{ padding: '0.2em', height: 'auto', maxHeight: 'none' }}>
+        <div className='PackCart' style={{ height: 'auto', maxHeight: 'none' }}>
         <div style={{ display: 'inline-flex', alignItems: 'center' }}>
           <Button
             outline={!(this.props.cart.packages.length > 0 && this.state.selected.length === this.props.cart.packages.length)}
-            color='success'
+            color='secondary'
             size='sm'
             onClick={this.toggleSelectAll.bind(this)}
             style={{
@@ -422,7 +422,9 @@ class Cart extends Component {
               whiteSpace: 'normal',
               wordBreak: 'break-word',
               textAlign: 'left',
-              fontSize: '1.5rem'
+              fontSize: '1.8rem',
+              fontWeight: '100',
+              color: '313531'
             }}>
             {(this.props.cart.packages.length > 0 && this.state.selected.length === this.props.cart.packages.length) ? 'Unselect All' : 'Select all'}
             </Button>
@@ -433,7 +435,8 @@ class Cart extends Component {
               whiteSpace: 'normal',
               wordBreak: 'break-word',
               textAlign: 'left',
-              fontSize: '1.5rem'
+              fontSize: '1.8rem',
+              fontWeight: '100'
             }}
             onClick={this.deleteSelected.bind(this)}
           >Delete Selected</Button>
@@ -444,13 +447,12 @@ class Cart extends Component {
           id={`options`}
           isOpen={this.state.cartOptionsOpen}
           toggle={this.toggleOpenCartOptions.bind(this)}
-          size="sm"
           style={{
             fontSize: '.8em',
             border: 'none'
           }}>
           <DropdownToggle
-            style={this.state.small ? { border: 'none', margin: '0em', padding: '5px 10px', fontSize: '1.5rem' } : { border: 'none', margin: '0em', fontSize: '1.5rem' }}
+            style={{ border: 'none', fontSize: '1.8rem', fontWeight: '100' }}
             outline
             caret>
             Menu
@@ -566,14 +568,12 @@ class Cart extends Component {
                         id={`options-${item._id}`}
                         isOpen={this.state.isOpen[i]}
                         toggle={this.toggleOpen.bind(this, i)}
-                        size="sm"
                         style={{
                             margin: '0em'
                         }}>
                         <DropdownToggle
                           key={`zyx${item.name}`}
-                          style={{ border: 'none', margin: '0em', fontSize: '1.5rem', fontWeight: 200 }}
-                          size="sm"
+                          style={{ border: 'none', margin: '0em', fontSize: '1.8rem', fontWeight: 100 }}
                           outline
                           caret>
                           Options
@@ -627,9 +627,6 @@ class Cart extends Component {
       </div>
       { !this.state.empty ? (
         <div style={{ maxWidth: '1000px', margin: 'auto'  }}>
-          <div className='TermBox'>
-            <p className='PackDesc' style={{ fontSize: '2rem', margin: '10px 15px', lineHeight: 1 }}>{this.state.npm || this.state.yarn ? 'Copied!' : 'Click to Copy'}</p>
-          </div>
           <div className='TermBox' style={this.state.small ? { display: 'block', padding: '5px', marginTop: '0px' } : { marginTop: '0px' }}>
             <p
               readOnly
@@ -661,6 +658,9 @@ class Cart extends Component {
                 {this.state.yarnString}
             </textarea>
             </p>
+          </div>
+          <div className='TermBox'>
+            <p className='PackDesc' style={{ margin: '5px 18px', lineHeight: 1 }}>{this.state.npm || this.state.yarn ? 'Copied!' : 'Click above to copy'}</p>
           </div>
           </div>
         ) : null }

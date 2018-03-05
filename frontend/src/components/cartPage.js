@@ -103,7 +103,7 @@ class CartPage extends Component {
       <div ref='cartPage'>
         <Cart />
         <p className='RecText' style={this.state.small ? {textAlign: 'center', margin: '50px 0px 0px'} : {}}>
-          {this.state.loading ? 'Loading recommendations' : this.state.loadRecsStarted ? 'Recommendations' : ''}
+          {this.state.loading ? 'Loading recommendations' : this.state.loadRecsStarted ? 'People that used the packages in your project also used:' : ''}
         </p>
         {this.state.recs.length > 0 ?
         this.state.recs.map((rec, i) => {
