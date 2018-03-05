@@ -1,11 +1,9 @@
 {
-	"name": "react application",
+	"name": "coleysmart",
 	"version": "1.0.0",
 	"dependencies": {
-		"axios": "*",
-		"babel-preset-react": "*",
-		"eslint-plugin-react": "*",
-		"react": "*",
-		"react-dom": "*"
+		"babel-plugin-transform-class-properties": "*",
+		"babel-plugin-transform-decorators-legacy": "*",
+		"webpack": "*"
 	}
 }

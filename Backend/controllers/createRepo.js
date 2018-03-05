@@ -50,8 +50,7 @@ const createRepo = (req, res) => {
                     const pkgPath = 'package.json';
                     const message = 'Hello World!';
 
-                    const c = fs.readFile(p, 'utf8', (err, data) => {
-
+                    fs.readFile(p, 'utf8', (err, data) => {
                         if (err) throw err;
                         const content = nacl.util.encodeBase64(data);
 
@@ -64,7 +63,6 @@ const createRepo = (req, res) => {
                             )
                                 .then((r) => {
                                     res.json(result.data.clone_url);
-                                    console.log(r);
                                 })
                                 .catch((e) => {
                                     console.log(e);
