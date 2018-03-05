@@ -59,6 +59,14 @@ class Header extends Component {
             windowWidth: window.innerWidth,
             small: small,
         });
+        if (this.props.user.status === 'unauthorized') {
+            const userUnParsed  = sessionStorage.getItem('JSLDUser');
+            const accessToken = sessionStorage.getItem('JSLDToken')
+            const user = JSON.parse(userUnParsed)
+            if (user) {
+                this.props.makeServerCalls(user.jwt, user.github_id, accessToken);
+            }
+          }
     }
 
     componentWillReceiveProps(nextProps, nextState) {
@@ -140,6 +148,8 @@ class Header extends Component {
         sessionStorage.removeItem('jwtToken');
         sessionStorage.removeItem('username');
         sessionStorage.removeItem('loggedIn');
+        sessionStorage.removeItem('JSLDUser');
+        sessionStorage.removeItem('JSLDToken');
         this.setState({
             username: '',
             loggedIn: false,

@@ -257,7 +257,7 @@ export class UserPage extends Component {
                   </ul>
               </div>
           <div className='PackButtons' style={this.state.expanded === i ? { marginTop: '0px' } : { marginTop: '10px' }}>
-          <Button onClick={this.handleExpand.bind(this, i)} color='secondary' style={{
+          <Button onClick={this.handleExpand.bind(this, i)} color='secondary' outline={!(this.state.expanded === i)} style={{
                       fontSize: '1.8rem', marginRight: '5px', fontWeight: '100'}}>{!(this.state.expanded === i) ? 'Show Packages' : 'Hide Packages'}</Button>
               {/* dropdown */}
                 <Dropdown

@@ -105,7 +105,7 @@ const getAccessToken = (req, res) => {
 
 const checkUserAuth = (req, res) => {
 
-    const { jwtToken, github_id } = req.body;
+    const { jwtToken, github_id, accessToken } = req.body;
 
     User.find({ github_id: github_id })
         .then((response) => {
@@ -114,7 +114,13 @@ const checkUserAuth = (req, res) => {
                 if (e) throw e;
                 if (user.id === Number(result.github_id) && user.login === result.login_name) {
                     res.json({
-                        username: result.login_name
+                        username: user.login,
+                        jwt: jwtToken,
+                        github_id: github_id,
+                        carts: response[0].carts,
+                        _id: response[0]._id,
+                        github_name: response[0].github_name,
+                        accessToken: accessToken
                     });
                 }
             })
