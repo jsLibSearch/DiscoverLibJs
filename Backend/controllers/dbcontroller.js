@@ -15,6 +15,7 @@ const Cart = require('../DB_Code/Cart.js');
 const STATUS_USER_ERROR = 422;
 
 
+
 const postUser = (req, res) => {
     const { info } = req.body;
     const newUser = new User(info);
@@ -96,7 +97,7 @@ const searchWithRecs = (req, res) => {
                                 if (i < a.length / 2) return seen.hasOwnProperty(item.name) ? false : (seen[item.name] = true)
                                 else return true;
                             });
-                            const filteredA = a.filter((item) => {
+                            const filteredA = a.filter((item, i) => {
                                 if (i >= a.length / 2) return seen.hasOwnProperty(item.name) ? false : (seen[item.name] = true)
                                 else return true;
                             });

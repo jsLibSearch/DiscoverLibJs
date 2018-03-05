@@ -387,7 +387,7 @@ class Home extends Component {
               </Navbar>
               </div>
             <div className="Items">
-              {this.state.list.length < 1 && <p className="introduction"> <p className="PackTitle">Welcome to Javascript Library Discovery.</p>Search for a library above or explore the directories of common libraries to the left. You may add libraries to your project which you can view by clicking on the icon on the top right corner of the page. Once you have libraries in your project, personalized library recommendations will be available! </p>}
+              {this.state.list.length < 1 && <div className="introduction"> <p className="PackTitle">Welcome to Javascript Library Discovery.</p><p>Search for a library above or explore the directories of common libraries to the left. You may add libraries to your project which you can view by clicking on the icon on the top right corner of the page. Once you have libraries in your project, personalized library recommendations will be available!</p> </div>}
               <ListOfPckgs data={this.state.list}/>
             </div>
             {/* <div className="Box">
