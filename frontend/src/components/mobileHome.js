@@ -1,15 +1,11 @@
 import React, { Component } from 'react';
 import '../App.css';
-import { Link } from 'react-router-dom';
-import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink,
-  ListGroup, ListGroupItem, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-
+import { Navbar, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { getCatalog, getRecs, dev } from '../actions';
+import { getCatalog, getRecs, dev, clearCatalog } from '../actions';
 import ListOfPckgs from './ListOfPckgs';
 import { initGA, logPageView } from './ReactGA';
-const axios = require('axios');
 
 
 class MobileHome extends Component {
@@ -17,7 +13,6 @@ class MobileHome extends Component {
 	constructor(props) {
 			super(props);
 			this.state = {
-					windowHeight: window.innerHeight - 40,
 					list: [],
 					cart: [],
 					server: !dev ? 'https://javascript-library-discovery2.herokuapp.com/' : 'http://localhost:8080/',
@@ -36,22 +31,27 @@ class MobileHome extends Component {
 		}
 	
 		componentDidMount() {
-			window.addEventListener('resize', this.handleResize.bind(this));
-			this.setState({
-				windowHeight: window.innerHeight - 40
-			});
-			console.log((this.props.catalog))
-			// if ( !Object.keys(this.props.catalog).length ) this.props.getCatalog();  
+			if ( !this.props.catalog.data ) this.props.getCatalog();  
 			initGA();
 			logPageView();
+			if ( this.props.catalog.data && this.props.catalog.ready && this.state.ready === false ) {
+				this.setState({
+				  ready: true
+				})
+			}
 		}
-	
+
 		componentWillUnmount() {
-			window.removeEventListener('resize', this.handleResize.bind(this));
+			// this.props.clearCatalog();
 		}
 	
 		componentWillReceiveProps(nextProps) {
-	
+			if ( nextProps.catalog.data && nextProps.catalog.ready && this.state.ready === false ) {
+				this.setState({
+				  ready: true
+				})
+			}
+			if ( !nextProps.catalog.data ) this.props.getCatalog();
 		}
 	
 		componentDidUpdate() {
@@ -62,25 +62,10 @@ class MobileHome extends Component {
 					this.setState({
 						cart: currentCart,
 					})
-					this.sendRecRequest();
 				}
 	
 			}
-			if (this.props.recState.loading && !this.state.loading) {
-				this.setState({
-					loading: true,
-				})
-			} else if (!this.props.recState.loading && this.state.loading) {
-				this.setState({
-					loading: false,
-					recs: this.props.recState.recs,
-				})
-			}
-			if (this.state.cart && this.state.cart.length > 0 && this.state.recs.length === 0 && !this.props.recState.loading && !this.state.loading) {
-				this.sendRecRequest();
-			}
-	
-	
+			
 			if (this.props.catalog.ready && !this.state.ready) this.setState({ ready: true });
 		}
 	
@@ -95,12 +80,6 @@ class MobileHome extends Component {
 			console.log(this.state.recommeds, '<--------------------RECOMMENDS!');
 		}
 	
-		handleResize() {
-			this.setState({
-					windowHeight: window.innerHeight - 40
-			})
-		}
-	
 		toggle(str) {
 			this.setState({
 				[str]: !this.state[str]
@@ -108,7 +87,6 @@ class MobileHome extends Component {
 		}
 
 		test(str) {
-			console.log(this.props.catalog)
 			switch (str) {
 				case 'appFrameWorks':
 					this.setState({ list: this.props.catalog.data.appFrameWorks })
@@ -219,106 +197,106 @@ class MobileHome extends Component {
 							<Navbar color="faded" light expand="md" className="mobileNavBarInner">
 								<ul className="mobileTitle">
 									<li className="mobileli">
-									<Dropdown group size="sm" isOpen={this.state.essentials} toggle={() => this.toggle('essentials')}>
-										<DropdownToggle caret>
+									<Dropdown group isOpen={this.state.essentials} toggle={() => this.toggle('essentials')}>
+										<DropdownToggle outline style={{ backgroundColor: 'white', fontWeight: 100, border: 'none' , color: '#313531', fontSize: '1.8rem' }} caret>
 												Essentials
 										</DropdownToggle>
-										<DropdownMenu>
-											<DropdownItem onClick={ () => this.test('appFrameWorks') }>App Frameworks</DropdownItem>
-											<DropdownItem onClick={ () => this.test('mobileFrameWorks') }>Mobile Frameworks</DropdownItem>
-											<DropdownItem onClick={ () => this.test('realTimeFrameWorks') }>Realtime Frameworks</DropdownItem>
-											<DropdownItem onClick={ () => this.test('testingFrameWorks') }>Testing Frameworks</DropdownItem>
+										<DropdownMenu style={{ backgroundColor: '#313531', color: 'white', fontSize: '1.8rem' }}>
+											<DropdownItem style={{ backgroundColor: '#313531', fontWeight: 100, color: 'white', fontSize: '1.8rem' }} onClick={ () => this.test('appFrameWorks') }>App Frameworks</DropdownItem>
+											<DropdownItem style={{ backgroundColor: '#313531', fontWeight: 100, color: 'white', fontSize: '1.8rem' }} onClick={ () => this.test('mobileFrameWorks') }>Mobile Frameworks</DropdownItem>
+											<DropdownItem style={{ backgroundColor: '#313531', fontWeight: 100, color: 'white', fontSize: '1.8rem' }} onClick={ () => this.test('realTimeFrameWorks') }>Realtime Frameworks</DropdownItem>
+											<DropdownItem style={{ backgroundColor: '#313531', fontWeight: 100, color: 'white', fontSize: '1.8rem' }} onClick={ () => this.test('testingFrameWorks') }>Testing Frameworks</DropdownItem>
 										</DropdownMenu>
 									</Dropdown>
 									</li>
 									<li className="mobileli">
-										<Dropdown group size="sm" isOpen={this.state.ui} toggle={() => this.toggle('ui')}>
-											<DropdownToggle caret>
+										<Dropdown group isOpen={this.state.ui} toggle={() => this.toggle('ui')}>
+											<DropdownToggle outline style={{ backgroundColor: 'white', fontWeight: 100, border: 'none' , color: '#313531', fontSize: '1.8rem' }} caret>
 												UI
 											</DropdownToggle>
-											<DropdownMenu>
-												<DropdownItem onClick={ () => this.test('uiFrameWorks') }>UI Frameworks</DropdownItem>
-												<DropdownItem onClick={ () => this.test('windowsModalsPopups') }>Windows, Modals, Popups</DropdownItem>
-												<DropdownItem onClick={ () => this.test('keyboardWrappers') }>Keyboard Wrappers</DropdownItem>
-												<DropdownItem onClick={ () => this.test('formWidgets') }>Form Widgets</DropdownItem>
+											<DropdownMenu style={{ backgroundColor: '#313531', color: 'white', fontSize: '1.8rem'}}>
+												<DropdownItem style={{ backgroundColor: '#313531', fontWeight: 100, color: 'white', fontSize: '1.8rem' }} onClick={ () => this.test('uiFrameWorks') }>UI Frameworks</DropdownItem>
+												<DropdownItem style={{ backgroundColor: '#313531', fontWeight: 100, color: 'white', fontSize: '1.8rem' }} onClick={ () => this.test('windowsModalsPopups') }>Windows, Modals, Popups</DropdownItem>
+												<DropdownItem style={{ backgroundColor: '#313531', fontWeight: 100, color: 'white', fontSize: '1.8rem' }} onClick={ () => this.test('keyboardWrappers') }>Keyboard Wrappers</DropdownItem>
+												<DropdownItem style={{ backgroundColor: '#313531', fontWeight: 100, color: 'white', fontSize: '1.8rem' }} onClick={ () => this.test('formWidgets') }>Form Widgets</DropdownItem>
 											</DropdownMenu>
 										</Dropdown>
 									</li>
 									<li className="mobileli">
-										<Dropdown group size="sm" isOpen={this.state.multimedia} toggle={() => this.toggle('multimedia')}>
-											<DropdownToggle caret>
+										<Dropdown group isOpen={this.state.multimedia} toggle={() => this.toggle('multimedia')}>
+											<DropdownToggle outline style={{ backgroundColor: 'white', fontWeight: 100, border: 'none' , color: '#313531', fontSize: '1.8rem' }} caret>
 													Multimedia
 											</DropdownToggle>
-											<DropdownMenu>
-												<DropdownItem onClick={ () => this.test('gameEngines') }>Game Engines</DropdownItem>
-												<DropdownItem onClick={ () => this.test('physicsLib') }>Physics Libraries</DropdownItem>
-												<DropdownItem onClick={ () => this.test('animationLib') }>Animation Libraries</DropdownItem>
-												<DropdownItem onClick={ () => this.test('presentationLib') }>Presentation Libraries</DropdownItem>
+											<DropdownMenu style={{ backgroundColor: '#313531', color: 'white', fontSize: '1.8rem'}}>
+												<DropdownItem style={{ backgroundColor: '#313531', fontWeight: 100, color: 'white', fontSize: '1.8rem' }} onClick={ () => this.test('gameEngines') }>Game Engines</DropdownItem>
+												<DropdownItem style={{ backgroundColor: '#313531', fontWeight: 100, color: 'white', fontSize: '1.8rem' }} onClick={ () => this.test('physicsLib') }>Physics Libraries</DropdownItem>
+												<DropdownItem style={{ backgroundColor: '#313531', fontWeight: 100, color: 'white', fontSize: '1.8rem' }} onClick={ () => this.test('animationLib') }>Animation Libraries</DropdownItem>
+												<DropdownItem style={{ backgroundColor: '#313531', fontWeight: 100, color: 'white', fontSize: '1.8rem' }} onClick={ () => this.test('presentationLib') }>Presentation Libraries</DropdownItem>
 											</DropdownMenu>
 										</Dropdown>
 									</li>
 									<li className="mobileli">
-										<Dropdown group size="sm" isOpen={this.state.graphics} toggle={() => this.toggle('graphics')}>
-											<DropdownToggle caret>
+										<Dropdown group isOpen={this.state.graphics} toggle={() => this.toggle('graphics')}>
+											<DropdownToggle outline style={{ backgroundColor: 'white', fontWeight: 100, border: 'none' , color: '#313531', fontSize: '1.8rem' }} caret>
 													Graphics
 											</DropdownToggle>
-											<DropdownMenu>
-												<DropdownItem onClick={ () => this.test('canvasWrappers') }>Canvas Wrappers</DropdownItem>
-												<DropdownItem onClick={ () => this.test('WebGL') }>WebGL</DropdownItem>
-												<DropdownItem onClick={ () => this.test('ImageManipulation') }>Image Manipulation</DropdownItem>
-												<DropdownItem onClick={ () => this.test('visualizationLib') }>Visualization Libraries</DropdownItem>
+											<DropdownMenu style={{ backgroundColor: '#313531', color: 'white', fontSize: '1.8rem'}}>
+												<DropdownItem style={{ backgroundColor: '#313531', fontWeight: 100, color: 'white', fontSize: '1.8rem' }} onClick={ () => this.test('canvasWrappers') }>Canvas Wrappers</DropdownItem>
+												<DropdownItem style={{ backgroundColor: '#313531', fontWeight: 100, color: 'white', fontSize: '1.8rem' }} onClick={ () => this.test('WebGL') }>WebGL</DropdownItem>
+												<DropdownItem style={{ backgroundColor: '#313531', fontWeight: 100, color: 'white', fontSize: '1.8rem' }} onClick={ () => this.test('ImageManipulation') }>Image Manipulation</DropdownItem>
+												<DropdownItem style={{ backgroundColor: '#313531', fontWeight: 100, color: 'white', fontSize: '1.8rem' }} onClick={ () => this.test('visualizationLib') }>Visualization Libraries</DropdownItem>
 											</DropdownMenu>
 										</Dropdown>
 									</li>
 									<li className="mobileli">
-										<Dropdown group size="sm" isOpen={this.state.data} toggle={() => this.toggle('data')}>
-											<DropdownToggle caret>
+										<Dropdown group isOpen={this.state.data} toggle={() => this.toggle('data')}>
+											<DropdownToggle outline style={{ backgroundColor: 'white', fontWeight: 100, border: 'none' , color: '#313531', fontSize: '1.8rem' }} caret>
 													Data
 											</DropdownToggle>
-											<DropdownMenu>
-												<DropdownItem onClick={ () => this.test('dataStructures') }>Data Structures</DropdownItem>
-												<DropdownItem onClick={ () => this.test('dateLib') }>Date Libraries</DropdownItem>
-												<DropdownItem onClick={ () => this.test('storageLib') }>Storage Libraries</DropdownItem>
-												<DropdownItem onClick={ () => this.test('validationLib') }>Validation</DropdownItem>
+											<DropdownMenu style={{ backgroundColor: '#313531', color: 'white', fontSize: '1.8rem'}}>
+												<DropdownItem style={{ backgroundColor: '#313531', fontWeight: 100, color: 'white', fontSize: '1.8rem' }} onClick={ () => this.test('dataStructures') }>Data Structures</DropdownItem>
+												<DropdownItem style={{ backgroundColor: '#313531', fontWeight: 100, color: 'white', fontSize: '1.8rem' }} onClick={ () => this.test('dateLib') }>Date Libraries</DropdownItem>
+												<DropdownItem style={{ backgroundColor: '#313531', fontWeight: 100, color: 'white', fontSize: '1.8rem' }} onClick={ () => this.test('storageLib') }>Storage Libraries</DropdownItem>
+												<DropdownItem style={{ backgroundColor: '#313531', fontWeight: 100, color: 'white', fontSize: '1.8rem' }} onClick={ () => this.test('validationLib') }>Validation</DropdownItem>
 											</DropdownMenu>
 										</Dropdown>
 									</li>
 									<li className="mobileli">
-										<Dropdown group size="sm" isOpen={this.state.devtools} toggle={() => this.toggle('devtools')}>
-											<DropdownToggle caret>
+										<Dropdown group isOpen={this.state.devtools} toggle={() => this.toggle('devtools')}>
+											<DropdownToggle outline style={{ backgroundColor: 'white', fontWeight: 100, border: 'none' , color: '#313531', fontSize: '1.8rem' }} caret>
 													DevTools
 											</DropdownToggle>
-											<DropdownMenu>
-												<DropdownItem onClick={ () => this.test('packageManagers') }>Package Managers</DropdownItem>
-												<DropdownItem onClick={ () => this.test('timingLib') }>Timing</DropdownItem>
-												<DropdownItem onClick={ () => this.test('toolkits') }>Toolkits</DropdownItem>
-												<DropdownItem onClick={ () => this.test('codeProtectionLibs') }>Code Protection</DropdownItem>
+											<DropdownMenu style={{ backgroundColor: '#313531', color: 'white', fontSize: '1.8rem'}}>
+												<DropdownItem style={{ backgroundColor: '#313531', fontWeight: 100, color: 'white', fontSize: '1.8rem' }} onClick={ () => this.test('packageManagers') }>Package Managers</DropdownItem>
+												<DropdownItem style={{ backgroundColor: '#313531', fontWeight: 100, color: 'white', fontSize: '1.8rem' }} onClick={ () => this.test('timingLib') }>Timing</DropdownItem>
+												<DropdownItem style={{ backgroundColor: '#313531', fontWeight: 100, color: 'white', fontSize: '1.8rem' }} onClick={ () => this.test('toolkits') }>Toolkits</DropdownItem>
+												<DropdownItem style={{ backgroundColor: '#313531', fontWeight: 100, color: 'white', fontSize: '1.8rem' }} onClick={ () => this.test('codeProtectionLibs') }>Code Protection</DropdownItem>
 											</DropdownMenu>
 										</Dropdown>
 									</li>
 									<li className="mobileli">
-										<Dropdown group size="sm" isOpen={this.state.utils} toggle={() => this.toggle('utils')}>
-											<DropdownToggle caret>
+										<Dropdown group isOpen={this.state.utils} toggle={() => this.toggle('utils')}>
+											<DropdownToggle outline style={{ backgroundColor: 'white', fontWeight: 100, border: 'none' , color: '#313531', fontSize: '1.8rem' }} caret>
 													Utilities
 											</DropdownToggle>
-											<DropdownMenu>
-												<DropdownItem onClick={ () => this.test('DOM') }>DOM</DropdownItem>
-												<DropdownItem onClick={ () => this.test('ACFL') }>Async, Control Flow, Event</DropdownItem>
-												<DropdownItem onClick={ () => this.test('functionalProgramming') }>Functional Programming</DropdownItem>
-												<DropdownItem onClick={ () => this.test('mathLibs') }>Math Libraries</DropdownItem>
+											<DropdownMenu style={{ backgroundColor: '#313531', color: 'white', fontSize: '1.8rem'}}>
+												<DropdownItem style={{ backgroundColor: '#313531', fontWeight: 100, color: 'white', fontSize: '1.8rem' }} onClick={ () => this.test('DOM') }>DOM</DropdownItem>
+												<DropdownItem style={{ backgroundColor: '#313531', fontWeight: 100, color: 'white', fontSize: '1.8rem' }} onClick={ () => this.test('ACFL') }>Async, Control Flow, Event</DropdownItem>
+												<DropdownItem style={{ backgroundColor: '#313531', fontWeight: 100, color: 'white', fontSize: '1.8rem' }} onClick={ () => this.test('functionalProgramming') }>Functional Programming</DropdownItem>
+												<DropdownItem style={{ backgroundColor: '#313531', fontWeight: 100, color: 'white', fontSize: '1.8rem' }} onClick={ () => this.test('mathLibs') }>Math Libraries</DropdownItem>
 											</DropdownMenu>
 										</Dropdown>
 									</li>
 									<li className="mobileli">
-										<Dropdown group size="sm" isOpen={this.state.apps} toggle={() => this.toggle('apps')}>
-											<DropdownToggle caret>
+										<Dropdown group isOpen={this.state.apps} toggle={() => this.toggle('apps')}>
+											<DropdownToggle outline style={{ backgroundColor: 'white', fontWeight: 100, border: 'none' , color: '#313531', fontSize: '1.8rem' }} caret>
 													Apps
 											</DropdownToggle>
-											<DropdownMenu>
-												<DropdownItem onClick={ () => this.test('html5Apps') }>Html5 Apps</DropdownItem>
-												<DropdownItem onClick={ () => this.test('siteGenerators') }>Static Site Generators</DropdownItem>
-												<DropdownItem onClick={ () => this.test('codeEditors') }>Code Editors</DropdownItem>
-												<DropdownItem onClick={ () => this.test('designAndPrototyping') }>Design And Prototyping</DropdownItem>
+											<DropdownMenu style={{ backgroundColor: '#313531', color: 'white', fontSize: '1.8rem'}}>
+												<DropdownItem style={{ backgroundColor: '#313531', fontWeight: 100, color: 'white', fontSize: '1.8rem' }} onClick={ () => this.test('html5Apps') }>Html5 Apps</DropdownItem>
+												<DropdownItem style={{ backgroundColor: '#313531', fontWeight: 100, color: 'white', fontSize: '1.8rem' }} onClick={ () => this.test('siteGenerators') }>Static Site Generators</DropdownItem>
+												<DropdownItem style={{ backgroundColor: '#313531', fontWeight: 100, color: 'white', fontSize: '1.8rem' }} onClick={ () => this.test('codeEditors') }>Code Editors</DropdownItem>
+												<DropdownItem style={{ backgroundColor: '#313531', fontWeight: 100, color: 'white', fontSize: '1.8rem' }} onClick={ () => this.test('designAndPrototyping') }>Design And Prototyping</DropdownItem>
 											</DropdownMenu>
 										</Dropdown>
 									</li>
@@ -328,7 +306,16 @@ class MobileHome extends Component {
 								
 						</div>
 						<div className="mobileItems">
-              <ListOfPckgs data={this.state.list}/>
+						{this.state.list.length < 1 ?
+							(<div style={{ display: 'flex', flexDirection: 'column', padding: '10px' }} className="introduction"> 
+								<p style={{ padding: '0px 0px 10px', textAlign: 'center', margin: 'auto' }} className="PackTitle">Welcome to Javascript Library Discovery.</p>
+								<p style={{ textAlign: 'left' }}>
+									Search for a library or explore the directories of common libraries above. You may add libraries to your project which you can view by tapping the icon on the top right corner of the page. Once you have libraries in your project, personalized library recommendations will be available!
+								</p>
+							</div>
+							) : (
+							<ListOfPckgs small={true} data={this.state.list}/>)
+						}
             </div>
 
 					</div>
@@ -336,7 +323,7 @@ class MobileHome extends Component {
 			} else {
 				return (
 					<div>
-						<h3> LOADING </h3>
+						<h3 className='PackTitle'> Loading </h3>
 					</div>
 				)
 			}
@@ -351,4 +338,4 @@ const mapStateToProps = (state, ownProps) => {
     };
 };
 
-export default withRouter(connect(mapStateToProps, { getCatalog, getRecs })(MobileHome));
+export default withRouter(connect(mapStateToProps, { getCatalog, getRecs, clearCatalog })(MobileHome));

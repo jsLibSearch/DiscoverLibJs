@@ -5,7 +5,7 @@ import '../App.css';
 import { Collapse, Navbar, NavbarBrand, Nav, NavItem, NavLink} from 'reactstrap';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { getCatalog, getRecs, dev } from '../actions';
+import { getCatalog, getRecs, dev, clearCatalog } from '../actions';
 import ListOfPckgs from './ListOfPckgs';
 import { initGA, logPageView } from './ReactGA';
 // const axios = require('axios');
@@ -14,7 +14,6 @@ class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        windowHeight: window.innerHeight - 40,
         essentials: false,
         ui: false,
         multimedia: false,
@@ -33,22 +32,27 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    window.addEventListener('resize', this.handleResize.bind(this));
-    this.setState({
-      windowHeight: window.innerHeight - 40
-    });
-    // console.log((this.props.catalog))
-    if ( !Object.keys(this.props.catalog).length ) this.props.getCatalog();  
+    if ( !this.props.catalog.data ) this.props.getCatalog();  
     initGA();
     logPageView();
+    if ( this.props.catalog.data && this.props.catalog.ready && this.state.ready === false ) {
+      this.setState({
+        ready: true
+      })
+    }
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this.handleResize.bind(this));
+    // this.props.clearCatalog();
   }
 
   componentWillReceiveProps(nextProps) {
-
+    if ( nextProps.catalog.data && nextProps.catalog.ready && this.state.ready === false ) {
+      this.setState({
+        ready: true
+      })
+    }
+    if ( !nextProps.catalog.data ) this.props.getCatalog();
   }
 
   componentDidUpdate() {
@@ -92,12 +96,6 @@ class Home extends Component {
     console.log(this.state.recommeds, '<--------------------RECOMMENDS!');
   }
 
-  handleResize() {
-    this.setState({
-        windowHeight: window.innerHeight - 40
-    })
-  }
-
   essentials() {
     this.setState({ essentials: !this.state.essentials });
   }
@@ -133,7 +131,6 @@ class Home extends Component {
 
  
   test(str) {
-    console.log(this.props.catalog)
     switch (str) {
       case 'appFrameWorks':
         this.setState({ list: this.props.catalog.data.appFrameWorks })
@@ -410,7 +407,7 @@ class Home extends Component {
     } else {
       return (
         <div>
-          <h3> LOADING </h3>
+          <h3 className='PackTitle' > Loading catalog </h3>
         </div>
       )
     }
@@ -425,7 +422,7 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-export default withRouter(connect(mapStateToProps, { getCatalog, getRecs })(Home));
+export default withRouter(connect(mapStateToProps, { getCatalog, getRecs, clearCatalog })(Home));
 
 
 

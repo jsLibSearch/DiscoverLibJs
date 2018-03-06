@@ -22,12 +22,14 @@ class ListOfPckgs extends Component {
     }
 
     componentDidMount() {
-
+        if (this.props.small) {
+            this.setState({
+                small: true
+            })
+        }
     }
 
     componentWillReceiveProps(nextProps) {
-        // TODO get all readmes an onse! 
-        console.log(nextProps)
         if (JSON.stringify(this.state.list) !== JSON.stringify(nextProps.data)) {
             const arr = new Array(nextProps.data.length).fill(false); 
             const markdowns = new Array(nextProps.data.length).fill('');
@@ -88,7 +90,7 @@ class ListOfPckgs extends Component {
                                                 style={{ backgroundColor: '#115d63', borderColor: '#115d63', marginRight: '5px', fontSize: '1.8rem', color: 'white', fontWeight: '100' }}>{this.state.tracker[idx] ? 'Added to Project' : 'Add to Project'}</button>
                                             <hr/>
                                             {/* <div dangerouslySetInnerHTML={{__html: this.state.data}} /> */}
-                                            <ReactMarkdown source={this.state.data[idx]} skipHtml={true}/>
+                                            {this.props.small ? <p>{pckg.description}</p> : <ReactMarkdown source={this.state.data[idx]} skipHtml={true}/>}
                                         </CardBody>
                                     </Card>
                                 </Collapse>

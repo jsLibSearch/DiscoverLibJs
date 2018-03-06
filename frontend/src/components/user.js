@@ -81,12 +81,14 @@ export class UserPage extends Component {
   }
 
   handleResize() {
-    const small = this.state.windowWidth < 700 ? true : false;
-    if (!small) {
-      this.setState({
-        windowWidth: window.innerWidth - 40,
-        small: window.innerWidth <= 700
-      })
+    if (this.refs.userpageholder) {
+      const small = this.state.windowWidth < 700 ? true : false;
+      if (!small) {
+        this.setState({
+          windowWidth: window.innerWidth - 40,
+          small: window.innerWidth <= 700
+        })
+      }
     }
   }
 
@@ -242,9 +244,9 @@ export class UserPage extends Component {
   
   render() {
     return (
-      <div id='user_page_div'>
-        <div style={{ borderBottom: '1px solid rgb(103, 122, 87)', marginTop: '.2em' }}>
-          <p className='SearchHeader'>
+      <div ref='userpageholder' id='user_page_div'>
+        <div style={{ borderBottom: '1px solid #313531', marginTop: '.2em' }}>
+          <p style={ this.state.small ? { margin: '10px 0px 0px 10px' } : {} } className={this.state.small ? 'SearchHeaderSmall' :'SearchHeader'}>
             {this.state.loadingCarts ? 'Loading projects' : 'Your saved projects'}
           </p>
         </div>
