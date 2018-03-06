@@ -59,6 +59,7 @@ body {
   color: white;
   cursor: pointer;
   overflow: visible;
+  font-weight: 100;
 }
 
 .SignSmall2 {
@@ -325,7 +326,7 @@ pink_red:      #C75058
 }
 
 .PackCartHead {
-  padding: 5px 0px;
+  padding: 5px 4px;
   height: auto;
   display: flex;
   max-height: none;
@@ -579,4 +580,46 @@ body {
   background: #ffffff55;
 }
 
+.mobileNavBar {
+  background: #ffffff;
+}
 
+.mobileNavBarInner {
+  margin-right: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.mobileTitle {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.mobileTitle li a {
+  padding: 0;
+  /* display: inline-block; */
+}
+
+.mobileli {
+  display: inline-block;
+  padding: 0.3rem;
+  color: #313531;
+  background-color: white;
+  font-size: 1.8rem;
+}
+
+.brand {
+  font-size: 3vw;
+  padding: 0;
+  margin-right: 0.8rem;
+}
+
+.dropdown-menu {
+  min-width: 0;
+}
+
+.mobileItems {
+  font-size: 1.8rem;
+  padding: 10px;
+}

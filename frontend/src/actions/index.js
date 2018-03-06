@@ -1,5 +1,5 @@
 import axios from 'axios';
-export const dev = true;
+export const dev = false;
 const apiURL = !dev ? 'https://javascript-library-discovery2.herokuapp.com/' : 'http://localhost:8080/';
 const DB_URL = !dev ? 'https://javascript-library-discovery2.herokuapp.com/' : 'http://localhost:8080/';
 
@@ -36,6 +36,7 @@ export const GET_RECS = 'GET_RECS';
 export const CLEAR_RECS = 'CLEAR_RECS';
 
 export const GET_CATALOG = 'GET_CATALOG';
+export const CLEAR_CATALOG = 'CLEAR_CATALOG';
 
 export const clearCart = () => {
     return (dispatch) => {
@@ -383,6 +384,13 @@ export const getCatalog = () => {
     }
 }
 
+export const clearCatalog = () => {
+    return (dispatch) => {
+        dispatch({
+            type: 'CLEAR_CATALOG'
+        })
+    }
+}
 
 export const setCartName = (name, _id = null) => {
     return (dispatch) => {

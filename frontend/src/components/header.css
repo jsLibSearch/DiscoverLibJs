@@ -92,11 +92,11 @@ body {
 }
 
 .SignSmall {
-  padding: 0px 20px 0px 20px;
+  padding: 0px 15px;
   font-size: 2rem;
   text-decoration: none;
   color: white;
-  font-weight: 700;
+  font-weight: 100;
 }
 
 .SignSmall:hover {
