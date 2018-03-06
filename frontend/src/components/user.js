@@ -81,10 +81,13 @@ export class UserPage extends Component {
   }
 
   handleResize() {
-    this.setState({
+    const small = this.state.windowWidth < 700 ? true : false;
+    if (!small) {
+      this.setState({
         windowWidth: window.innerWidth - 40,
         small: window.innerWidth <= 700
-    })
+      })
+    }
   }
 
   handleCart(i) {

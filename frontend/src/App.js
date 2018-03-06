@@ -10,6 +10,8 @@ class App extends Component {
     super(props);
     this.state = {
         windowHeight: window.innerHeight - 40,
+        windowWidth: window.innerWidth,
+        small: window.innerWidth < 700
     };
   }
 
@@ -17,6 +19,8 @@ class App extends Component {
     window.addEventListener('resize', this.handleResize.bind(this))
     this.setState({
       windowHeight: window.innerHeight - 40,
+      windowWidth: window.innerWidth,
+        small: window.innerWidth < 700
     })
   }
 
@@ -26,36 +30,48 @@ class App extends Component {
 
   handleResize() {
     this.setState({
-        windowHeight: window.innerHeight - 40
+        windowHeight: window.innerHeight - 40,
     })
+    
+    const small = window.innerWidth < 700
+    if (this.state.small !== small) {
+      this.setState({
+        small
+      })
+    }
   }
   
   render() {
     return (
       <div className="App">
         <Route path='/' component={Header} />
-        <div style={ this.props.history.location.pathname !== '/' ? { minHeight: `${ this.state.windowHeight }px`, display: 'flex'} : { minHeight: `${ this.state.windowHeight }px`}} className='Main' >
-          {this.props.history.location.pathname !== '/' ?
-            (<div className='Center' style={{ minHeight: `${this.state.windowHeight}px`}}  >
+        <div style={{ minHeight: `${ this.state.windowHeight }px`, display: 'flex'}} className='Main' >
+          <div className='Center' style={{ minHeight: `${this.state.windowHeight}px`}}  >
               <Route path='/search' component={SearchPage}/>
               <Route path='/cart' component={CartPage}/>
               <Route path='/login' component={LogIn}/>
               <Route path='/signup' component={SignUp}/>
               <Route path='/user' component={RequireAuth(UserPage)}/>
               <Route path='/faq' component={FAQ}/>
-              <Route exact path='/' component={Home}/>
               <Route path='/gettingstarted' component={GettingStarted}/>
-            </div>):
-            (<div>
-            <Route path='/search' component={SearchPage}/>
-            <Route path='/cart' component={CartPage}/>
-            <Route path='/login' component={LogIn}/>
-            <Route path='/signup' component={SignUp}/>
-            <Route path='/user' component={RequireAuth(UserPage)}/>
-            <Route path='/faq' component={FAQ}/>
-            <Route exact path='/' component={Home}/>
-            <Route path='/gettingstarted' component={GettingStarted}/>
-            </div>)}
+              <Route exact path='/' component={!this.state.small ? Home :
+              () => (<div>
+                  <div
+                    className="introduction"
+                    style={{ display: 'flex', flexDirection: 'column', alignContent: 'center' }}>
+                    <p
+                      className="PackTitle"
+                      style={{ textAlign: 'center', margin: 'auto', padding: '10px' }}>
+                      Welcome to Javascript Library Discovery.
+                    </p>
+                    <p
+                      style={{ textAlign: 'left', padding: '10px' }}>
+                      Search for a library above or explore the directories of common libraries to the left. You may add libraries to your project which you can view by clicking on the icon on the top right corner of the page. Once you have libraries in your project, personalized library recommendations will be available!
+                    </p>
+                  </div>
+                </div>
+              )}/>
+            </div>
         </div>
       </div>
     );

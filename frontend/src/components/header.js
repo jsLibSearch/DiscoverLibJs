@@ -94,9 +94,11 @@ class Header extends Component {
             windowWidth: window.innerWidth
         })
         const small = this.state.windowWidth < 700 ? true : false;
-        this.setState({
-            small: small
-        })
+        if (small !== this.state.small) {
+            this.setState({
+                small: small
+            })
+        }
     }
 
     handleEnter(e) {
@@ -184,7 +186,7 @@ class Header extends Component {
                             toggle={this.toggleUserOptions.bind(this)}
                             size="sm">
                         <DropdownToggle
-                            style={this.state.small ? { border: 'none', margin: '0em', fontSize: '2rem', maxWidth: this.state.windowWidth - 250 } : { border: 'none', margin: '0em' }}
+                            style={this.state.small ? { border: 'none', margin: '0em', fontSize: '2rem', maxWidth: this.state.windowWidth - 275 } : { border: 'none', margin: '0em' }}
                             size="sm"
                             outline
                             className={!this.state.small ? 'Username' : 'UsernameSmall'}

@@ -170,8 +170,9 @@ body {
 }
 
 .UsernameSmall {
-  color: #91ac7c;
+  color: #ffffff;
   font-size: 2.5rem !important;
+  font-weight: 100;
   text-decoration: none;
   padding-right: 10px !important;
   max-width: 120px;
@@ -409,7 +410,7 @@ pink_red:      #C75058
   font-size: 3.2rem;
   font-weight: 100;
   line-height: 1.2;
-  margin: 10px 0px 0px 55px;
+  margin: 10px 0px 0px 20px;
   padding-bottom: 20px;
   max-width: 1000px;
 }

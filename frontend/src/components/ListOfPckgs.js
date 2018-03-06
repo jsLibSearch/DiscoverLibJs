@@ -2,10 +2,8 @@ import React, { Component } from 'react';
 import '../App.css';
 import { Collapse, ListGroup, ListGroupItem, CardBody, Card } from 'reactstrap';
 import { dev } from '../actions'
-import { customColors as c } from '../custom/colors.js';
 import { newItem } from '../actions';
 import { connect } from 'react-redux';
-// const Remarkable = require('remarkable');
 const axios = require('axios');
 const ReactMarkdown = require('react-markdown');
 
